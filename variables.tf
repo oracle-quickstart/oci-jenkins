@@ -54,10 +54,14 @@ variable "jenkinsMasterShape" {
 }
 
 variable "jenkinsSlaveShape" {
-  default = "VM.Standard1.2"
+  default = "VM.Standard1.1"
 }
 
 # Jenkins Config
+variable "slaveAd1Count" {
+  default = 1
+}
+
 variable "http_port" {
   description = "The port to use for HTTP traffic to Jenkins"
   default     = 8080
@@ -71,5 +75,11 @@ variable "jnlp_port" {
 variable "plugins" {
   type        = "list"
   description = "A list of Jenkins plugins to install, use short names."
-  default     = ["git"]
+  default     = ["git", "ssh-slaves"]
+}
+
+variable "tags" {
+  type        = "map"
+  description = "Supply tags you want added to all resources"
+  default     = {}
 }

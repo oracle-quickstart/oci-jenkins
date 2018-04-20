@@ -85,3 +85,16 @@ resource "oci_core_subnet" "JenkinsMasterSubnetAD1" {
   route_table_id      = "${oci_core_route_table.JenkinsRT.id}"
   dhcp_options_id     = "${oci_core_virtual_network.JenkinsVCN.default_dhcp_options_id}"
 }
+
+## Create Jenkins Slave Subnet On AD1
+resource "oci_core_subnet" "JenkinsSlaveSubnetAD1" {
+  availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[0],"name")}"
+  cidr_block          = "${lookup(var.network_cidrs, "slaveSubnetAD1")}"
+  display_name        = "${var.label_prefix}JenkinsSlaveSubnetAD1"
+  dns_label           = "jenslavead1"
+  security_list_ids   = ["${oci_core_virtual_network.JenkinsVCN.default_security_list_id}"]
+  compartment_id      = "${var.compartment_ocid}"
+  vcn_id              = "${oci_core_virtual_network.JenkinsVCN.id}"
+  route_table_id      = "${oci_core_route_table.JenkinsRT.id}"
+  dhcp_options_id     = "${oci_core_virtual_network.JenkinsVCN.default_dhcp_options_id}"
+}

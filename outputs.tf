@@ -2,6 +2,10 @@ output "master_instance_ids" {
   value = "${module.jenkins-master-ad1.ids}"
 }
 
+output "slave_instance_ids" {
+  value = "${module.jenkins-slave-ad1.ids}"
+}
+
 output "vcn_id" {
   value = "${module.vcn.id}"
 }
@@ -16,4 +20,12 @@ output "master_public_ips" {
 
 output "master_private_ips" {
   value = "${module.jenkins-master-ad1.private_ips}"
+}
+
+output "slave_public_ips" {
+  value = "${module.jenkins-slave-ad1.public_ips}"
+}
+
+output "slave_private_ips" {
+  value = "${module.jenkins-slave-ad1.private_ips}"
 }
