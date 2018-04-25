@@ -1,44 +1,37 @@
 ## DATASOURCE
-
 # Prevent oci_core_images image list from changing underneath us.
 data "oci_core_images" "ImageOCID" {
   compartment_id = "${var.compartment_ocid}"
-  display_name   = "${var.oracle_linux_image_name}"
-}
-
-# Cloud call to get a list of Availability Domains
-data "oci_identity_availability_domains" "ADs" {
-  compartment_id = "${var.tenancy_ocid}"
+  display_name   = "${var.master_ol_image_name}"
 }
 
 ## JENKINS MASTER INSTANCE(S)
-
 resource "oci_core_instance" "TFJenkinsMaster" {
   availability_domain = "${var.availability_domain}"
   compartment_id      = "${var.compartment_ocid}"
-  display_name        = "${var.label_prefix}${var.display_name_prefix}"
-  hostname_label      = "${var.hostname_label_prefix}"
+  display_name        = "${var.label_prefix}${var.master_display_name}"
+  hostname_label      = "${var.master_display_name}"
   image               = "${lookup(data.oci_core_images.ImageOCID.images[0], "id")}"
   shape               = "${var.shape}"
 
   create_vnic_details {
     subnet_id        = "${var.subnet_id}"
-    display_name     = "${var.label_prefix}${var.display_name_prefix}"
-    assign_public_ip = true
-    hostname_label   = "${var.hostname_label_prefix}"
+    display_name     = "${var.label_prefix}${var.master_display_name}"
+    assign_public_ip = "${var.assign_public_ip}"
+    hostname_label   = "${var.master_display_name}"
   }
 
   metadata {
-    ssh_authorized_keys = "${var.ssh_public_key}"
+    ssh_authorized_keys = "${file("${var.ssh_authorized_keys}")}"
   }
 
   provisioner "file" {
     connection = {
       host        = "${self.public_ip}"
       agent       = false
-      timeout     = "30m"
+      timeout     = "5m"
       user        = "opc"
-      private_key = "${var.ssh_private_key}"
+      private_key = "${file("${var.ssh_private_key}")}"
     }
 
     content     = "${var.setup_data}"
@@ -49,9 +42,9 @@ resource "oci_core_instance" "TFJenkinsMaster" {
     connection = {
       host        = "${self.public_ip}"
       agent       = false
-      timeout     = "30m"
+      timeout     = "5m"
       user        = "opc"
-      private_key = "${var.ssh_private_key}"
+      private_key = "${file("${var.ssh_private_key}")}"
     }
 
     inline = [
@@ -61,6 +54,6 @@ resource "oci_core_instance" "TFJenkinsMaster" {
   }
 
   timeouts {
-    create = "60m"
+    create = "10m"
   }
 }

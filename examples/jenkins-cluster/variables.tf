@@ -1,3 +1,9 @@
+variable "tenancy_ocid" {}
+variable "user_ocid" {}
+variable "fingerprint" {}
+variable "private_key_path" {}
+variable "region" {}
+
 variable "compartment_ocid" {
   description = "Compartment's OCID where VCN will be created. "
 }
@@ -32,26 +38,6 @@ variable "master_subnet_id" {
   default     = ""
 }
 
-variable "master_display_name" {
-  description = "The name of the master instance. "
-  default     = "tf-jenkins-master"
-}
-
-variable "master_ol_image_name" {
-  description = "The image name of a master instance. "
-  default = "Oracle-Linux-7.4-2018.02.21-1"
-}
-
-variable "master_shape" {
-  description = "Instance shape to use for master instance. "
-  default = "VM.Standard1.1"
-}
-
-variable "master_user_data" {
-  description = "Provide your own base64-encoded data to be used by Cloud-Init to run custom scripts or provide custom Cloud-Init configuration for master instance. "
-  default     = ""
-}
-
 variable "slave_count" {
   description = "Number of slave instances to launch. "
   default     = 1
@@ -67,9 +53,9 @@ variable "slave_subnet_id" {
   default     = []
 }
 
-variable "slave_display_name" {
-  description = "The name of the slave instance. "
-  default     = "tf-jenkins-slave"
+variable "master_ol_image_name" {
+  description = "The image name of a master instance. "
+  default = "Oracle-Linux-7.4-2018.02.21-1"
 }
 
 variable "slave_ol_image_name" {
@@ -77,14 +63,14 @@ variable "slave_ol_image_name" {
   default = "Oracle-Linux-7.4-2018.02.21-1"
 }
 
-variable "slave_shape" {
-  description = "Instance shape to use for slave instance(s). "
+variable "master_shape" {
+  description = "Instance shape to use for master instance. "
   default = "VM.Standard1.1"
 }
 
-variable "slave_user_data" {
-  description = "Provide your own base64-encoded data to be used by Cloud-Init to run custom scripts or provide custom Cloud-Init configuration for slave instance. "
-  default     = ""
+variable "slave_shape" {
+  description = "Instance shape to use for slave instance(s). "
+  default = "VM.Standard1.1"
 }
 
 variable "http_port" {

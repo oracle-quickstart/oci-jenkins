@@ -1,22 +1,33 @@
 # OCI service
-variable "availability_domain" {}
-
-variable "compartment_ocid" {}
-variable "display_name_prefix" {}
-variable "hostname_label_prefix" {}
-
-variable "subnet_id" {
-  description = "ID of subnet to use for master instance(s)"
+variable "compartment_ocid" {
+  description = "Compartment's OCID where VCN will be created. "
 }
 
-variable "shape" {}
-variable "tenancy_ocid" {}
+variable "availability_domains" {
+  description = "The Availability Domains of the slave instance. "
+  default     = []
+}
+
+variable "subnet_ids" {
+  description = "List of Jenkins slave subnets' id. "
+  default     = []
+}
+
+variable "slave_display_name" {
+  description = "The name of the slave instance. "
+  default     = ""
+}
+
+variable "shape" {
+  description = "Instance shape to use for slave instance. "
+  default     = ""
+}
 
 variable "label_prefix" {
+  description = "To create unique identifier for multiple clusters in a compartment."
   default = ""
 }
 
-# Instance
 variable "count" {
   description = "The number of slave instance(s) to create"
 }
@@ -29,23 +40,22 @@ variable "jenkins_master_port" {
   description = "The Port of the master jenkins instance"
 }
 
-variable "ssh_public_key" {}
-
-variable "ssh_private_key" {}
-
-variable "private_key_path" {}
-
-variable "oracle_linux_image_name" {
-  default = "Oracle-Linux-7.4-2018.01.20-0"
+variable "assign_public_ip" {
+  description = "Whether the VNIC should be assigned a public IP address. Defaults to whether the subnet is public or private. "
+  default     = true
 }
 
-variable "environment" {
-  description = "The environement tag to add to Jenkins master instance"
+variable "ssh_authorized_keys" {
+  description = "Public SSH keys path to be included in the ~/.ssh/authorized_keys file for the default user on the instance. "
   default     = ""
 }
 
-variable "tags" {
-  type        = "map"
-  description = "Supply tags you want added to all resources"
-  default     = {}
+variable "ssh_private_key" {
+  description = "The private key path to access instance. "
+  default     = ""
+}
+
+variable "slave_ol_image_name" {
+  description = "The image name of a slave instance. "
+  default = ""
 }

@@ -1,6 +1,5 @@
 #!/bin/bash
 set -e -x
-# This script is meant to be run in the User Data of each OCI Instance while it's booting.
 
 function waitForJenkins() {
     echo "Waiting jenkins to launch on 8080..."
@@ -23,11 +22,11 @@ function waitForPasswordFile() {
 }
 
 
-# Update Java for Jenkins
-# install xmlstarlet used for XML config manipulation
+# Install Java for Jenkins
+# Install xmlstarlet used for XML config manipulation
 sudo yum install -y java xmlstarlet
 
-# install jenkins
+# Install Jenkins
 sudo wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
 sudo rpm --import http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key
 sudo yum install -y jenkins

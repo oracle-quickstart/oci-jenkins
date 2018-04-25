@@ -3,17 +3,12 @@
 # Prevent oci_core_images image list from changing underneath us.
 data "oci_core_images" "ImageOCID" {
   compartment_id = "${var.compartment_ocid}"
-  display_name   = "${var.oracle_linux_image_name}"
-}
-
-# Cloud call to get a list of Availability Domains
-data "oci_identity_availability_domains" "ADs" {
-  compartment_id = "${var.tenancy_ocid}"
+  display_name   = "${var.slave_ol_image_name}"
 }
 
 # Init Script Files
 data "template_file" "install_slave" {
-  template = "${file("./modules/instances/jenkins-slave/scripts/setup.sh")}"
+  template = "${file("${path.module}/scripts/setup.sh")}"
 
   vars {
     jenkins_master_url = "${local.jenkins_master_url}"
@@ -22,7 +17,7 @@ data "template_file" "install_slave" {
 }
 
 data "template_file" "config_slave" {
-  template = "${file("./modules/instances/jenkins-slave/scripts/config.sh")}"
+  template = "${file("${path.module}/scripts/config.sh")}"
 
   vars {
     jenkins_master_url = "${local.jenkins_master_url}"
@@ -37,23 +32,22 @@ locals {
 # Jenkins Slaves
 resource "oci_core_instance" "TFJenkinsSlave" {
   count               = "${var.count}"
-  availability_domain = "${var.availability_domain}"
+  availability_domain = "${var.availability_domains[count.index%length(var.availability_domains)]}"
   compartment_id      = "${var.compartment_ocid}"
-  display_name        = "${var.label_prefix}${var.display_name_prefix}-${count.index}"
-  hostname_label      = "${var.hostname_label_prefix}-${count.index}"
+  display_name        = "${var.label_prefix}${var.slave_display_name}-${count.index+1}"
+  hostname_label      = "${var.slave_display_name}-${count.index+1}"
   image               = "${lookup(data.oci_core_images.ImageOCID.images[0], "id")}"
   shape               = "${var.shape}"
-  subnet_id           = "${var.subnet_id}"
 
   create_vnic_details {
-    subnet_id        = "${var.subnet_id}"
-    display_name     = "${var.label_prefix}${var.display_name_prefix}-${count.index}"
+    subnet_id        = "${var.subnet_ids[count.index%length(var.subnet_ids)]}"
+    display_name     = "${var.label_prefix}${var.slave_display_name}-${count.index+1}"
     assign_public_ip = true
-    hostname_label   = "${var.hostname_label_prefix}-${count.index}"
+    hostname_label   = "${var.slave_display_name}-${count.index+1}"
   }
 
   metadata {
-    ssh_authorized_keys = "${var.ssh_public_key}"
+    ssh_authorized_keys = "${file("${var.ssh_authorized_keys}")}"
   }
 
   #Prepare files on slave node
@@ -61,12 +55,12 @@ resource "oci_core_instance" "TFJenkinsSlave" {
     connection = {
       host        = "${self.public_ip}"
       agent       = false
-      timeout     = "3m"
+      timeout     = "5m"
       user        = "opc"
-      private_key = "${var.ssh_private_key}"
+      private_key = "${file("${var.ssh_private_key}")}"
     }
 
-    content     = "${var.ssh_private_key}"
+    content     = "${file("${var.ssh_private_key}")}"
     destination = "/tmp/key.pem"
   }
 
@@ -74,9 +68,9 @@ resource "oci_core_instance" "TFJenkinsSlave" {
     connection = {
       host        = "${self.public_ip}"
       agent       = false
-      timeout     = "3m"
+      timeout     = "5m"
       user        = "opc"
-      private_key = "${var.ssh_private_key}"
+      private_key = "${file("${var.ssh_private_key}")}"
     }
 
     content     = "${data.template_file.install_slave.rendered}"
@@ -87,9 +81,9 @@ resource "oci_core_instance" "TFJenkinsSlave" {
     connection = {
       host        = "${self.public_ip}"
       agent       = false
-      timeout     = "30m"
+      timeout     = "5m"
       user        = "opc"
-      private_key = "${var.ssh_private_key}"
+      private_key = "${file("${var.ssh_private_key}")}"
     }
 
     content     = "${data.template_file.config_slave.rendered}"
@@ -101,9 +95,9 @@ resource "oci_core_instance" "TFJenkinsSlave" {
     connection = {
       host        = "${self.public_ip}"
       agent       = false
-      timeout     = "3m"
+      timeout     = "5m"
       user        = "opc"
-      private_key = "${var.ssh_private_key}"
+      private_key = "${file("${var.ssh_private_key}")}"
     }
 
     inline = [
@@ -117,9 +111,9 @@ resource "oci_core_instance" "TFJenkinsSlave" {
     connection = {
       host        = "${self.public_ip}"
       agent       = false
-      timeout     = "30m"
+      timeout     = "10m"
       user        = "opc"
-      private_key = "${var.ssh_private_key}"
+      private_key = "${file("${var.ssh_private_key}")}"
     }
 
     inline = [
