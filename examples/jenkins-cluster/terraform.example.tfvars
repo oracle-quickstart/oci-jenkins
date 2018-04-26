@@ -14,5 +14,5 @@ master_ad = "uGEq:PHX-AD-1"
 master_subnet_id = "ocid1.subnet.oc1.phx.aaaaaaaau73t2miowjrdawdh2d2bx3lbmgjctwuxqbqcirjkyebud4cmufcq"
 
 slave_count = 2
-slave_ad = ["uGEq:PHX-AD-1", "uGEq:PHX-AD-2"]
-slave_subnet_id = ["ocid1.subnet.oc1.phx.aaaaaaaau73t2miowjrdawdh2d2bx3lbmgjctwuxqbqcirjkyebud4cmufcq", "ocid1.subnet.oc1.phx.aaaaaaaauccbmse7qa3zbmbnbxx2dbiytaie6ya5rhpqf2sn3lus35u3mjuq"]
+slave_ads = ["uGEq:PHX-AD-1", "uGEq:PHX-AD-2"]
+slave_subnet_ids = ["ocid1.subnet.oc1.phx.aaaaaaaau73t2miowjrdawdh2d2bx3lbmgjctwuxqbqcirjkyebud4cmufcq", "ocid1.subnet.oc1.phx.aaaaaaaauccbmse7qa3zbmbnbxx2dbiytaie6ya5rhpqf2sn3lus35u3mjuq"]

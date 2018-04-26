@@ -43,34 +43,34 @@ variable "slave_count" {
   default     = 1
 }
 
-variable "slave_ad" {
+variable "slave_ads" {
   description = "The Availability Domain(s) for Jenkins slave(s). "
   default     = []
 }
 
-variable "slave_subnet_id" {
+variable "slave_subnet_ids" {
   description = "List of Jenkins slave subnets' id. "
   default     = []
 }
 
 variable "master_ol_image_name" {
   description = "The image name of a master instance. "
-  default = "Oracle-Linux-7.4-2018.02.21-1"
+  default     = "Oracle-Linux-7.4-2018.02.21-1"
 }
 
 variable "slave_ol_image_name" {
   description = "The image name of a slave instance. "
-  default = "Oracle-Linux-7.4-2018.02.21-1"
+  default     = "Oracle-Linux-7.4-2018.02.21-1"
 }
 
 variable "master_shape" {
   description = "Instance shape to use for master instance. "
-  default = "VM.Standard1.1"
+  default     = "VM.Standard1.1"
 }
 
 variable "slave_shape" {
   description = "Instance shape to use for slave instance(s). "
-  default = "VM.Standard1.1"
+  default     = "VM.Standard1.1"
 }
 
 variable "http_port" {

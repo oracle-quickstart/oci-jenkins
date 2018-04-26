@@ -25,7 +25,7 @@ variable "shape" {
 
 variable "label_prefix" {
   description = "To create unique identifier for multiple clusters in a compartment."
-  default = ""
+  default     = ""
 }
 
 variable "count" {
@@ -57,5 +57,5 @@ variable "ssh_private_key" {
 
 variable "slave_ol_image_name" {
   description = "The image name of a slave instance. "
-  default = ""
+  default     = ""
 }

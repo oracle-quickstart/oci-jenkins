@@ -20,13 +20,13 @@ provider "oci" {
 # DEPLOY THE JENKINS CLUSTER
 # ---------------------------------------------------------------------------------------------------------------------
 module "jenkins" {
-  source = "../../"
+  source              = "../../"
   compartment_ocid    = "${var.compartment_ocid}"
   master_ad           = "${var.master_ad}"
   master_subnet_id    = "${var.master_subnet_id}"
   slave_count         = "${var.slave_count}"
-  slave_ad            = "${var.slave_ad}"
-  slave_subnet_id     = "${var.slave_subnet_id}"
+  slave_ads           = "${var.slave_ads}"
+  slave_subnet_ids    = "${var.slave_subnet_ids}"
   ssh_authorized_keys = "${var.ssh_authorized_keys}"
   ssh_private_key     = "${var.ssh_private_key}"
 }

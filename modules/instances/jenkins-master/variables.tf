@@ -24,6 +24,7 @@ variable "shape" {
 }
 
 variable "label_prefix" {
+  description = "To create unique identifier for multiple clusters in a compartment."
   default = ""
 }
 
@@ -32,7 +33,6 @@ variable "assign_public_ip" {
   default     = true
 }
 
-# Instance
 variable "ssh_authorized_keys" {
   description = "Public SSH keys path to be included in the ~/.ssh/authorized_keys file for the default user on the instance. "
   default     = ""

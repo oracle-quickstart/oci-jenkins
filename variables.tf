@@ -39,12 +39,12 @@ variable "master_display_name" {
 
 variable "master_ol_image_name" {
   description = "The image name of a master instance. "
-  default = "Oracle-Linux-7.4-2018.02.21-1"
+  default     = "Oracle-Linux-7.4-2018.02.21-1"
 }
 
 variable "master_shape" {
   description = "Instance shape to use for master instance. "
-  default = "VM.Standard1.1"
+  default     = "VM.Standard1.1"
 }
 
 variable "master_user_data" {
@@ -74,12 +74,12 @@ variable "slave_display_name" {
 
 variable "slave_ol_image_name" {
   description = "The image name of a slave instance. "
-  default = "Oracle-Linux-7.4-2018.02.21-1"
+  default     = "Oracle-Linux-7.4-2018.02.21-1"
 }
 
 variable "slave_shape" {
   description = "Instance shape to use for slave instance. "
-  default = "VM.Standard1.1"
+  default     = "VM.Standard1.1"
 }
 
 variable "slave_user_data" {
