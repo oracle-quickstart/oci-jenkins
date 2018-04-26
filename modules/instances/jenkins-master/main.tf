@@ -10,8 +10,6 @@ resource "oci_core_instance" "TFJenkinsMaster" {
   availability_domain = "${var.availability_domain}"
   compartment_id      = "${var.compartment_ocid}"
   display_name        = "${var.label_prefix}${var.master_display_name}"
-  hostname_label      = "${var.master_display_name}"
-  image               = "${lookup(data.oci_core_images.ImageOCID.images[0], "id")}"
   shape               = "${var.shape}"
 
   create_vnic_details {
@@ -23,6 +21,11 @@ resource "oci_core_instance" "TFJenkinsMaster" {
 
   metadata {
     ssh_authorized_keys = "${file("${var.ssh_authorized_keys}")}"
+  }
+
+  source_details {
+    source_id   = "${lookup(data.oci_core_images.ImageOCID.images[0], "id")}"
+    source_type = "image"
   }
 
   provisioner "file" {

@@ -35,8 +35,6 @@ resource "oci_core_instance" "TFJenkinsSlave" {
   availability_domain = "${var.availability_domains[count.index%length(var.availability_domains)]}"
   compartment_id      = "${var.compartment_ocid}"
   display_name        = "${var.label_prefix}${var.slave_display_name}-${count.index+1}"
-  hostname_label      = "${var.slave_display_name}-${count.index+1}"
-  image               = "${lookup(data.oci_core_images.ImageOCID.images[0], "id")}"
   shape               = "${var.shape}"
 
   create_vnic_details {
@@ -48,6 +46,11 @@ resource "oci_core_instance" "TFJenkinsSlave" {
 
   metadata {
     ssh_authorized_keys = "${file("${var.ssh_authorized_keys}")}"
+  }
+
+  source_details {
+    source_id   = "${lookup(data.oci_core_images.ImageOCID.images[0], "id")}"
+    source_type = "image"
   }
 
   #Prepare files on slave node
