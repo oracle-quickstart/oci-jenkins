@@ -57,12 +57,12 @@ variable "slave_count" {
   default     = 1
 }
 
-variable "slave_ad" {
+variable "slave_ads" {
   description = "The Availability Domain(s) for Jenkins slave(s). "
   default     = []
 }
 
-variable "slave_subnet_id" {
+variable "slave_subnet_ids" {
   description = "List of Jenkins slave subnets' id. "
   default     = []
 }
@@ -78,7 +78,7 @@ variable "slave_ol_image_name" {
 }
 
 variable "slave_shape" {
-  description = "Instance shape to use for slave instance(s). "
+  description = "Instance shape to use for slave instance. "
   default = "VM.Standard1.1"
 }
 

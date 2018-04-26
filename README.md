@@ -17,15 +17,15 @@ Instead of figuring out the details of how to run a piece of infrastructure from
 
 ## How to use this Module
 Each Module has the following folder structure:
-* [root](): This folder shows an example of Terraform code that uses the jenkins-master and jenkins-slave module(s) to deploy a Jenkins cluster in OCI.
+* [root](): This folder shows an example of Terraform code that uses the jenkins-master and jenkins-slave modules to deploy a Jenkins cluster in OCI.
 * [modules](): This folder contains the reusable code for this Module, broken down into one or more modules.
 * [examples](): This folder contains examples of how to use the modules.
 
 To deploy Jenkins Cluster servers using this Module:
 
 ```hcl
-module "instance" {
-  source              = "git::ssh://git@bitbucket.aka.lgl.grungy.us:7999/tfs/terraform-oci-compute-instance.git?ref=dev"
+module "jenkins" {
+  source              = "git::ssh://git@bitbucket.aka.lgl.grungy.us:7999/tfs/terraform-oci-jenkins.git?ref=dev"
   compartment_ocid    = "${var.compartment_ocid}"
   master_ad           = "${var.master_ad}"
   master_subnet_id    = "${var.master_subnet_id}"
@@ -46,12 +46,18 @@ ssh_private_key | The private key path to access instance
 label_prefix | To create unique identifier for multiple clusters in a compartment.
 master_ad  | The Availability Domain for Jenkins master.
 master_subnet_id | The OCID of the master subnet to create the VNIC in.
-master_ol_image_name | The image name to be used on the master instance
-slave_ol_image_name | The image name to be used on the slave instance
-jenkinsMasterShape | The shape to be used on the master instance
-jenkinsSlaveShape | The shape to be used on the slave instance
-http_port | The port to use for HTTP traffic to Jenkins
-jnlp_port | The Port to use for Jenkins master to slave communication between instances
+master_display_name | The name of the master instance.
+master_ol_image_name | The image name to be used on the master instance.
+master_shape | The shape to be used on the master instance.
+master_user_data | Provide your own base64-encoded data to be used by Cloud-Init to run custom scripts or provide custom Cloud-Init configuration for master instance.
+slave_count | Number of slave instances to launch.
+slave_ads | The list of Availability Domains for Jenkins slave.
+slave_subnet_ids | The list of Jenkins slave subnets' id.
+slave_display_name | The name of the slave instance.
+slave_ol_image_name | The image name to be used on the slave instance.
+slave_shape | The shape to be used on the slave instance
+http_port | The port to use for HTTP traffic to Jenkins.
+jnlp_port | The Port to use for Jenkins master to slave communication between instances.
 plugins | The list of plugins to pre-install on the master instance.
 
 
