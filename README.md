@@ -1,9 +1,10 @@
-# Jenkins Oracle Cloud Infrastructure Module
+# Oracle Cloud Infrastructure Jenkins Terraform Module
 
 
 ## About
 The Jenkins Oracle Cloud Infrastructure Module provides a Terraform-based Jenkins cluster installation for Oracle Cloud Infrastructure (OCI). Jenkins is a distributed automation server, generally associated with Continuous Integration (CI) and Continuous Delivery (CD). A Jenkins cluster typically involves one or more master instance(s) coupled with one or more slave instance(s).
 
+![Jenkins architecture](docs/images/architecture.png)
 
 ## Prerequisites
 1. Download and install Terraform (v0.10.3 or later)
