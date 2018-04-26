@@ -31,7 +31,7 @@ module "jenkins" {
   master_ad           = "${var.master_ad}"
   master_subnet_id    = "${var.master_subnet_id}"
   slave_count         = "${var.slave_count}"
-  slave_ads            = "${var.slave_ads}"
+  slave_ads           = "${var.slave_ads}"
   slave_subnet_id     = "${var.slave_subnet_id}"
   ssh_authorized_keys = "${var.ssh_authorized_keys}"
   ssh_private_key     = "${var.ssh_private_key}"
