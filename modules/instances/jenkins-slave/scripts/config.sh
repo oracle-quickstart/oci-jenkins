@@ -34,5 +34,5 @@ nohup sudo -u jenkins $cmd &>/tmp/jenkins.log &
 
 sleep 10
 
-# echo admin init password for login
+# Echo Master admin init password for login
 echo "admin:$PASS"

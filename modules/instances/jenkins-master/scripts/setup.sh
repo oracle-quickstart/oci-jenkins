@@ -2,9 +2,9 @@
 set -e -x
 
 function waitForJenkins() {
-    echo "Waiting jenkins to launch on 8080..."
+    echo "Waiting jenkins to launch on ${http_port}..."
 
-    while ! timeout 1 bash -c "echo > /dev/tcp/localhost/8080"; do
+    while ! timeout 1 bash -c "echo > /dev/tcp/localhost/${http_port}"; do
       sleep 1
     done
 
@@ -31,8 +31,11 @@ sudo wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenk
 sudo rpm --import http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key
 sudo yum install -y jenkins
 
+# Config Jenkins Http Port
+sudo sed -i '/JENKINS_PORT/c\ \JENKINS_PORT=\"${http_port}\"' /etc/sysconfig/jenkins
+
 # Start Jenkins
-sudo service jenkins start
+sudo service jenkins restart
 sudo chkconfig --add jenkins
 
 # Set httpport on firewall
@@ -43,7 +46,7 @@ sudo firewall-cmd --reload
 waitForJenkins
 
 # UPDATE PLUGIN LIST
-curl  -L http://updates.jenkins-ci.org/update-center.json | sed '1d;$d' | curl -X POST -H 'Accept: application/json' -d @- http://localhost:8080/updateCenter/byId/default/postBack
+curl  -L http://updates.jenkins-ci.org/update-center.json | sed '1d;$d' | curl -X POST -H 'Accept: application/json' -d @- http://localhost:${http_port}/updateCenter/byId/default/postBack
 
 sleep 10
 
@@ -68,7 +71,7 @@ waitForJenkins
 sleep 10
 
 # INSTALL PLUGINS
-sudo java -jar /var/lib/jenkins/jenkins-cli.jar -s http://localhost:8080 -auth admin:$PASS install-plugin ${plugins}
+sudo java -jar /var/lib/jenkins/jenkins-cli.jar -s http://localhost:${http_port} -auth admin:$PASS install-plugin ${plugins}
 
 # RESTART JENKINS TO ACTIVATE PLUGINS
-sudo java -jar /var/lib/jenkins/jenkins-cli.jar -s http://localhost:8080 -auth admin:$PASS restart
+sudo java -jar /var/lib/jenkins/jenkins-cli.jar -s http://localhost:${http_port} -auth admin:$PASS restart

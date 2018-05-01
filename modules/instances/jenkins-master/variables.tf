@@ -57,15 +57,8 @@ variable "setup_data" {
 
 variable "http_port" {
   description = "The port to use for HTTP traffic to Jenkins"
-  default     = 8080
-}
-
-variable "https_port" {
-  description = "The port to use for HTTPS traffic to Jenkins"
-  default     = 443
 }
 
 variable "jnlp_port" {
   description = "The port to use for TCP traffic between Jenkins intances"
-  default     = 49187
 }

@@ -24,6 +24,7 @@ module "jenkins" {
   compartment_ocid    = "${var.compartment_ocid}"
   master_ad           = "${var.master_ad}"
   master_subnet_id    = "${var.master_subnet_id}"
+  http_port           = "${var.http_port}"
   slave_count         = "${var.slave_count}"
   slave_ads           = "${var.slave_ads}"
   slave_subnet_ids    = "${var.slave_subnet_ids}"

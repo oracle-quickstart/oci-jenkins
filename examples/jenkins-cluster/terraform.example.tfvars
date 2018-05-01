@@ -12,6 +12,7 @@ ssh_private_key = "~/.ssh/id_rsa"
 
 master_ad = "uGEq:PHX-AD-1"
 master_subnet_id = "ocid1.subnet.oc1.phx.aaaaaaaau73t2miowjrdawdh2d2bx3lbmgjctwuxqbqcirjkyebud4cmufcq"
+http_port = 8989
 
 slave_count = 2
 slave_ads = ["uGEq:PHX-AD-1", "uGEq:PHX-AD-2"]
