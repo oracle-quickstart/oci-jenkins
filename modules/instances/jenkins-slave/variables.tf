@@ -28,7 +28,7 @@ variable "label_prefix" {
   default     = ""
 }
 
-variable "count" {
+variable "number_of_slaves" {
   description = "The number of slave instance(s) to create"
 }
 
@@ -41,7 +41,7 @@ variable "jenkins_master_port" {
 }
 
 variable "assign_public_ip" {
-  description = "Whether the VNIC should be assigned a public IP address. Defaults to whether the subnet is public or private. "
+  description = "Whether the VNIC should be assigned a public IP address. Default 'true' assigns a public IP address. "
   default     = true
 }
 
@@ -55,7 +55,7 @@ variable "ssh_private_key" {
   default     = ""
 }
 
-variable "slave_ol_image_name" {
-  description = "The image name of a slave instance. "
+variable "image_id" {
+  description = "The OCID of an image for an instance to use. "
   default     = ""
 }

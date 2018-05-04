@@ -1,8 +1,13 @@
 ## DATASOURCE
-# Prevent oci_core_images image list from changing underneath us.
-data "oci_core_images" "ImageOCID" {
-  compartment_id = "${var.compartment_ocid}"
-  display_name   = "${var.master_ol_image_name}"
+# Init Script Files
+data "template_file" "setup_jenkins" {
+  template = "${file("${path.module}/scripts/setup.sh")}"
+
+  vars {
+    http_port = "${var.http_port}"
+    jnlp_port = "${var.jnlp_port}"
+    plugins   = "${join(" ", var.plugins)}"
+  }
 }
 
 ## JENKINS MASTER INSTANCE(S)
@@ -24,7 +29,7 @@ resource "oci_core_instance" "TFJenkinsMaster" {
   }
 
   source_details {
-    source_id   = "${lookup(data.oci_core_images.ImageOCID.images[0], "id")}"
+    source_id   = "${var.image_id}"
     source_type = "image"
   }
 
@@ -37,7 +42,7 @@ resource "oci_core_instance" "TFJenkinsMaster" {
       private_key = "${file("${var.ssh_private_key}")}"
     }
 
-    content     = "${var.setup_data}"
+    content     = "${data.template_file.setup_jenkins.rendered}"
     destination = "/tmp/setup.sh"
   }
 

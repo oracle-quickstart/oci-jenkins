@@ -1,11 +1,4 @@
 ## DATASOURCE
-
-# Prevent oci_core_images image list from changing underneath us.
-data "oci_core_images" "ImageOCID" {
-  compartment_id = "${var.compartment_ocid}"
-  display_name   = "${var.slave_ol_image_name}"
-}
-
 # Init Script Files
 data "template_file" "install_slave" {
   template = "${file("${path.module}/scripts/setup.sh")}"
@@ -31,7 +24,7 @@ locals {
 
 # Jenkins Slaves
 resource "oci_core_instance" "TFJenkinsSlave" {
-  count               = "${var.count}"
+  count               = "${var.number_of_slaves}"
   availability_domain = "${var.availability_domains[count.index%length(var.availability_domains)]}"
   compartment_id      = "${var.compartment_ocid}"
   display_name        = "${var.label_prefix}${var.slave_display_name}-${count.index+1}"
@@ -49,7 +42,7 @@ resource "oci_core_instance" "TFJenkinsSlave" {
   }
 
   source_details {
-    source_id   = "${lookup(data.oci_core_images.ImageOCID.images[0], "id")}"
+    source_id   = "${var.image_id}"
     source_type = "image"
   }
 

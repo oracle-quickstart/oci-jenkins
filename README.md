@@ -18,7 +18,7 @@ Instead of figuring out the details of how to run a piece of infrastructure from
 
 ## How to use this Module
 Each Module has the following folder structure:
-* [root](): This folder shows an example of Terraform code that uses the jenkins-master and jenkins-slave modules to deploy a Jenkins cluster in OCI.
+* [root](): This folder contains a root module calls jenkins-master and jenkins-slave sub-modules to create a Jenkins cluster in OCI.
 * [modules](): This folder contains the reusable code for this Module, broken down into one or more modules.
 * [examples](): This folder contains examples of how to use the modules.
 
@@ -48,14 +48,14 @@ label_prefix | To create unique identifier for multiple clusters in a compartmen
 master_ad  | The Availability Domain for Jenkins master.
 master_subnet_id | The OCID of the master subnet to create the VNIC in.
 master_display_name | The name of the master instance.
-master_ol_image_name | The image name to be used on the master instance.
+master_image_id | The OCID of an image for a master instance to use. You can refer to https://docs.us-phoenix-1.oraclecloud.com/images/ for more details.
 master_shape | The shape to be used on the master instance.
 master_user_data | Provide your own base64-encoded data to be used by Cloud-Init to run custom scripts or provide custom Cloud-Init configuration for master instance.
 slave_count | Number of slave instances to launch.
 slave_ads | The list of Availability Domains for Jenkins slave.
 slave_subnet_ids | The list of Jenkins slave subnets' id.
 slave_display_name | The name of the slave instance.
-slave_ol_image_name | The image name to be used on the slave instance.
+slave_image_id | The OCID of an image for slave instance to use. You can refer to https://docs.us-phoenix-1.oraclecloud.com/images/ for more details. 
 slave_shape | The shape to be used on the slave instance
 http_port | The port to use for HTTP traffic to Jenkins.
 jnlp_port | The Port to use for Jenkins master to slave communication between instances.

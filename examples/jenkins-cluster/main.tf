@@ -1,6 +1,29 @@
 # ---------------------------------------------------------------------------------------------------------------------
 # This is an example of how to use the terraform_oci_jenkins module to deploy a Jenkins cluster in OCI.
 # ---------------------------------------------------------------------------------------------------------------------
+variable "tenancy_ocid" {}
+
+variable "user_ocid" {}
+variable "fingerprint" {}
+variable "private_key_path" {}
+variable "region" {}
+variable "compartment_ocid" {}
+variable "ssh_authorized_keys" {}
+variable "ssh_private_key" {}
+variable "master_ad" {}
+variable "master_subnet_id" {}
+variable "master_image_id" {}
+
+variable "slave_ads" {
+  type = "list"
+}
+
+variable "slave_subnet_ids" {
+  type = "list"
+}
+
+variable "slave_image_id" {}
+
 provider "oci" {
   tenancy_ocid     = "${var.tenancy_ocid}"
   user_ocid        = "${var.user_ocid}"
@@ -11,9 +34,6 @@ provider "oci" {
 
 # ---------------------------------------------------------------------------------------------------------------------
 # USING EXISTING VCN AND SUBNET FOR JEKNIS DEPOLYMENT
-# Using the public subnets makes this example easy to run and test, but it means Jeknins Master and Slave are
-# accessible from the public Internet. In a production deployment, we strongly recommend deploying into a custom AD
-# and private subnets.
 # ---------------------------------------------------------------------------------------------------------------------
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -24,10 +44,14 @@ module "jenkins" {
   compartment_ocid    = "${var.compartment_ocid}"
   master_ad           = "${var.master_ad}"
   master_subnet_id    = "${var.master_subnet_id}"
-  http_port           = "${var.http_port}"
-  slave_count         = "${var.slave_count}"
+  master_image_id     = "${var.master_image_id}"
+  http_port           = "8989"
+  jnlp_port           = "49187"
+  slave_count         = "2"
   slave_ads           = "${var.slave_ads}"
   slave_subnet_ids    = "${var.slave_subnet_ids}"
+  slave_image_id      = "${var.slave_image_id}"
   ssh_authorized_keys = "${var.ssh_authorized_keys}"
   ssh_private_key     = "${var.ssh_private_key}"
+  plugins             = ["git", "ssh-slaves"]
 }

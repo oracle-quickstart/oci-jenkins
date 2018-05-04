@@ -2,7 +2,7 @@
 set -e -x
 
 function waitForJenkins() {
-    echo "Waiting jenkins to launch on ${http_port}..."
+    echo "Waiting for Jenkins to launch on ${http_port}..."
 
     while ! timeout 1 bash -c "echo > /dev/tcp/localhost/${http_port}"; do
       sleep 1
@@ -12,7 +12,7 @@ function waitForJenkins() {
 }
 
 function waitForPasswordFile() {
-    echo "Waiting jenkins to generate password..."
+    echo "Waiting for Jenkins to generate password..."
 
     while [ ! -f /var/lib/jenkins/secrets/initialAdminPassword ]; do
       sleep 2 # wait for 1/10 of the second before check again

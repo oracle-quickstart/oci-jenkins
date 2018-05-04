@@ -37,9 +37,9 @@ variable "master_display_name" {
   default     = "tf-jenkins-master"
 }
 
-variable "master_ol_image_name" {
-  description = "The image name of a master instance. "
-  default     = "Oracle-Linux-7.4-2018.02.21-1"
+variable "master_image_id" {
+  description = "The OCID of an image for a master instance to use. "
+  default     = ""
 }
 
 variable "master_shape" {
@@ -72,9 +72,9 @@ variable "slave_display_name" {
   default     = "tf-jenkins-slave"
 }
 
-variable "slave_ol_image_name" {
-  description = "The image name of a slave instance. "
-  default     = "Oracle-Linux-7.4-2018.02.21-1"
+variable "slave_image_id" {
+  description = "The OCID of an image for slave instance to use.  "
+  default     = ""
 }
 
 variable "slave_shape" {

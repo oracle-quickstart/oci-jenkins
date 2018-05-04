@@ -28,7 +28,7 @@ variable "label_prefix" {
 }
 
 variable "assign_public_ip" {
-  description = "Whether the VNIC should be assigned a public IP address. Defaults to whether the subnet is public or private. "
+  description = "Whether the VNIC should be assigned a public IP address. Default 'true' assigns a public IP address. "
   default     = true
 }
 
@@ -42,17 +42,13 @@ variable "ssh_private_key" {
   default     = ""
 }
 
-variable "master_ol_image_name" {
-  description = "The image name of a master instance. "
+variable "image_id" {
+  description = "The OCID of an image for an instance to use. "
   default     = ""
 }
 
 variable "user_data" {
   description = "A User Data script to execute while the server is booting."
-}
-
-variable "setup_data" {
-  description = "A User Data script to execute after server has booted to setup jenkins defaults."
 }
 
 variable "http_port" {
@@ -61,4 +57,9 @@ variable "http_port" {
 
 variable "jnlp_port" {
   description = "The port to use for TCP traffic between Jenkins intances"
+}
+
+variable "plugins" {
+  type        = "list"
+  description = "A list of Jenkins plugins to install, use short names. "
 }
