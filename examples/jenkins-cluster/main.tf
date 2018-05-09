@@ -53,5 +53,5 @@ module "jenkins" {
   slave_image_id      = "${var.slave_image_id}"
   ssh_authorized_keys = "${var.ssh_authorized_keys}"
   ssh_private_key     = "${var.ssh_private_key}"
-  plugins             = ["git", "ssh-slaves"]
+  plugins             = ["git", "oracle-cloud-infrastructure-compute"]
 }
