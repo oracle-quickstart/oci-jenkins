@@ -18,6 +18,7 @@ function waitForPasswordFile() {
       sleep 2 # wait for 1/10 of the second before check again
     done
 
+    sudo cat /var/lib/jenkins/secrets/initialAdminPassword > /tmp/secret
     echo "Password created"
 }
 
@@ -27,7 +28,8 @@ function waitForPasswordFile() {
 sudo yum install -y java xmlstarlet
 
 # Install Jenkins
-sudo wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
+# Using Stable version： https://jenkins.io/download/lts/
+sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
 sudo rpm --import http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key
 sudo yum install -y jenkins
 

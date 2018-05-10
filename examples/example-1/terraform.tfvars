@@ -10,12 +10,8 @@ region = "<region in which to operate, example: us-ashburn-1, us-phoenix-1>"
 # Compartment
 compartment_ocid = "<compartment OCID>"
 
-#Network Configration
-master_ad = "<availability domain name, example: uGEq:PHX-AD-1>"
-slave_ads = ["<list of availability domain name, example: uGEq:PHX-AD-1, uGEq:PHX-AD-2>"]
-
 #Instance Configration
 ssh_authorized_keys = "<path to public key>"
 ssh_private_key = "<path to private key>"
-master_image_id = "<image OCID>"
-slave_image_id = "<image OCID>"
+master_subnet_id = "<subnet OCID>"
+slave_subnet_ids = ["<list of subnet OCID>"]

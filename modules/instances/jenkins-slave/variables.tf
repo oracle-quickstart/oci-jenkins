@@ -33,11 +33,15 @@ variable "number_of_slaves" {
 }
 
 variable "jenkins_master_ip" {
-  description = "The IP of the master jenkins instance"
+  description = "The IP of the master Jenkins instance"
 }
 
 variable "jenkins_master_port" {
-  description = "The Port of the master jenkins instance"
+  description = "The Port of the master Jenkins instance. "
+}
+
+variable "jenkins_master_passwd" {
+  description = "The Admin initial Password for login Jenkins master url. "
 }
 
 variable "assign_public_ip" {

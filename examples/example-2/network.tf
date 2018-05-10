@@ -80,7 +80,7 @@ resource "oci_core_security_list" "JenkinsMasterSubnet" {
 # Create Master Subnet
 ############################################
 resource "oci_core_subnet" "JenkinsMasterSubnetAD" {
-  availability_domain = "${var.master_ad}"
+  availability_domain = "${data.template_file.ad_names.*.rendered[0]}"
   cidr_block          = "${lookup(var.network_cidrs, "masterSubnetAD")}"
   display_name        = "${var.label_prefix}JenkinsMasterSubnetAD"
   dns_label           = "masterad"
@@ -95,8 +95,8 @@ resource "oci_core_subnet" "JenkinsMasterSubnetAD" {
 # Create Slave Subnet
 ############################################
 resource "oci_core_subnet" "JenkinsSlaveSubnetAD" {
-  count               = "${length(var.slave_ads)}"
-  availability_domain = "${var.slave_ads[count.index]}"
+  count               = "${length(data.template_file.ad_names.*.rendered)}"
+  availability_domain = "${data.template_file.ad_names.*.rendered[count.index]}"
   cidr_block          = "${lookup(var.network_cidrs, "slaveSubnetAD${count.index+1}")}"
   display_name        = "${var.label_prefix}JenkinsSlaveSubnetAD${count.index+1}"
   dns_label           = "slavead${count.index+1}"

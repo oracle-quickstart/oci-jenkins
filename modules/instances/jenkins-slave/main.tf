@@ -5,7 +5,6 @@ data "template_file" "install_slave" {
 
   vars {
     jenkins_master_url = "${local.jenkins_master_url}"
-    jenkins_master_ip  = "${var.jenkins_master_ip}"
   }
 }
 
@@ -13,8 +12,8 @@ data "template_file" "config_slave" {
   template = "${file("${path.module}/scripts/config.sh")}"
 
   vars {
-    jenkins_master_url = "${local.jenkins_master_url}"
-    jenkins_master_ip  = "${var.jenkins_master_ip}"
+    jenkins_master_url    = "${local.jenkins_master_url}"
+    jenkins_master_passwd = "${var.jenkins_master_passwd}"
   }
 }
 
@@ -26,9 +25,10 @@ locals {
 resource "oci_core_instance" "TFJenkinsSlave" {
   count               = "${var.number_of_slaves}"
   availability_domain = "${var.availability_domains[count.index%length(var.availability_domains)]}"
-  compartment_id      = "${var.compartment_ocid}"
-  display_name        = "${var.label_prefix}${var.slave_display_name}-${count.index+1}"
-  shape               = "${var.shape}"
+
+  compartment_id = "${var.compartment_ocid}"
+  display_name   = "${var.label_prefix}${var.slave_display_name}-${count.index+1}"
+  shape          = "${var.shape}"
 
   create_vnic_details {
     subnet_id        = "${var.subnet_ids[count.index%length(var.subnet_ids)]}"
@@ -47,19 +47,6 @@ resource "oci_core_instance" "TFJenkinsSlave" {
   }
 
   #Prepare files on slave node
-  provisioner "file" {
-    connection = {
-      host        = "${self.public_ip}"
-      agent       = false
-      timeout     = "5m"
-      user        = "opc"
-      private_key = "${file("${var.ssh_private_key}")}"
-    }
-
-    content     = "${file("${var.ssh_private_key}")}"
-    destination = "/tmp/key.pem"
-  }
-
   provisioner "file" {
     connection = {
       host        = "${self.public_ip}"

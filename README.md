@@ -10,6 +10,7 @@ The Jenkins Oracle Cloud Infrastructure Module provides a Terraform-based Jenkin
 1. Download and install Terraform (v0.10.3 or later)
 2. Download and install the OCI Terraform Provider (v2.0.0 or later)
 3. Export OCI credentials. (this refer to the https://github.com/oracle/terraform-provider-oci )
+4. An existing VCN with subnets, and those subnets need internet access in order to download Java and Jenkins.
 
 
 ## What's a Module?
@@ -21,6 +22,8 @@ Each Module has the following folder structure:
 * [root](): This folder contains a root module calls jenkins-master and jenkins-slave sub-modules to create a Jenkins cluster in OCI.
 * [modules](): This folder contains the reusable code for this Module, broken down into one or more modules.
 * [examples](): This folder contains examples of how to use the modules.
+  - [example-1](examples/example-1): This is an example of how to use the terraform_oci_jenkins module to deploy a Jenkins cluster in OCI by using an existing VCN, Security list and Subnets.
+  - [example-2](examples/example-2): This example creates a VCN in Oracle Cloud Infrastructure including default route table, DHCP options, security list and subnets from scratch, then use terraform_oci_jenkins module to deploy a Jenkins cluster.
 
 To deploy Jenkins Cluster servers using this Module:
 
@@ -55,7 +58,7 @@ slave_count | Number of slave instances to launch.
 slave_ads | The list of Availability Domains for Jenkins slave.
 slave_subnet_ids | The list of Jenkins slave subnets' id.
 slave_display_name | The name of the slave instance.
-slave_image_id | The OCID of an image for slave instance to use. You can refer to https://docs.us-phoenix-1.oraclecloud.com/images/ for more details. 
+slave_image_id | The OCID of an image for slave instance to use. You can refer to https://docs.us-phoenix-1.oraclecloud.com/images/ for more details.
 slave_shape | The shape to be used on the slave instance
 http_port | The port to use for HTTP traffic to Jenkins.
 jnlp_port | The Port to use for Jenkins master to slave communication between instances.

@@ -10,7 +10,7 @@ data "template_file" "setup_jenkins" {
   }
 }
 
-## JENKINS MASTER INSTANCE(S)
+## JENKINS MASTER INSTANCE
 resource "oci_core_instance" "TFJenkinsMaster" {
   availability_domain = "${var.availability_domain}"
   compartment_id      = "${var.compartment_ocid}"
@@ -63,5 +63,17 @@ resource "oci_core_instance" "TFJenkinsMaster" {
 
   timeouts {
     create = "10m"
+  }
+}
+
+## EXTERNAL DATASOURCE
+# Get Admin Initial Password from Jenkins Master instance
+# Store password in datasource result which can be used by terraform output
+data "external" "get_admin_init_password" {
+  program = ["bash", "${path.module}/scripts/get_password.sh"]
+
+  query = {
+    host        = "${oci_core_instance.TFJenkinsMaster.public_ip}"
+    private_key = "${var.ssh_private_key}"
   }
 }

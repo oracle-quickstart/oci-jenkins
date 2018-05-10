@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export PASS=$(sudo bash -c "cat /tmp/secret")
+export PASS=${jenkins_master_passwd}
 
 # Register node as Slave
 cat <<EOF | java -jar /tmp/jenkins-cli.jar -s ${jenkins_master_url} -auth admin:$PASS create-node $1

@@ -1,8 +1,8 @@
 ## Create VCN and Deploy Jenkins Cluster
-This example creates one VCN in Oracle Cloud Infrastructure including default route table, DHCP options and subnets from scratch, then use the terraform_oci_jenkins module to deploy a Jenkins cluster.
+This example creates a VCN in Oracle Cloud Infrastructure including default route table, DHCP options, security list and subnets from scratch, then use terraform_oci_jenkins module to deploy a Jenkins cluster.
 
 ### Using this example
-Update terraform.tfvars with the required information. 
+Update terraform.tfvars with the required information.
 
 ### Deploy the cluster  
 Initialize Terraform:
