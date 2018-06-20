@@ -6,6 +6,10 @@ output "slave_private_ips" {
   value = "${module.jenkins.slave_private_ips}"
 }
 
-output "master_login_info" {
-  value = "${module.jenkins.master_login_info}"
+output "master_login_url" {
+  value = "${module.jenkins.master_login_url}"
+}
+
+output "master_login_init_password" {
+  value = "${module.jenkins.master_login_init_password}"
 }
