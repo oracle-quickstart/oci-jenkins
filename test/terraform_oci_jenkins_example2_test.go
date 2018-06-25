@@ -77,33 +77,9 @@ func validateSolution(t *testing.T, terraformOptions *terraform.Options) {
 	// validateByHTTPGet(t, terraformOptions)
 }
 
-func getURL(t *testing.T, terraformOptions *terraform.Options) string {
-	login_info := terraform.Output(t, terraformOptions, "master_login_info")
-	lines := strings.Split(login_info, ",")
-	for i := 0; i < len(lines); i++ {
-		if strings.Contains(lines[i], "Jenkins Master URL") {
-			url := strings.TrimSpace(strings.SplitN(lines[i], ":", 2)[1])
-			return url
-		}
-	}
-	return ""
-}
-
-func getPassword(t *testing.T, terraformOptions *terraform.Options) string {
-	login_info := terraform.Output(t, terraformOptions, "master_login_info")
-	lines := strings.Split(login_info, ",")
-	for i := 0; i < len(lines); i++ {
-		if strings.Contains(lines[i], "Admin Initial Password") {
-			url := strings.TrimSpace(strings.SplitN(lines[i], ":", 2)[1])
-			return url
-		}
-	}
-	return ""
-}
-
 func validateByHTTPGet(t *testing.T, terraformOptions *terraform.Options) {
-	url := getURL(t, terraformOptions)
-	password := getPassword(t, terraformOptions)
+	url := terraform.Output(t, terraformOptions, "master_login_url")
+	password := terraform.Output(t, terraformOptions, "master_login_init_password")
 	assert.NotEqual(t, url, "")
 	assert.NotEqual(t, password, "")
 	status_code, body := test_helper.HTTPGetWithAuth(t, url, "admin", password)
