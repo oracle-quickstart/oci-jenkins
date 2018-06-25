@@ -18,9 +18,10 @@ output "slave_private_ips" {
   value = "${module.jenkins-slave.private_ips}"
 }
 
-output "master_login_info" {
-  value = [
-    "Jenkins Master URL: http://${module.jenkins-master.public_ip}:${var.http_port}",
-    "Admin Initial Password: ${module.jenkins-master.admin_init_password}",
-  ]
+output "master_login_url" {
+  value = "http://${module.jenkins-master.public_ip}:${var.http_port}"
+}
+
+output "master_login_init_password" {
+  value = "${module.jenkins-master.admin_init_password}"
 }
