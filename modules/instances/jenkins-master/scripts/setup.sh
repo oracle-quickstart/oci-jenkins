@@ -28,10 +28,9 @@ function waitForPasswordFile() {
 sudo yum install -y java xmlstarlet
 
 # Install Jenkins
-# Using Stable version： https://jenkins.io/download/lts/
-sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
 sudo rpm --import http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key
-sudo yum install -y jenkins
+sudo yum install -y jenkins-2.116
 
 # Config Jenkins Http Port
 sudo sed -i '/JENKINS_PORT/c\ \JENKINS_PORT=\"${http_port}\"' /etc/sysconfig/jenkins
