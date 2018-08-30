@@ -23,5 +23,5 @@ output "master_login_url" {
 }
 
 output "master_login_init_password" {
-  value = "${module.jenkins-master.admin_init_password}"
+  value = "Please check the initial password on master instance: /var/lib/jenkins/secrets/initialAdminPassword"
 }

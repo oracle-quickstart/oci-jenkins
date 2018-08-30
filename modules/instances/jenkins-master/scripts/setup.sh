@@ -24,8 +24,11 @@ function waitForPasswordFile() {
 
 
 # Install Java for Jenkins
+wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u181-b13/96a7b8442fe848ef90c96a2fad6ed6d1/jdk-8u181-linux-x64.rpm"
+sudo rpm -ivh jdk-8u181-linux-x64.rpm
+
 # Install xmlstarlet used for XML config manipulation
-sudo yum install -y java xmlstarlet
+sudo yum install -y xmlstarlet
 
 # Install Jenkins
 sudo wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo

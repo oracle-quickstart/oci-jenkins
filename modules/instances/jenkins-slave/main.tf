@@ -4,6 +4,7 @@ data "template_file" "install_slave" {
   template = "${file("${path.module}/scripts/setup.sh")}"
 
   vars {
+    jenkins_master_ip  = "${var.jenkins_master_ip}"
     jenkins_master_url = "${local.jenkins_master_url}"
   }
 }
@@ -12,8 +13,7 @@ data "template_file" "config_slave" {
   template = "${file("${path.module}/scripts/config.sh")}"
 
   vars {
-    jenkins_master_url    = "${local.jenkins_master_url}"
-    jenkins_master_passwd = "${var.jenkins_master_passwd}"
+    jenkins_master_url = "${local.jenkins_master_url}"
   }
 }
 
@@ -47,6 +47,19 @@ resource "oci_core_instance" "TFJenkinsSlave" {
   }
 
   #Prepare files on slave node
+  provisioner "file" {
+    connection = {
+      host        = "${self.public_ip}"
+      agent       = false
+      timeout     = "5m"
+      user        = "opc"
+      private_key = "${file("${var.ssh_private_key}")}"
+    }
+
+    content     = "${file("${var.ssh_private_key}")}"
+    destination = "/tmp/key.pem"
+  }
+
   provisioner "file" {
     connection = {
       host        = "${self.public_ip}"
