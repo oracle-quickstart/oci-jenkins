@@ -13,3 +13,9 @@ output "master_login_url" {
 output "master_login_init_password" {
   value = "${module.jenkins.master_login_init_password}"
 }
+output "slave_private_name0" {
+  value = "${element(module.jenkins.slave_host_names,0)}"
+}
+output "slave_private_name1" {
+  value = "${element(module.jenkins.slave_host_names,1)}"
+}

@@ -25,3 +25,6 @@ output "master_login_url" {
 output "master_login_init_password" {
   value = "Please check the initial password on master instance: /var/lib/jenkins/secrets/initialAdminPassword"
 }
+output "slave_host_names" {
+  value = "${module.jenkins-slave.slave_host_names}"
+}
