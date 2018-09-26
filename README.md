@@ -3,8 +3,6 @@
 ## About
 The Jenkins Oracle Cloud Infrastructure Module installs a Terraform-based Jenkins cluster on Oracle Cloud Infrastructure (OCI). A Jenkins cluster typically involves one or more master instance coupled with one or more slave instances.
 
-![Jenkins architecture](docs/images/architecture.png)
-
 ## Prerequisites
 1. [Download and install Terraform](https://www.terraform.io/downloads.html) (v0.10.3 or later)
 2. [Download and install the OCI Terraform Provider](https://github.com/oracle/terraform-provider-oci) (v2.0.0 or later)
@@ -22,8 +20,6 @@ Each Module has the following folder structure:
 * [root](): Contains a root module calls jenkins-master and jenkins-slave sub-modules to create a Jenkins cluster in OCI.
 * [modules](): Contains the reusable code for this module, broken down into one or more modules.
 * [examples](): Contains examples of how to use the modules.
-  - [example-1](examples/example-1): This is an example of how to use the terraform_oci_jenkins module to deploy a Jenkins cluster in OCI by using an existing VCN, security list, and subnets.
-  - [example-2](examples/example-2): This example creates a VCN in Oracle Cloud Infrastructure including default route table, DHCP options, security list and subnets, then uses the terraform_oci_jenkins module to deploy a Jenkins cluster.
 
 The following code shows how to deploy Jenkins Cluster servers using this module:
 
@@ -38,6 +34,9 @@ module "jenkins" {
   slave_subnet_id     = "${var.slave_subnet_id}"
   ssh_authorized_keys = "${var.ssh_authorized_keys}"
   ssh_private_key     = "${var.ssh_private_key}"
+  bastion_host         = "${var.bastion_public_ip}"
+  bastion_user         = "${var.bastion_user}"
+  bastion_private_key  = "${var.bastion_private_key}"
 }
 
 ```
