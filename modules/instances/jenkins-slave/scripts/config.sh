@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export PASS=$(sudo bash -c "cat /tmp/secret")
+export PASS=$(sudo bash -c "cat /home/opc/secret")
 
 # Register node as Slave
 cat <<EOF | java -jar /tmp/jenkins-cli.jar -s ${jenkins_master_url} -auth admin:$PASS create-node $1
@@ -30,7 +30,7 @@ export SECRET=$(curl --user "admin:$PASS" -d "$TOKEN" --data-urlencode "script=$
 sudo chown -R jenkins:jenkins /home/jenkins/jenkins-slave
 cmd="java -jar /home/jenkins/jenkins-slave/slave.jar -jnlpUrl ${jenkins_master_url}/computer/$1/slave-agent.jnlp -secret $SECRET"
 echo $cmd
-nohup sudo -u jenkins $cmd &>/tmp/jenkins.log &
+nohup sudo -u jenkins $cmd &>/home/jenkins/jenkins.log &
 
 sleep 10
 

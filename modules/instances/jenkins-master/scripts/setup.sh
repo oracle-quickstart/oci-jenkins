@@ -18,7 +18,7 @@ function waitForPasswordFile() {
       sleep 2 # wait for 1/10 of the second before check again
     done
 
-    sudo cat /var/lib/jenkins/secrets/initialAdminPassword > /tmp/secret
+    sudo cat /var/lib/jenkins/secrets/initialAdminPassword > /home/opc/secret
     echo "Password created"
 }
 
@@ -31,9 +31,10 @@ sudo rpm -ivh jdk-8u181-linux-x64.rpm
 sudo yum install -y xmlstarlet
 
 # Install Jenkins
+sudo echo "[jenkins-ci-org-${jenkins_version}]"
 sudo wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
 sudo rpm --import http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key
-sudo yum install -y jenkins-2.116
+sudo yum install -y jenkins-${jenkins_version}
 
 # Config Jenkins Http Port
 sudo sed -i '/JENKINS_PORT/c\ \JENKINS_PORT=\"${http_port}\"' /etc/sysconfig/jenkins
@@ -45,6 +46,7 @@ sudo chkconfig --add jenkins
 # Set httpport on firewall
 sudo firewall-cmd --zone=public --permanent --add-port=${http_port}/tcp
 sudo firewall-cmd --zone=public --permanent --add-port=${jnlp_port}/tcp
+sudo firewall-cmd --zone=public --permanent --add-port=443/tcp
 sudo firewall-cmd --reload
 
 waitForJenkins
@@ -66,8 +68,8 @@ PASS=$(sudo bash -c "cat /var/lib/jenkins/secrets/initialAdminPassword")
 sleep 10
 
 # SET AGENT PORT
-xmlstarlet ed -u "//slaveAgentPort" -v "${jnlp_port}" /var/lib/jenkins/config.xml > /tmp/jenkins_config.xml
-sudo mv /tmp/jenkins_config.xml /var/lib/jenkins/config.xml
+xmlstarlet ed -u "//slaveAgentPort" -v "${jnlp_port}" /var/lib/jenkins/config.xml > /home/opc/jenkins_config.xml
+sudo mv /home/opc/jenkins_config.xml /var/lib/jenkins/config.xml
 sudo service jenkins restart
 
 waitForJenkins

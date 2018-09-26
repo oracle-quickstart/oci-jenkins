@@ -13,3 +13,6 @@ compartment_ocid = "<compartment OCID>"
 #Instance Configration
 ssh_authorized_keys = "<path to public key>"
 ssh_private_key = "<path to private key>"
+bastion_authorized_keys = "<path to bastion host public key>"
+bastion_private_key = "<path to bastion host private key>"
+nat_authorized_keys = "<path to nat host public key>"

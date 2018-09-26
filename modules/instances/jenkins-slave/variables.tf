@@ -59,3 +59,16 @@ variable "image_id" {
   description = "The OCID of an image for an instance to use. "
   default     = ""
 }
+
+variable "bastion_host" {
+  description = "The bastion host IP."
+}
+
+variable "bastion_user" {
+  description = "The SSH user to connect to the bastion host."
+  default     = "opc"
+}
+
+variable "bastion_private_key" {
+  description = "The private key path to access the bastion host."
+}
