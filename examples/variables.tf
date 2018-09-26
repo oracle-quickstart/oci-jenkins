@@ -51,6 +51,9 @@ variable "jnlp_port" {
   default = 49187
 }
 
+variable "jenkins_version" {
+  default     = "2.116"
+}
 
 variable "bastion_display_name" {
   default = "JenkinsBastion"

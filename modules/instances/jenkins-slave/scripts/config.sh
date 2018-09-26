@@ -3,7 +3,7 @@
 export PASS=$(sudo bash -c "cat /home/opc/secret")
 
 # Register node as Slave
-cat <<EOF | java -jar /tmp/jenkins-cli.jar -s ${jenkins_master_url} -auth admin:$PASS create-node $1
+cat <<EOF | java -jar /home/opc/tmp/jenkins-cli.jar -s ${jenkins_master_url} -auth admin:$PASS create-node $1
 <slave>
   <name>$1</name>
   <remoteFS>/home/jenkins</remoteFS>
@@ -16,7 +16,7 @@ EOF
 
 export TOKEN=$(curl --user "admin:$PASS" -s ${jenkins_master_url}/crumbIssuer/api/json | python -c 'import sys,json;j=json.load(sys.stdin);print j["crumbRequestField"] + "=" + j["crumb"]')
 
-cat > /tmp/secret.groovy <<EOF
+cat > /home/opc/secret.groovy <<EOF
 for (aSlave in hudson.model.Hudson.instance.slaves) {
   if (aSlave.name == "$1") {
     println aSlave.name + "," + aSlave.getComputer().getJnlpMac()
@@ -24,13 +24,13 @@ for (aSlave in hudson.model.Hudson.instance.slaves) {
 }
 EOF
 
-export SECRET=$(curl --user "admin:$PASS" -d "$TOKEN" --data-urlencode "script=$(</tmp/secret.groovy)" ${jenkins_master_url}/scriptText | awk -F',' '{print $2}')
+export SECRET=$(curl --user "admin:$PASS" -d "$TOKEN" --data-urlencode "script=$(</home/opc/secret.groovy)" ${jenkins_master_url}/scriptText | awk -F',' '{print $2}')
 
 # Run from service definition
 sudo chown -R jenkins:jenkins /home/jenkins/jenkins-slave
 cmd="java -jar /home/jenkins/jenkins-slave/slave.jar -jnlpUrl ${jenkins_master_url}/computer/$1/slave-agent.jnlp -secret $SECRET"
 echo $cmd
-nohup sudo -u jenkins $cmd &>/home/jenkins/jenkins.log &
+nohup sudo -u jenkins $cmd &>/home/opc/jenkins.log &
 
 sleep 10
 

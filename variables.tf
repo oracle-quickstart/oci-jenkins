@@ -32,6 +32,11 @@ variable "master_subnet_id" {
   default     = ""
 }
 
+variable "jenkins_version" {
+  description = "The verion of Jenkins server. "
+  default     = "2.116"
+}
+
 variable "master_display_name" {
   description = "The name of the master instance. "
   default     = "tf-jenkins-master"

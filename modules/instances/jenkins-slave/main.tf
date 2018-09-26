@@ -128,7 +128,7 @@ resource "oci_core_instance" "TFJenkinsSlave" {
 
     inline = [
       "sudo chmod +x ~/config_slave.sh",
-      "~/config_slave.sh ${self.display_name}",
+      "sudo ~/config_slave.sh ${self.display_name}",
     ]
   }
 }

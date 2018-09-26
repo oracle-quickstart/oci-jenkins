@@ -21,9 +21,7 @@ resource "oci_load_balancer_backend_set" "lb-bes1" {
 
   health_checker {
     port                = "${var.http_port}"
-    protocol            = "HTTP"
-    response_body_regex = ".*"
-    url_path            = "/"
+    protocol            = "TCP"
   }
 }
 
@@ -86,7 +84,7 @@ resource "oci_load_balancer_backend" "lb-be1" {
   load_balancer_id = "${oci_load_balancer.JenkinsLB.id}"
   backendset_name  = "${oci_load_balancer_backend_set.lb-bes1.name}"
   ip_address       = "${module.jenkins.master_private_ip}"
-  port             = 8080
+  port             = "${var.http_port}"
   backup           = false
   drain            = false
   offline          = false
