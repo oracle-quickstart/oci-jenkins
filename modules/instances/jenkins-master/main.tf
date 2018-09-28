@@ -15,10 +15,15 @@ data "template_file" "setup_jenkins" {
 resource "oci_core_instance" "TFJenkinsMaster" {
   availability_domain = "${var.availability_domain}"
   compartment_id      = "${var.compartment_ocid}"
-  display_name        = "${var.label_prefix}${var.master_display_name}"
   shape               = "${var.shape}"
-  subnet_id           = "${var.subnet_id}"
-  hostname_label      = "${var.master_display_name}"
+  display_name        = "${var.label_prefix}${var.master_display_name}"
+
+  create_vnic_details {
+    subnet_id        = "${var.subnet_id}"
+    display_name     = "${var.label_prefix}${var.master_display_name}"
+    assign_public_ip = "${var.assign_public_ip}"
+    hostname_label   = "${var.master_display_name}"
+  }
 
   metadata {
     ssh_authorized_keys = "${file("${var.ssh_authorized_keys}")}"

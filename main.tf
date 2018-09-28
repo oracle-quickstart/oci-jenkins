@@ -10,6 +10,7 @@ module "jenkins-master" {
   shape               = "${var.master_shape}"
   label_prefix        = "${var.label_prefix}"
   subnet_id           = "${var.master_subnet_id}"
+  jenkins_version     = "${var.jenkins_version}"
   http_port           = "${var.http_port}"
   jnlp_port           = "${var.jnlp_port}"
   ssh_authorized_keys = "${var.ssh_authorized_keys}"

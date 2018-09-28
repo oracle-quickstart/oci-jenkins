@@ -34,7 +34,7 @@ variable "master_subnet_id" {
 
 variable "jenkins_version" {
   description = "The verion of Jenkins server. "
-  default     = "2.116"
+  default     = ""
 }
 
 variable "master_display_name" {

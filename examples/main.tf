@@ -53,7 +53,7 @@ resource "oci_core_instance" "JenkinsNat" {
 module "jenkins" {
   source              = "../"
   compartment_ocid    = "${var.compartment_ocid}"
-  jenkins_version     = "2.143"
+  jenkins_version     = "2.116"
   master_ad           = "${data.template_file.ad_names.*.rendered[0]}"
   master_subnet_id    = "${oci_core_subnet.JenkinsMasterSubnetAD.id}"
   master_image_id     = "${var.image_id[var.region]}"

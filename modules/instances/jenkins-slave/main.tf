@@ -28,8 +28,14 @@ resource "oci_core_instance" "TFJenkinsSlave" {
   compartment_id = "${var.compartment_ocid}"
   display_name   = "${var.label_prefix}${var.slave_display_name}-${count.index+1}"
   shape          = "${var.shape}"
-  subnet_id        = "${var.subnet_ids[count.index%length(var.subnet_ids)]}"
-  hostname_label   = "${var.slave_display_name}-${count.index+1}"
+
+
+  create_vnic_details {
+    subnet_id        = "${var.subnet_ids[count.index%length(var.subnet_ids)]}"
+    display_name   = "${var.label_prefix}${var.slave_display_name}-${count.index+1}"
+    assign_public_ip = false
+    hostname_label   = "${var.slave_display_name}-${count.index+1}"
+  }
 
   metadata {
     ssh_authorized_keys = "${file("${var.ssh_authorized_keys}")}"
