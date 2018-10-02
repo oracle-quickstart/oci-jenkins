@@ -9,7 +9,7 @@ variable "availability_domain" {
 
 variable "jenkins_version" {
   description = "The version of the Jenkins Server."
-  default     = "2.116"
+  default     = "2.138.1"
 }
 
 variable "master_display_name" {

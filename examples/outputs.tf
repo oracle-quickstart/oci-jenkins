@@ -19,5 +19,5 @@ output "lb_public_ip" {
 }
 
 output "jenkins_login_url" {
-  value = "http://${oci_load_balancer.JenkinsLB.ip_addresses.*.rendered[0]}:${var.http_port}"
+  value = "http://${oci_load_balancer.JenkinsLB.ip_addresses[0]}"
 }

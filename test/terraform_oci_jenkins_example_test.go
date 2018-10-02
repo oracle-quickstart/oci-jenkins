@@ -1,3 +1,5 @@
+// todo ：Need modify testcases based on example changes (Adding bastion host and LoadBalancer)
+
 package test
 
 import (
