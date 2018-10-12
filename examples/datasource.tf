@@ -11,7 +11,6 @@ data "template_file" "ad_names" {
   template = "${lookup(data.oci_identity_availability_domains.ad.availability_domains[count.index], "name")}"
 }
 
-
 # Gets a list of vNIC attachments on the nat instance
 data "oci_core_vnic_attachments" "nat" {
   compartment_id      = "${var.compartment_ocid}"

@@ -11,18 +11,6 @@ function waitForJenkins() {
     echo "Jenkins launched"
 }
 
-function waitForPasswordFile() {
-    echo "Waiting for Jenkins to generate password..."
-
-    while [ ! -f /var/lib/jenkins/secrets/initialAdminPassword ]; do
-      sleep 2 # wait for 1/10 of the second before check again
-    done
-
-    sudo cat /var/lib/jenkins/secrets/initialAdminPassword > /home/opc/secret
-    echo "Password created"
-}
-
-
 # Install Java for Jenkins
 sudo yum install -y java-1.8.0-openjdk
 
@@ -37,7 +25,7 @@ sudo yum install -y jenkins-${jenkins_version}
 
 # Config Jenkins Http Port
 sudo sed -i '/JENKINS_PORT/c\ \JENKINS_PORT=\"${http_port}\"' /etc/sysconfig/jenkins
-
+sudo sed -i '/JENKINS_JAVA_OPTIONS/c\ \JENKINS_JAVA_OPTIONS=\"-Djenkins.install.runSetupWizard=false -Djava.awt.headless=true\"' /etc/sysconfig/jenkins
 # Start Jenkins
 sudo service jenkins restart
 sudo chkconfig --add jenkins
@@ -60,15 +48,24 @@ waitForJenkins
 # INSTALL CLI
 sudo cp /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar /var/lib/jenkins/jenkins-cli.jar
 
-waitForPasswordFile
-
-PASS=$(sudo bash -c "cat /var/lib/jenkins/secrets/initialAdminPassword")
-
 sleep 10
 
-# SET AGENT PORT
+# Set Agent Port
 xmlstarlet ed -u "//slaveAgentPort" -v "${jnlp_port}" /var/lib/jenkins/config.xml > /home/opc/jenkins_config.xml
 sudo mv /home/opc/jenkins_config.xml /var/lib/jenkins/config.xml
+
+# Initialize Jenkins User Password Groovy Script
+sudo mv /home/opc/initialUserPassword /var/lib/jenkins/initialUserPassword
+USER=$(sudo bash -c "cat /var/lib/jenkins/initialUserPassword | grep JENKINS_USER | cut -d'=' -f2")
+PASS=$(sudo bash -c "cat /var/lib/jenkins/initialUserPassword | grep JENKINS_PASS | cut -d'=' -f2")
+
+# Give default username and password if initialUserPassword file is not provided
+[[ -z "$PASS" ]] && export USER="admin" || export USER=$USER
+[[ -z "$PASS" ]] && export PASS="admin" || export PASS=$PASS
+
+sudo -u jenkins mkdir -p /var/lib/jenkins/init.groovy.d
+sudo mv /home/opc/default-user.groovy /var/lib/jenkins/init.groovy.d/default-user.groovy
+
 sudo service jenkins restart
 
 waitForJenkins
@@ -76,7 +73,7 @@ waitForJenkins
 sleep 10
 
 # INSTALL PLUGINS
-sudo java -jar /var/lib/jenkins/jenkins-cli.jar -s http://localhost:${http_port} -auth admin:$PASS install-plugin ${plugins}
+sudo java -jar /var/lib/jenkins/jenkins-cli.jar -s http://localhost:${http_port} -auth $USER:$PASS install-plugin ${plugins}
 
 # RESTART JENKINS TO ACTIVATE PLUGINS
-sudo java -jar /var/lib/jenkins/jenkins-cli.jar -s http://localhost:${http_port} -auth admin:$PASS restart
+sudo java -jar /var/lib/jenkins/jenkins-cli.jar -s http://localhost:${http_port} -auth $USER:$PASS restart

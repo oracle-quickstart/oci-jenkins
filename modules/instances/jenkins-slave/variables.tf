@@ -40,6 +40,10 @@ variable "jenkins_master_port" {
   description = "The Port of the master Jenkins instance. "
 }
 
+variable "jenkins_user_password" {
+  description = "File includes jenkins initial user and password. "
+}
+
 variable "assign_public_ip" {
   description = "Whether the VNIC should be assigned a public IP address. Default 'true' assigns a public IP address. "
   default     = true

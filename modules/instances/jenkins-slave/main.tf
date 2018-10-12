@@ -1,14 +1,4 @@
-## DATASOURCE
 # Init Script Files
-data "template_file" "install_slave" {
-  template = "${file("${path.module}/scripts/setup.sh")}"
-
-  vars {
-    jenkins_master_ip  = "${var.jenkins_master_ip}"
-    jenkins_master_url = "${local.jenkins_master_url}"
-  }
-}
-
 data "template_file" "config_slave" {
   template = "${file("${path.module}/scripts/config.sh")}"
 
@@ -25,14 +15,13 @@ locals {
 resource "oci_core_instance" "TFJenkinsSlave" {
   count               = "${var.number_of_slaves}"
   availability_domain = "${var.availability_domains[count.index%length(var.availability_domains)]}"
-  compartment_id = "${var.compartment_ocid}"
-  display_name   = "${var.label_prefix}${var.slave_display_name}-${count.index+1}"
-  shape          = "${var.shape}"
-
+  compartment_id      = "${var.compartment_ocid}"
+  display_name        = "${var.label_prefix}${var.slave_display_name}-${count.index+1}"
+  shape               = "${var.shape}"
 
   create_vnic_details {
     subnet_id        = "${var.subnet_ids[count.index%length(var.subnet_ids)]}"
-    display_name   = "${var.label_prefix}${var.slave_display_name}-${count.index+1}"
+    display_name     = "${var.label_prefix}${var.slave_display_name}-${count.index+1}"
     assign_public_ip = false
     hostname_label   = "${var.slave_display_name}-${count.index+1}"
   }
@@ -60,25 +49,8 @@ resource "oci_core_instance" "TFJenkinsSlave" {
       bastion_private_key = "${file("${var.bastion_private_key}")}"
     }
 
-    content     = "${file("${var.ssh_private_key}")}"
-    destination = "~/key.pem"
-  }
-
-  provisioner "file" {
-    connection = {
-      host        = "${self.private_ip}"
-      agent       = false
-      timeout     = "5m"
-      user        = "opc"
-      private_key = "${file("${var.ssh_private_key}")}"
-
-      bastion_host        = "${var.bastion_host}"
-      bastion_user        = "${var.bastion_user}"
-      bastion_private_key = "${file("${var.bastion_private_key}")}"
-    }
-
-    content     = "${data.template_file.install_slave.rendered}"
-    destination = "~/setup_slave.sh"
+    content     = "${file("${var.jenkins_user_password}")}"
+    destination = "~/initialUserPassword"
   }
 
   provisioner "file" {
@@ -96,26 +68,6 @@ resource "oci_core_instance" "TFJenkinsSlave" {
 
     content     = "${data.template_file.config_slave.rendered}"
     destination = "~/config_slave.sh"
-  }
-
-  # Install slave
-  provisioner "remote-exec" {
-    connection = {
-      host        = "${self.private_ip}"
-      agent       = false
-      timeout     = "5m"
-      user        = "opc"
-      private_key = "${file("${var.ssh_private_key}")}"
-
-      bastion_host        = "${var.bastion_host}"
-      bastion_user        = "${var.bastion_user}"
-      bastion_private_key = "${file("${var.bastion_private_key}")}"
-    }
-
-    inline = [
-      "chmod +x ~/setup_slave.sh",
-      "sudo ~/setup_slave.sh",
-    ]
   }
 
   # Register & Launch slave

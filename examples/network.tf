@@ -26,7 +26,7 @@ resource "oci_core_route_table" "public" {
   display_name   = "public"
 
   route_rules {
-    destination        = "0.0.0.0/0"
+    destination       = "0.0.0.0/0"
     network_entity_id = "${oci_core_internet_gateway.JenkinsIG.id}"
   }
 }
@@ -37,7 +37,7 @@ resource "oci_core_route_table" "private" {
   display_name   = "private"
 
   route_rules {
-    destination        = "0.0.0.0/0"
+    destination       = "0.0.0.0/0"
     network_entity_id = "${lookup(data.oci_core_private_ips.nat.private_ips[0],"id")}"
   }
 }
@@ -100,14 +100,14 @@ resource "oci_core_security_list" "JenkinsBastion" {
   vcn_id         = "${oci_core_virtual_network.JenkinsVCN.id}"
 
   egress_security_rules = [{
-   tcp_options {
-     "max" = 22
-     "min" = 22
-   }
+    tcp_options {
+      "max" = 22
+      "min" = 22
+    }
 
-   protocol    = "6"
-   destination = "${lookup(var.network_cidrs, "vcn_cidr")}"
- }]
+    protocol    = "6"
+    destination = "${lookup(var.network_cidrs, "vcn_cidr")}"
+  }]
 
   ingress_security_rules = [{
     tcp_options {

@@ -11,7 +11,7 @@ variable "network_cidrs" {
   type = "map"
 
   default = {
-    vcn_cidr        = "10.0.0.0/16"
+    vcn_cidr = "10.0.0.0/16"
 
     bastionSubnetAD = "10.0.10.0/24"
     masterSubnetAD  = "10.0.11.0/24"
@@ -19,8 +19,8 @@ variable "network_cidrs" {
     slaveSubnetAD2  = "10.0.13.0/24"
     slaveSubnetAD3  = "10.0.14.0/24"
     natSubnetAD     = "10.0.15.0/24"
-    lbSubnet1     = "10.0.16.0/24"
-    lbSubnet2     = "10.0.17.0/24"
+    lbSubnet1       = "10.0.16.0/24"
+    lbSubnet2       = "10.0.17.0/24"
   }
 }
 
@@ -52,7 +52,11 @@ variable "jnlp_port" {
 }
 
 variable "jenkins_version" {
-  default     = "2.116"
+  default = "2.138.2"
+}
+
+variable "jenkins_user_password" {
+  default = "./initialUserPassword"
 }
 
 variable "bastion_display_name" {
@@ -78,7 +82,6 @@ variable "bastion_ad_index" {
   default = 0
 }
 
-
 variable "nat_display_name" {
   default = "JenkinsNat"
 }
@@ -86,7 +89,9 @@ variable "nat_display_name" {
 variable "nat_shape" {
   default = "VM.Standard1.1"
 }
+
 variable "nat_authorized_keys" {}
+
 variable "nat_ad_index" {
   default = 0
 }

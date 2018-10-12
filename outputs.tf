@@ -17,7 +17,3 @@ output "slave_private_ips" {
 output "master_login_url" {
   value = "http://${module.jenkins-master.private_ip}:${var.http_port}"
 }
-
-output "master_login_init_password" {
-  value = "Please check the initial password on master instance: /var/lib/jenkins/secrets/initialAdminPassword"
-}
