@@ -81,17 +81,3 @@ variable "bastion_private_key" {}
 variable "bastion_ad_index" {
   default = 0
 }
-
-variable "nat_display_name" {
-  default = "JenkinsNat"
-}
-
-variable "nat_shape" {
-  default = "VM.Standard1.1"
-}
-
-variable "nat_authorized_keys" {}
-
-variable "nat_ad_index" {
-  default = 0
-}

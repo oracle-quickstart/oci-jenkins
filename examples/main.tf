@@ -23,31 +23,6 @@ resource "oci_core_instance" "JenkinsBastion" {
 }
 
 # ------------------------------------------------------------------------------
-# Setup NAT Host
-# ------------------------------------------------------------------------------
-resource "oci_core_instance" "JenkinsNat" {
-  availability_domain = "${data.template_file.ad_names.*.rendered[var.nat_ad_index]}"
-  compartment_id      = "${var.compartment_ocid}"
-  display_name        = "${var.nat_display_name}"
-  shape               = "${var.nat_shape}"
-
-  create_vnic_details {
-    subnet_id              = "${oci_core_subnet.JenkinsNat.id}"
-    skip_source_dest_check = true
-  }
-
-  metadata {
-    ssh_authorized_keys = "${file("${var.nat_authorized_keys}")}"
-    user_data           = "${base64encode(file("nat_user_data.tpl"))}"
-  }
-
-  source_details {
-    source_id   = "${var.image_id[var.region]}"
-    source_type = "image"
-  }
-}
-
-# ------------------------------------------------------------------------------
 # DEPLOY THE JENKINS CLUSTER
 # ------------------------------------------------------------------------------
 module "jenkins" {

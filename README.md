@@ -4,10 +4,8 @@
 The Jenkins Oracle Cloud Infrastructure Module installs a Terraform-based Jenkins cluster on Oracle Cloud Infrastructure (OCI). A Jenkins cluster typically involves one or more master instance coupled with one or more slave instances.
 
 ## Prerequisites
-1. [Download and install Terraform](https://www.terraform.io/downloads.html) (v0.10.3 or later)
-2. [Download and install the OCI Terraform Provider](https://github.com/oracle/terraform-provider-oci) (v2.0.0 or later)
-3. Export OCI credentials using guidance at [Export Credentials](https://github.com/oracle/terraform-provider-oci#export-credentials).
-4. An existing VCN with subnets The subnets need internet access in order to download Java and Jenkins.
+1. See the [Oracle Cloud Infrastructure Terraform Provider docs](https://www.terraform.io/docs/providers/oci/index.html) for information about setting up and using the Oracle Cloud Infrastructure Terraform Provider.
+2. An existing VCN with subnets The subnets need internet access in order to download Java and Jenkins.
 
 
 ## What's a Module?
@@ -65,5 +63,13 @@ plugins | List of plugins to pre-install on the master instance.
 
 
 ## Contributing
+
 This project is open source. Oracle appreciates any contributions that are made by the open source community.
-See Contributing for details.
+
+## License
+
+Copyright (c) 2018, Oracle and/or its affiliates. All rights reserved.
+
+Licensed under the Universal Permissive License 1.0 or Apache License 2.0.
+
+See [LICENSE](/LICENSE.txt) for more details.

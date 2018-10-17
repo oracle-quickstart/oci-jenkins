@@ -9,12 +9,21 @@ resource "oci_core_virtual_network" "JenkinsVCN" {
 }
 
 ############################################
-# Create Internet Gateways
+# Create Internet Gateway
 ############################################
 resource "oci_core_internet_gateway" "JenkinsIG" {
   compartment_id = "${var.compartment_ocid}"
   vcn_id         = "${oci_core_virtual_network.JenkinsVCN.id}"
   display_name   = "JenkinsIG"
+}
+
+############################################
+# Create NAT Gateway
+############################################
+resource "oci_core_nat_gateway" "JenkinsNG" {
+  compartment_id = "${var.compartment_ocid}"
+  vcn_id         = "${oci_core_virtual_network.JenkinsVCN.id}"
+  display_name   = "JenkinsNG"
 }
 
 ############################################
@@ -38,7 +47,8 @@ resource "oci_core_route_table" "private" {
 
   route_rules {
     destination       = "0.0.0.0/0"
-    network_entity_id = "${lookup(data.oci_core_private_ips.nat.private_ips[0],"id")}"
+    destination_type  = "CIDR_BLOCK"
+    network_entity_id = "${oci_core_nat_gateway.JenkinsNG.id}"
   }
 }
 
@@ -208,20 +218,6 @@ resource "oci_core_subnet" "JenkinsBastion" {
   display_name        = "JenkinsBastionAD${var.bastion_ad_index+1}"
   cidr_block          = "${lookup(var.network_cidrs, "bastionSubnetAD")}"
   security_list_ids   = ["${oci_core_security_list.JenkinsBastion.id}"]
-  vcn_id              = "${oci_core_virtual_network.JenkinsVCN.id}"
-  route_table_id      = "${oci_core_route_table.public.id}"
-  dhcp_options_id     = "${oci_core_virtual_network.JenkinsVCN.default_dhcp_options_id}"
-}
-
-############################################
-# Create NAT Subnet
-############################################
-resource "oci_core_subnet" "JenkinsNat" {
-  availability_domain = "${data.template_file.ad_names.*.rendered[var.nat_ad_index]}"
-  compartment_id      = "${var.compartment_ocid}"
-  display_name        = "JenkinsNatAD${var.nat_ad_index+1}"
-  cidr_block          = "${lookup(var.network_cidrs, "natSubnetAD")}"
-  security_list_ids   = ["${oci_core_security_list.JenkinsNat.id}"]
   vcn_id              = "${oci_core_virtual_network.JenkinsVCN.id}"
   route_table_id      = "${oci_core_route_table.public.id}"
   dhcp_options_id     = "${oci_core_virtual_network.JenkinsVCN.default_dhcp_options_id}"
