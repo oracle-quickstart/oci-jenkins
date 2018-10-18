@@ -92,15 +92,6 @@ resource "oci_core_security_list" "JenkinsPrivate" {
       protocol = "6"
       source   = "0.0.0.0/0"
     },
-    {
-      protocol = "6"
-      source   = "0.0.0.0/0"
-
-      tcp_options {
-        "min" = 443
-        "max" = 443
-      }
-    },
   ]
 }
 

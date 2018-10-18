@@ -59,6 +59,10 @@ variable "jenkins_user_password" {
   default = "./initialUserPassword"
 }
 
+variable "slave_count" {
+  default = "2"
+}
+
 variable "bastion_display_name" {
   default = "JenkinsBastion"
 }
