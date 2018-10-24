@@ -12,8 +12,8 @@ variable "jenkins_version" {
   default     = "2.138.2"
 }
 
-variable "jenkins_user_password" {
-  description = "File includes jenkins initial user and password. "
+variable "jenkins_password" {
+  description = "Required field for Jenkins initial password. "
 }
 
 variable "master_display_name" {

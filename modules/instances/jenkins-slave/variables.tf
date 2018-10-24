@@ -40,8 +40,8 @@ variable "jenkins_master_port" {
   description = "The Port of the master Jenkins instance. "
 }
 
-variable "jenkins_user_password" {
-  description = "File includes jenkins initial user and password. "
+variable "jenkins_password" {
+  description = "Required field for Jenkins initial password. "
 }
 
 variable "assign_public_ip" {

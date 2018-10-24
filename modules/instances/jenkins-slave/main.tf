@@ -4,6 +4,7 @@ data "template_file" "config_slave" {
 
   vars {
     jenkins_master_url = "${local.jenkins_master_url}"
+    jenkins_password   = "${var.jenkins_password}"
   }
 }
 
@@ -33,24 +34,6 @@ resource "oci_core_instance" "TFJenkinsSlave" {
   source_details {
     source_id   = "${var.image_id}"
     source_type = "image"
-  }
-
-  #Prepare files on slave node
-  provisioner "file" {
-    connection = {
-      host        = "${self.private_ip}"
-      agent       = false
-      timeout     = "5m"
-      user        = "opc"
-      private_key = "${file("${var.ssh_private_key}")}"
-
-      bastion_host        = "${var.bastion_host}"
-      bastion_user        = "${var.bastion_user}"
-      bastion_private_key = "${file("${var.bastion_private_key}")}"
-    }
-
-    content     = "${file("${var.jenkins_user_password}")}"
-    destination = "~/initialUserPassword"
   }
 
   provisioner "file" {

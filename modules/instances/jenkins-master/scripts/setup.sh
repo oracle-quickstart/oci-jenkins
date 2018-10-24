@@ -55,13 +55,7 @@ xmlstarlet ed -u "//slaveAgentPort" -v "${jnlp_port}" /var/lib/jenkins/config.xm
 sudo mv /home/opc/jenkins_config.xml /var/lib/jenkins/config.xml
 
 # Initialize Jenkins User Password Groovy Script
-sudo mv /home/opc/initialUserPassword /var/lib/jenkins/initialUserPassword
-USER=$(sudo bash -c "cat /var/lib/jenkins/initialUserPassword | grep JENKINS_USER | cut -d'=' -f2")
-PASS=$(sudo bash -c "cat /var/lib/jenkins/initialUserPassword | grep JENKINS_PASS | cut -d'=' -f2")
-
-# Give default username and password if initialUserPassword file is not provided
-[[ -z "$PASS" ]] && export USER="admin" || export USER=$USER
-[[ -z "$PASS" ]] && export PASS="admin" || export PASS=$PASS
+export PASS=${jenkins_password}
 
 sudo -u jenkins mkdir -p /var/lib/jenkins/init.groovy.d
 sudo mv /home/opc/default-user.groovy /var/lib/jenkins/init.groovy.d/default-user.groovy
@@ -73,7 +67,7 @@ waitForJenkins
 sleep 10
 
 # INSTALL PLUGINS
-sudo java -jar /var/lib/jenkins/jenkins-cli.jar -s http://localhost:${http_port} -auth $USER:$PASS install-plugin ${plugins}
+sudo java -jar /var/lib/jenkins/jenkins-cli.jar -s http://localhost:${http_port} -auth admin:$PASS install-plugin ${plugins}
 
 # RESTART JENKINS TO ACTIVATE PLUGINS
-sudo java -jar /var/lib/jenkins/jenkins-cli.jar -s http://localhost:${http_port} -auth $USER:$PASS restart
+sudo java -jar /var/lib/jenkins/jenkins-cli.jar -s http://localhost:${http_port} -auth admin:$PASS restart

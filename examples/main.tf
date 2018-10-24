@@ -29,7 +29,7 @@ module "jenkins" {
   source                = "../"
   compartment_ocid      = "${var.compartment_ocid}"
   jenkins_version       = "${var.jenkins_version}"
-  jenkins_user_password = "./initialUserPassword"
+  jenkins_password      = "${var.jenkins_password}"
   master_ad             = "${data.template_file.ad_names.*.rendered[0]}"
   master_subnet_id      = "${oci_core_subnet.JenkinsMasterSubnetAD.id}"
   master_image_id       = "${var.image_id[var.region]}"

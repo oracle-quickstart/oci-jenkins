@@ -55,8 +55,7 @@ variable "jenkins_version" {
   default = "2.138.2"
 }
 
-variable "jenkins_user_password" {
-  default = "./initialUserPassword"
+variable "jenkins_password" {
 }
 
 variable "slave_count" {

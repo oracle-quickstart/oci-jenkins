@@ -32,8 +32,8 @@ variable "master_subnet_id" {
   default     = ""
 }
 
-variable "jenkins_user_password" {
-  description = "File includes jenkins initial user and password. Set default username and password(admin/admin) if username and password are not provided in file."
+variable "jenkins_password" {
+  description = "Required field for Jenkins initial password. "
 }
 
 variable "jenkins_version" {

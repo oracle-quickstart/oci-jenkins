@@ -4,10 +4,19 @@ data "template_file" "setup_jenkins" {
   template = "${file("${path.module}/scripts/setup.sh")}"
 
   vars {
-    jenkins_version = "${var.jenkins_version}"
-    http_port       = "${var.http_port}"
-    jnlp_port       = "${var.jnlp_port}"
-    plugins         = "${join(" ", var.plugins)}"
+    jenkins_version  = "${var.jenkins_version}"
+    jenkins_password = "${var.jenkins_password}"
+    http_port        = "${var.http_port}"
+    jnlp_port        = "${var.jnlp_port}"
+    plugins          = "${join(" ", var.plugins)}"
+  }
+}
+
+data "template_file" "init_jenkins" {
+  template = "${file("${path.module}/scripts/default-user.groovy")}"
+
+  vars {
+    jenkins_password = "${var.jenkins_password}"
   }
 }
 
@@ -64,24 +73,7 @@ resource "oci_core_instance" "TFJenkinsMaster" {
       bastion_private_key = "${file("${var.bastion_private_key}")}"
     }
 
-    content     = "${file("${var.jenkins_user_password}")}"
-    destination = "~/initialUserPassword"
-  }
-
-  provisioner "file" {
-    connection = {
-      host        = "${self.private_ip}"
-      agent       = false
-      timeout     = "5m"
-      user        = "opc"
-      private_key = "${file("${var.ssh_private_key}")}"
-
-      bastion_host        = "${var.bastion_host}"
-      bastion_user        = "${var.bastion_user}"
-      bastion_private_key = "${file("${var.bastion_private_key}")}"
-    }
-
-    content     = "${file("${path.module}/scripts/default-user.groovy")}"
+    content     = "${data.template_file.init_jenkins.rendered}"
     destination = "~/default-user.groovy"
   }
 
