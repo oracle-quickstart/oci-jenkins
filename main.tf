@@ -2,7 +2,7 @@
 # Jenkins Master Instance
 ############################################
 module "jenkins-master" {
-  source                = "./modules/instances/jenkins-master"
+  source                = "./modules/jenkins-master"
   availability_domain   = "${var.master_ad}"
   compartment_ocid      = "${var.compartment_ocid}"
   master_display_name   = "${var.master_display_name}"
@@ -27,7 +27,7 @@ module "jenkins-master" {
 # Jenkins Slave Instance(s)
 ############################################
 module "jenkins-slave" {
-  source                = "./modules/instances/jenkins-slave"
+  source                = "./modules/jenkins-slave"
   number_of_slaves      = "${var.slave_count}"
   availability_domains  = "${var.slave_ads}"
   compartment_ocid      = "${var.compartment_ocid}"
