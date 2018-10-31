@@ -84,3 +84,80 @@ variable "bastion_private_key" {}
 variable "bastion_ad_index" {
   default = 0
 }
+
+
+
+variable "listener_certificate_name" {
+  description = "The friendly name of the SSL certificate for listener."
+  default     = ""
+}
+
+variable "listener_ca_certificate" {
+  description = "The associated Certificate Authority certificate."
+  default     = ""
+}
+
+variable "listener_private_key" {
+  description = "The private key for the certificate."
+  default     = ""
+}
+
+variable "listener_public_certificate" {
+  description = "The certificate in PEM format."
+  default     = ""
+}
+
+variable "listener_protocol" {
+  description = "The protocol on which the listener accepts connection requests, either HTTP or TCP."
+  default     = "HTTP"
+}
+
+variable "ssl_listener_name" {
+  description = "The name of the listener with ssl enabled."
+  default     = ""
+}
+
+variable "ssl_listener_port" {
+  description = "The communication port for the listener with ssl enabled."
+  default     = "443"
+}
+
+variable "ssl_verify_peer_certificate" {
+  description = "To enable peer certificate verification."
+  default     = false
+}
+
+variable "ssl_verify_depth" {
+  description = "The maximum depth for certificate chain verification."
+  default     = 0
+}
+
+variable "ssl_listener_hostnames" {
+  description = "The hostname resources for the listener with ssl enabled."
+  default     = ["app.example.com", "app2.example.com"]
+}
+
+variable "ssl_listener_path_route_set" {
+  description = "The path route set name for the listener with ssl enabled. It applys only to HTTP and HTTPS requests."
+  default     = "prs1"
+}
+
+variable "non_ssl_listener_name" {
+  description = "The name of the listener without ssl enabled."
+  default     = "JenkinsLSNR"
+}
+
+variable "non_ssl_listener_port" {
+  description = "The communication port for the listener without ssl enabled."
+  default     = "80"
+}
+
+variable "non_ssl_listener_hostnames" {
+  description = "The hostname resources for the listener without ssl enabled."
+  default     = []
+}
+
+variable "non_ssl_listener_path_route_set" {
+  description = "The path route set name for the listener without ssl enabled. It applys only to HTTP and HTTPS requests."
+  default     = ""
+}

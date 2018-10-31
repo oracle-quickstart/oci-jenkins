@@ -7,9 +7,9 @@ output "slave_private_ips" {
 }
 
 output "lb_public_ip" {
-  value = ["${oci_load_balancer.JenkinsLB.ip_addresses}"]
+  value = ["${module.load_balancer.ip_addresses}"]
 }
 
 output "jenkins_login_url" {
-  value = "http://${oci_load_balancer.JenkinsLB.ip_addresses[0]}"
+  value = "http://${module.load_balancer.ip_addresses[0]}"
 }
