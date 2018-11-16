@@ -3,3 +3,4 @@
 *.tfstate.backup
 .DS_Store
 .idea
+terraform.tfvars
