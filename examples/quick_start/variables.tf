@@ -55,8 +55,7 @@ variable "jenkins_version" {
   default = "2.138.2"
 }
 
-variable "jenkins_password" {
-}
+variable "jenkins_password" {}
 
 variable "slave_count" {
   default = "2"
@@ -83,4 +82,16 @@ variable "bastion_private_key" {}
 
 variable "bastion_ad_index" {
   default = 0
+}
+
+variable "listener_ca_certificate" {
+  default = ""
+}
+
+variable "listener_private_key" {
+  default = ""
+}
+
+variable "listener_public_certificate" {
+  default = ""
 }
