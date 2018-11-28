@@ -54,10 +54,6 @@ resource "tls_private_key" "JenkinTLS" {
   rsa_bits  = 4096
 }
 
-data "tls_public_key" "example" {
-  private_key_pem = "${file("~/.ssh/id_rsa")}"
-}
-
 resource "tls_self_signed_cert" "JenkinsCert" {
   count           = "${var.listener_ca_certificate == "" ? 1 : 0 }"
   key_algorithm   = "${tls_private_key.JenkinTLS.algorithm}"
