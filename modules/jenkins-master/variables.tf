@@ -85,3 +85,8 @@ variable "bastion_user" {
 variable "bastion_private_key" {
   description = "The private key path to access the bastion host."
 }
+
+variable "vm_user" {
+  description = "The SSH user to connect to the slave host."
+  default     = "opc"
+}

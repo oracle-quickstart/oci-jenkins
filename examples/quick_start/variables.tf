@@ -7,21 +7,17 @@ variable "compartment_ocid" {}
 variable "ssh_authorized_keys" {}
 variable "ssh_private_key" {}
 
-variable "network_cidrs" {
-  type = "map"
+variable "vcn_cidr" {
+  default = "10.0.0.0/16"
+}
 
-  default = {
-    vcn_cidr = "10.0.0.0/16"
+locals {
+  app_tier_prefix = "${cidrsubnet("${var.vcn_cidr}", 2, 0)}"
 
-    bastionSubnetAD = "10.0.10.0/24"
-    masterSubnetAD  = "10.0.11.0/24"
-    slaveSubnetAD1  = "10.0.12.0/24"
-    slaveSubnetAD2  = "10.0.13.0/24"
-    slaveSubnetAD3  = "10.0.14.0/24"
-    natSubnetAD     = "10.0.15.0/24"
-    lbSubnet1       = "10.0.16.0/24"
-    lbSubnet2       = "10.0.17.0/24"
-  }
+  lb_subnet_prefix      = "${cidrsubnet("${local.app_tier_prefix}", 2, 0)}"
+  bastion_subnet_prefix = "${cidrsubnet("${local.app_tier_prefix}", 2, 1)}"
+  master_subnet_prefix  = "${cidrsubnet("${local.app_tier_prefix}", 2, 2)}"
+  slave_subnet_prefix   = "${cidrsubnet("${local.app_tier_prefix}", 2, 3)}"
 }
 
 variable "label_prefix" {
@@ -66,7 +62,7 @@ variable "bastion_display_name" {
 }
 
 variable "bastion_shape" {
-  default = "VM.Standard1.1"
+  default = "VM.Standard2.1"
 }
 
 variable "bastion_host" {

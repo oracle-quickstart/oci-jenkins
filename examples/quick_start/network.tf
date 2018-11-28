@@ -4,7 +4,7 @@
 resource "oci_core_virtual_network" "JenkinsVCN" {
   compartment_id = "${var.compartment_ocid}"
   display_name   = "JenkinsVCN"
-  cidr_block     = "${lookup(var.network_cidrs, "vcn_cidr")}"
+  cidr_block     = "${var.vcn_cidr}"
   dns_label      = "JenkinsVCN"
 }
 
@@ -107,7 +107,7 @@ resource "oci_core_security_list" "JenkinsBastion" {
     }
 
     protocol    = "6"
-    destination = "${lookup(var.network_cidrs, "vcn_cidr")}"
+    destination = "${var.vcn_cidr}"
   }]
 
   ingress_security_rules = [{
@@ -123,7 +123,7 @@ resource "oci_core_security_list" "JenkinsBastion" {
 
 resource "oci_core_security_list" "JenkinsNat" {
   compartment_id = "${var.compartment_ocid}"
-  display_name   = "nat"
+  display_name   = "JenkinsNat"
   vcn_id         = "${oci_core_virtual_network.JenkinsVCN.id}"
 
   egress_security_rules = [{
@@ -133,12 +133,12 @@ resource "oci_core_security_list" "JenkinsNat" {
 
   ingress_security_rules = [{
     protocol = "6"
-    source   = "${lookup(var.network_cidrs, "vcn_cidr")}"
+    source   = "${var.vcn_cidr}"
   }]
 }
 
 resource "oci_core_security_list" "JenkinsLB" {
-  display_name   = "jenkinslb"
+  display_name   = "JenkinsLB"
   compartment_id = "${var.compartment_ocid}"
   vcn_id         = "${oci_core_virtual_network.JenkinsVCN.id}"
 
@@ -174,7 +174,7 @@ resource "oci_core_security_list" "JenkinsLB" {
 ############################################
 resource "oci_core_subnet" "JenkinsMasterSubnetAD" {
   availability_domain = "${data.template_file.ad_names.*.rendered[0]}"
-  cidr_block          = "${lookup(var.network_cidrs, "masterSubnetAD")}"
+  cidr_block          = "${cidrsubnet("${local.master_subnet_prefix}", 4, 0)}"
   display_name        = "${var.label_prefix}JenkinsMasterSubnetAD"
   dns_label           = "masterad"
   security_list_ids   = ["${oci_core_security_list.JenkinsPrivate.id}"]
@@ -190,7 +190,7 @@ resource "oci_core_subnet" "JenkinsMasterSubnetAD" {
 resource "oci_core_subnet" "JenkinsSlaveSubnetAD" {
   count               = "${length(data.template_file.ad_names.*.rendered)}"
   availability_domain = "${data.template_file.ad_names.*.rendered[count.index]}"
-  cidr_block          = "${lookup(var.network_cidrs, "slaveSubnetAD${count.index+1}")}"
+  cidr_block          = "${cidrsubnet("${local.slave_subnet_prefix}", 4, count.index)}"
   display_name        = "${var.label_prefix}JenkinsSlaveSubnetAD${count.index+1}"
   dns_label           = "slavead${count.index+1}"
   security_list_ids   = ["${oci_core_security_list.JenkinsPrivate.id}"]
@@ -207,7 +207,7 @@ resource "oci_core_subnet" "JenkinsBastion" {
   availability_domain = "${data.template_file.ad_names.*.rendered[var.bastion_ad_index]}"
   compartment_id      = "${var.compartment_ocid}"
   display_name        = "JenkinsBastionAD${var.bastion_ad_index+1}"
-  cidr_block          = "${lookup(var.network_cidrs, "bastionSubnetAD")}"
+  cidr_block          = "${cidrsubnet(local.bastion_subnet_prefix, 4, 0)}"
   security_list_ids   = ["${oci_core_security_list.JenkinsBastion.id}"]
   vcn_id              = "${oci_core_virtual_network.JenkinsVCN.id}"
   route_table_id      = "${oci_core_route_table.public.id}"
@@ -219,7 +219,7 @@ resource "oci_core_subnet" "JenkinsBastion" {
 ############################################
 resource "oci_core_subnet" "JenkinsLBSubnet1" {
   availability_domain = "${data.template_file.ad_names.*.rendered[0]}"
-  cidr_block          = "${lookup(var.network_cidrs, "lbSubnet1")}"
+  cidr_block          = "${cidrsubnet(local.lb_subnet_prefix, 4, 0)}"
   display_name        = "JenkinsLBSubnet1"
   dns_label           = "subnet1"
   security_list_ids   = ["${oci_core_security_list.JenkinsLB.id}"]
@@ -231,7 +231,7 @@ resource "oci_core_subnet" "JenkinsLBSubnet1" {
 
 resource "oci_core_subnet" "JenkinsLBSubnet2" {
   availability_domain = "${data.template_file.ad_names.*.rendered[1]}"
-  cidr_block          = "${lookup(var.network_cidrs, "lbSubnet2")}"
+  cidr_block          = "${cidrsubnet(local.lb_subnet_prefix, 4, 1)}"
   display_name        = "JenkinsLBSubnet2"
   dns_label           = "subnet2"
   security_list_ids   = ["${oci_core_security_list.JenkinsLB.id}"]

@@ -41,7 +41,7 @@ resource "oci_core_instance" "TFJenkinsSlave" {
       host        = "${self.private_ip}"
       agent       = false
       timeout     = "5m"
-      user        = "opc"
+      user        = "${var.vm_user}"
       private_key = "${file("${var.ssh_private_key}")}"
 
       bastion_host        = "${var.bastion_host}"
@@ -59,7 +59,7 @@ resource "oci_core_instance" "TFJenkinsSlave" {
       host        = "${self.private_ip}"
       agent       = false
       timeout     = "10m"
-      user        = "opc"
+      user        = "${var.vm_user}"
       private_key = "${file("${var.ssh_private_key}")}"
 
       bastion_host        = "${var.bastion_host}"

@@ -48,12 +48,38 @@ resource "oci_load_balancer_backend" "JenkinsLBBe" {
   weight           = 1
 }
 
+resource "tls_private_key" "JenkinTLS" {
+  count     = "${var.listener_ca_certificate == "" ? 1 : 0 }"
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+data "tls_public_key" "example" {
+  private_key_pem = "${file("~/.ssh/id_rsa")}"
+}
+
+resource "tls_self_signed_cert" "JenkinsCert" {
+  count           = "${var.listener_ca_certificate == "" ? 1 : 0 }"
+  key_algorithm   = "${tls_private_key.JenkinTLS.algorithm}"
+  private_key_pem = "${tls_private_key.JenkinTLS.private_key_pem}"
+
+  validity_period_hours = 26280
+  early_renewal_hours   = 8760
+  is_ca_certificate     = true
+  allowed_uses          = ["cert_signing"]
+
+  subject {
+    common_name  = "*.example.com"
+    organization = "Example, Inc"
+  }
+}
+
 resource "oci_load_balancer_certificate" "JenkinsLBCert" {
   load_balancer_id   = "${oci_load_balancer.JenkinsLB.id}"
-  ca_certificate     = "${var.listener_ca_certificate == "" ? "${file("${path.module}/../../examples/quick_start/certs/example.crt.pem")}" : var.listener_ca_certificate}"
-  certificate_name   = "JenkinsCets"
-  private_key        = "${var.listener_private_key == "" ? "${file("${path.module}/../../examples/quick_start/certs/example.key.pem")}" : var.listener_private_key}"
-  public_certificate = "${var.listener_public_certificate == "" ? "${file("${path.module}/../../examples/quick_start/certs/example.crt.pem")}" : var.listener_public_certificate}"
+  ca_certificate     = "${var.listener_ca_certificate == "" ? "${tls_self_signed_cert.JenkinsCert.cert_pem}" : var.listener_ca_certificate}"
+  certificate_name   = "JenkinsCert"
+  private_key        = "${var.listener_private_key == "" ? "${tls_private_key.JenkinTLS.private_key_pem}" : var.listener_private_key}"
+  public_certificate = "${var.listener_public_certificate == "" ? "${tls_self_signed_cert.JenkinsCert.cert_pem}" : var.listener_public_certificate}"
 
   lifecycle {
     create_before_destroy = true
@@ -72,5 +98,3 @@ resource "oci_load_balancer_listener" "JenkinsLBLsnr_SSL" {
     verify_peer_certificate = false
   }
 }
-
-
