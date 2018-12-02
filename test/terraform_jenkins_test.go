@@ -68,15 +68,8 @@ func validateSolution(t *testing.T, terraform_options *terraform.Options) {
 	testJenkins(t, terraform_options, key_pair,key)
 	}
 func testJenkins(t *testing.T, terraform_options *terraform.Options, key_pair *ssh.KeyPair,key string){
-	//commandGetKey := "cat" + " /tmp/secret"
-	//slave_private_name0 := terraform.Output(t, terraform_options, "slave_private_name0")
-	//slave_private_name1 := terraform.Output(t, terraform_options, "slave_private_name1")
- 	//master_public_ip    := terraform.Output(t, terraform_options, "master_public_ip")
-	//key := test_helper.SSHToHost(t, master_public_ip, "opc", key_pair, commandGetKey)
-	//key = strings.Replace(key, "\n", "", -1)
 	slave_private_name0 := "JenkinsSlave-1"
 	slave_private_name1 := "JenkinsSlave-2"
-	//key := terraform_options.Vars["jenkins_password"].(string)
 	master_login_url_tf := terraform.Output(t, terraform_options, "jenkins_login_url")
 	master_login_url := master_login_url_tf + "/"
 	jenkins := gojenkins.CreateJenkins(nil, master_login_url, "admin", key)
