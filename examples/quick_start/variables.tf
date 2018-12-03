@@ -12,12 +12,16 @@ variable "vcn_cidr" {
 }
 
 locals {
-  app_tier_prefix = "${cidrsubnet("${var.vcn_cidr}", 2, 0)}"
+  // contains bastion, LB, and anything internet-facing
+  dmz_tier_prefix = "${cidrsubnet("${var.vcn_cidr}", 2, 0)}"
 
-  lb_subnet_prefix      = "${cidrsubnet("${local.app_tier_prefix}", 2, 0)}"
-  bastion_subnet_prefix = "${cidrsubnet("${local.app_tier_prefix}", 2, 1)}"
-  master_subnet_prefix  = "${cidrsubnet("${local.app_tier_prefix}", 2, 2)}"
-  slave_subnet_prefix   = "${cidrsubnet("${local.app_tier_prefix}", 2, 3)}"
+  // contains private subnets with app logic
+  app_tier_prefix = "${cidrsubnet("${var.vcn_cidr}", 2, 1)}"
+
+  lb_subnet_prefix      = "${cidrsubnet("${local.dmz_tier_prefix}", 2, 0)}"
+  bastion_subnet_prefix = "${cidrsubnet("${local.dmz_tier_prefix}", 2, 1)}"
+  master_subnet_prefix  = "${cidrsubnet("${local.app_tier_prefix}", 2, 0)}"
+  slave_subnet_prefix   = "${cidrsubnet("${local.app_tier_prefix}", 2, 1)}"
 }
 
 variable "label_prefix" {
