@@ -29,7 +29,7 @@ To deploy Jenkins Cluster servers using this Module:
 
 ```hcl
 module "jenkins" {
-  source              = "git::ssh://git@bitbucket.aka.lgl.grungy.us:7999/tfs/terraform-oci-jenkins.git?ref=dev"
+  source              = "git::ssh://git@bitbucket.oci.oraclecorp.com:7999/tfs/terraform-oci-jenkins.git?ref=dev"
   compartment_ocid    = "${var.compartment_ocid}"
   master_ad           = "${var.master_ad}"
   master_subnet_id    = "${var.master_subnet_id}"
