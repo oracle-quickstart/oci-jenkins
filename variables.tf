@@ -32,9 +32,17 @@ variable "master_subnet_id" {
   default     = ""
 }
 
+variable "jenkins_password" {
+  description = "Required field for Jenkins initial password. "
+}
+
+variable "jenkins_version" {
+  description = "The verion of Jenkins server. "
+}
+
 variable "master_display_name" {
   description = "The name of the master instance. "
-  default     = "tf-jenkins-master"
+  default     = "JenkinsMaster"
 }
 
 variable "master_image_id" {
@@ -44,7 +52,7 @@ variable "master_image_id" {
 
 variable "master_shape" {
   description = "Instance shape to use for master instance. "
-  default     = "VM.Standard1.1"
+  default     = "VM.Standard2.1"
 }
 
 variable "master_user_data" {
@@ -69,7 +77,7 @@ variable "slave_subnet_ids" {
 
 variable "slave_display_name" {
   description = "The name of the slave instance. "
-  default     = "tf-jenkins-slave"
+  default     = "JenkinsSlave"
 }
 
 variable "slave_image_id" {
@@ -79,7 +87,7 @@ variable "slave_image_id" {
 
 variable "slave_shape" {
   description = "Instance shape to use for slave instance. "
-  default     = "VM.Standard1.1"
+  default     = "VM.Standard2.1"
 }
 
 variable "slave_user_data" {
@@ -101,4 +109,17 @@ variable "plugins" {
   type        = "list"
   description = "A list of Jenkins plugins to install, use short names. "
   default     = ["git", "ssh-slaves", "oracle-cloud-infrastructure-compute"]
+}
+
+variable "bastion_host" {
+  description = "The bastion host IP."
+}
+
+variable "bastion_user" {
+  description = "The SSH user to connect to the bastion host."
+  default     = "opc"
+}
+
+variable "bastion_private_key" {
+  description = "The private key path to access the bastion host."
 }
