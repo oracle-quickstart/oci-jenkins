@@ -13,7 +13,7 @@ Virtual network should be set up in Oracle data centers including default route 
 ### Using this example
 Update terraform.tfvars with the required information.
 
-### Deploy the cluster  
+#### Deploy the cluster  
 Initialize Terraform:
 ```
 $ terraform init
