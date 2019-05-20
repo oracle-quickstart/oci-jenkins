@@ -1,4 +1,6 @@
-# Oracle Cloud Infrastructure Jenkins Terraform Module
+# oci-quickstart-jenkins
+
+These are Terraform modules that deploy Jenkins on Oracle Cloud Infrastructure (OCI).
 
 ## About
 The Jenkins Oracle Cloud Infrastructure Module installs a Terraform-based Jenkins cluster on Oracle Cloud Infrastructure (OCI). A Jenkins cluster typically involves one or more master instance coupled with one or more slave instances.
@@ -6,7 +8,6 @@ The Jenkins Oracle Cloud Infrastructure Module installs a Terraform-based Jenkin
 ## Prerequisites
 1. See the [Oracle Cloud Infrastructure Terraform Provider docs](https://www.terraform.io/docs/providers/oci/index.html) for information about setting up and using the Oracle Cloud Infrastructure Terraform Provider.
 2. An existing VCN with subnets The subnets need internet access in order to download Java and Jenkins.
-
 
 ## What's a Module?
 A module is a canonical, reusablem definition for how to run a single piece of infrastructure, such as a database or server cluster. Each module is created using Terraform, and includes automated tests, examples, and documentation. It is maintained both by the open source community and companies that provide commercial support.
@@ -60,16 +61,3 @@ slave_shape | Shape to be used on the slave instance.
 http_port | Port for HTTP traffic to Jenkins.
 jnlp_port | Port for Jenkins master-to-slave communication between instances.
 plugins | List of plugins to pre-install on the master instance.
-
-
-## Contributing
-
-This project is open source. Oracle appreciates any contributions that are made by the open source community.
-
-## License
-
-Copyright (c) 2018, Oracle and/or its affiliates. All rights reserved.
-
-Licensed under the Universal Permissive License 1.0 or Apache License 2.0.
-
-See [LICENSE](/LICENSE.txt) for more details.
