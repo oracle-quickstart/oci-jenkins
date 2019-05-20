@@ -11,33 +11,21 @@ function waitForJenkins() {
     echo "Jenkins launched"
 }
 
-function waitForPasswordFile() {
-    echo "Waiting for Jenkins to generate password..."
-
-    while [ ! -f /var/lib/jenkins/secrets/initialAdminPassword ]; do
-      sleep 2 # wait for 1/10 of the second before check again
-    done
-
-    sudo cat /var/lib/jenkins/secrets/initialAdminPassword > /tmp/secret
-    echo "Password created"
-}
-
-
 # Install Java for Jenkins
-wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u181-b13/96a7b8442fe848ef90c96a2fad6ed6d1/jdk-8u181-linux-x64.rpm"
-sudo rpm -ivh jdk-8u181-linux-x64.rpm
+sudo yum install -y java-1.8.0-openjdk
 
 # Install xmlstarlet used for XML config manipulation
 sudo yum install -y xmlstarlet
 
 # Install Jenkins
-sudo wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
-sudo rpm --import http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key
-sudo yum install -y jenkins-2.116
+sudo echo "[jenkins-ci-org-${jenkins_version}]"
+sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+sudo yum install -y jenkins-${jenkins_version}
 
 # Config Jenkins Http Port
 sudo sed -i '/JENKINS_PORT/c\ \JENKINS_PORT=\"${http_port}\"' /etc/sysconfig/jenkins
-
+sudo sed -i '/JENKINS_JAVA_OPTIONS/c\ \JENKINS_JAVA_OPTIONS=\"-Djenkins.install.runSetupWizard=false -Djava.awt.headless=true\"' /etc/sysconfig/jenkins
 # Start Jenkins
 sudo service jenkins restart
 sudo chkconfig --add jenkins
@@ -45,6 +33,7 @@ sudo chkconfig --add jenkins
 # Set httpport on firewall
 sudo firewall-cmd --zone=public --permanent --add-port=${http_port}/tcp
 sudo firewall-cmd --zone=public --permanent --add-port=${jnlp_port}/tcp
+sudo firewall-cmd --zone=public --permanent --add-port=443/tcp
 sudo firewall-cmd --reload
 
 waitForJenkins
@@ -59,15 +48,18 @@ waitForJenkins
 # INSTALL CLI
 sudo cp /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar /var/lib/jenkins/jenkins-cli.jar
 
-waitForPasswordFile
-
-PASS=$(sudo bash -c "cat /var/lib/jenkins/secrets/initialAdminPassword")
-
 sleep 10
 
-# SET AGENT PORT
-xmlstarlet ed -u "//slaveAgentPort" -v "${jnlp_port}" /var/lib/jenkins/config.xml > /tmp/jenkins_config.xml
-sudo mv /tmp/jenkins_config.xml /var/lib/jenkins/config.xml
+# Set Agent Port
+xmlstarlet ed -u "//slaveAgentPort" -v "${jnlp_port}" /var/lib/jenkins/config.xml > /home/opc/jenkins_config.xml
+sudo mv /home/opc/jenkins_config.xml /var/lib/jenkins/config.xml
+
+# Initialize Jenkins User Password Groovy Script
+export PASS=${jenkins_password}
+
+sudo -u jenkins mkdir -p /var/lib/jenkins/init.groovy.d
+sudo mv /home/opc/default-user.groovy /var/lib/jenkins/init.groovy.d/default-user.groovy
+
 sudo service jenkins restart
 
 waitForJenkins

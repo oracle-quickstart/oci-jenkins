@@ -2,6 +2,7 @@
 # Provider
 ############################################
 provider "oci" {
+  version          = ">= 3.4.0"
   tenancy_ocid     = "${var.tenancy_ocid}"
   user_ocid        = "${var.user_ocid}"
   fingerprint      = "${var.fingerprint}"

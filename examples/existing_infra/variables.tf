@@ -7,18 +7,6 @@ variable "compartment_ocid" {}
 variable "ssh_authorized_keys" {}
 variable "ssh_private_key" {}
 
-variable "network_cidrs" {
-  type = "map"
-
-  default = {
-    VCN-CIDR       = "10.0.0.0/16"
-    masterSubnetAD = "10.0.20.0/24"
-    slaveSubnetAD1 = "10.0.30.0/24"
-    slaveSubnetAD2 = "10.0.31.0/24"
-    slaveSubnetAD3 = "10.0.32.0/24"
-  }
-}
-
 variable "label_prefix" {
   default = ""
 }
@@ -38,10 +26,54 @@ variable "image_id" {
   }
 }
 
+variable "master_subnet_id" {
+  description = "The OCID of the master subnet to create the VNIC in. "
+  default     = ""
+}
+
+variable "slave_subnet_ids" {
+  description = "List of Jenkins slave subnets' id. "
+  default     = []
+}
+
 variable "http_port" {
   default = 8080
 }
 
 variable "jnlp_port" {
   default = 49187
+}
+
+variable "jenkins_version" {
+  default = "2.138.2"
+}
+
+variable "jenkins_password" {
+}
+
+variable "slave_count" {
+  default = "2"
+}
+
+variable "bastion_display_name" {
+  default = "JenkinsBastion"
+}
+
+variable "bastion_shape" {
+  default = "VM.Standard1.1"
+}
+
+variable "bastion_host" {
+  default = ""
+}
+
+variable "bastion_user" {
+  default = "opc"
+}
+
+variable "bastion_authorized_keys" {}
+variable "bastion_private_key" {}
+
+variable "bastion_ad_index" {
+  default = 0
 }

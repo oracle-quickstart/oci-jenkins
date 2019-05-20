@@ -40,6 +40,10 @@ variable "jenkins_master_port" {
   description = "The Port of the master Jenkins instance. "
 }
 
+variable "jenkins_password" {
+  description = "Required field for Jenkins initial password. "
+}
+
 variable "assign_public_ip" {
   description = "Whether the VNIC should be assigned a public IP address. Default 'true' assigns a public IP address. "
   default     = true
@@ -58,4 +62,22 @@ variable "ssh_private_key" {
 variable "image_id" {
   description = "The OCID of an image for an instance to use. "
   default     = ""
+}
+
+variable "bastion_host" {
+  description = "The bastion host IP."
+}
+
+variable "bastion_user" {
+  description = "The SSH user to connect to the bastion host."
+  default     = "opc"
+}
+
+variable "bastion_private_key" {
+  description = "The private key path to access the bastion host."
+}
+
+variable "vm_user" {
+  description = "The SSH user to connect to the slave host."
+  default     = "opc"
 }
