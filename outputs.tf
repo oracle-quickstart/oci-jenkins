@@ -17,3 +17,6 @@ output "slave_private_ips" {
 output "master_login_url" {
   value = "http://${module.jenkins-master.private_ip}:${var.http_port}"
 }
+output "slave_host_names" {
+  value = "${module.jenkins-slave.slave_host_names}"
+}
