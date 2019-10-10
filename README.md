@@ -1,4 +1,4 @@
-# oci-quickstart-jenkins
+# oci-jenkins
 
 These are Terraform modules that deploy [Jenkins](https://jenkins.io/) on [Oracle Cloud Infrastructure (OCI)](https://cloud.oracle.com/en_US/cloud-infrastructure).
 
