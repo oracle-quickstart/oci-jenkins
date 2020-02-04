@@ -1,11 +1,12 @@
 output "ids" {
-  value = ["${oci_core_instance.TFJenkinsSlave.*.id}"]
+  value = [oci_core_instance.TFJenkinsSlave.*.id]
 }
 
 output "private_ips" {
-  value = ["${oci_core_instance.TFJenkinsSlave.*.private_ip}"]
+  value = [oci_core_instance.TFJenkinsSlave.*.private_ip]
 }
 
 output "slave_host_names" {
-  value = ["${oci_core_instance.TFJenkinsSlave.*.display_name}"]
+  value = [oci_core_instance.TFJenkinsSlave.*.display_name]
 }
+

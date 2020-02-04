@@ -5,7 +5,7 @@ variable "compartment_ocid" {
 
 variable "availability_domains" {
   description = "The Availability Domains of the slave instance. "
-  default     = []
+  default     = ""
 }
 
 variable "subnet_ids" {
@@ -20,7 +20,7 @@ variable "slave_display_name" {
 
 variable "shape" {
   description = "Instance shape to use for slave instance. "
-  default     = ""
+  default     = "VM.Standard1.4"
 }
 
 variable "label_prefix" {
@@ -81,3 +81,4 @@ variable "vm_user" {
   description = "The SSH user to connect to the slave host."
   default     = "opc"
 }
+
