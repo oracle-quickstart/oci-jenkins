@@ -1,10 +1,10 @@
 {
-  "tenancy_ocid": "ocid1.tenancy.oc1..aaaaaaaawgbzspd6cjovpmic7dahwbalg4opcbixgguo6z2s7t335m6lalbq",
-  "compartment_ocid": "ocid1.compartment.oc1..aaaaaaaawzlfllc7kkf62dzkes75urrxfxppz5fjphx27a7k5fk5jnzvyhiq",
-  "user_ocid": "ocid1.user.oc1..aaaaaaaaglcvzbh5og2b7czkors4uyrggg3hgtwxxqqyocz46vtvogf7qrnq",
+  "tenancy_ocid": "<tenancy OCID>",
+  "compartment_ocid": "<compartment OCID>",
+  "user_ocid": "<user OCID>",
   "region": "us-phoenix-1",
-  "fingerprint": "42:bf:5c:8d:63:50:ce:31:d9:f7:e8:1f:2e:ee:e9:68",
-  "private_key_path": "/Users/wangjunxia/.oci/oci_api_key.pem",
-  "ssh_authorized_keys": "/Users/wangjunxia/wjx_key/id_rsa.pub",
-  "ssh_private_key": "/Users/wangjunxia/wjx_key/id_rsa"
+  "fingerprint": "<PEM key fingerprint>",
+  "private_key_path": "<path to the private key that matches the fingerprint above>",
+  "ssh_authorized_keys": "<path to public key>",
+  "ssh_private_key": "<path to private key>",
 }
