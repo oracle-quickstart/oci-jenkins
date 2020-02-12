@@ -1,11 +1,26 @@
-variable "tenancy_ocid" {}
-variable "user_ocid" {}
-variable "fingerprint" {}
-variable "private_key_path" {}
-variable "region" {}
-variable "compartment_ocid" {}
-variable "ssh_authorized_keys" {}
-variable "ssh_private_key" {}
+variable "tenancy_ocid" {
+}
+
+variable "user_ocid" {
+}
+
+variable "fingerprint" {
+}
+
+variable "private_key_path" {
+}
+
+variable "region" {
+}
+
+variable "compartment_ocid" {
+}
+
+variable "ssh_authorized_keys" {
+}
+
+variable "ssh_private_key" {
+}
 
 variable "vcn_cidr" {
   default = "10.0.0.0/16"
@@ -13,15 +28,15 @@ variable "vcn_cidr" {
 
 locals {
   // contains bastion, LB, and anything internet-facing
-  dmz_tier_prefix = "${cidrsubnet("${var.vcn_cidr}", 2, 0)}"
+  dmz_tier_prefix = cidrsubnet(var.vcn_cidr, 2, 0)
 
   // contains private subnets with app logic
-  app_tier_prefix = "${cidrsubnet("${var.vcn_cidr}", 2, 1)}"
+  app_tier_prefix = cidrsubnet(var.vcn_cidr, 2, 1)
 
-  lb_subnet_prefix      = "${cidrsubnet("${local.dmz_tier_prefix}", 2, 0)}"
-  bastion_subnet_prefix = "${cidrsubnet("${local.dmz_tier_prefix}", 2, 1)}"
-  master_subnet_prefix  = "${cidrsubnet("${local.app_tier_prefix}", 2, 0)}"
-  slave_subnet_prefix   = "${cidrsubnet("${local.app_tier_prefix}", 2, 1)}"
+  lb_subnet_prefix      = cidrsubnet(local.dmz_tier_prefix, 2, 0)
+  bastion_subnet_prefix = cidrsubnet(local.dmz_tier_prefix, 2, 1)
+  master_subnet_prefix  = cidrsubnet(local.app_tier_prefix, 2, 0)
+  slave_subnet_prefix   = cidrsubnet(local.app_tier_prefix, 2, 1)
 }
 
 variable "label_prefix" {
@@ -29,7 +44,7 @@ variable "label_prefix" {
 }
 
 variable "image_id" {
-  type = "map"
+  type = map(string)
 
   # --------------------------------------------------------------------------
   # Oracle-provided image "Oracle-Linux-7.4-2018.02.21-1"
@@ -55,7 +70,8 @@ variable "jenkins_version" {
   default = "2.138.2"
 }
 
-variable "jenkins_password" {}
+variable "jenkins_password" {
+}
 
 variable "slave_count" {
   default = "2"
@@ -66,7 +82,7 @@ variable "bastion_display_name" {
 }
 
 variable "bastion_shape" {
-  default = "VM.Standard2.1"
+  default = "VM.Standard1.4"
 }
 
 variable "bastion_host" {
@@ -77,8 +93,11 @@ variable "bastion_user" {
   default = "opc"
 }
 
-variable "bastion_authorized_keys" {}
-variable "bastion_private_key" {}
+variable "bastion_authorized_keys" {
+}
+
+variable "bastion_private_key" {
+}
 
 variable "bastion_ad_index" {
   default = 0
@@ -95,3 +114,4 @@ variable "listener_private_key" {
 variable "listener_public_certificate" {
   default = ""
 }
+
