@@ -20,8 +20,8 @@ resource "oci_core_instance" "TFJenkinsSlave" {
  availability_domain = var.availability_domains[count.index % length(var.availability_domains)]
   compartment_id      = var.compartment_ocid
   display_name        = "${var.label_prefix}${var.slave_display_name}-${count.index + 1}"
-#  shape               = var.shape
-   shape               = "VM.Standard1.4"
+  shape               = var.shape
+#   shape               = "VM.Standard1.4"
   create_vnic_details {
     subnet_id        = var.subnet_ids[count.index % length(var.subnet_ids)]
     display_name     = "${var.label_prefix}${var.slave_display_name}-${count.index + 1}"
