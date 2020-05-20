@@ -34,6 +34,7 @@ module "jenkins" {
   master_subnet_id    = oci_core_subnet.JenkinsMasterSubnetAD.id
   master_image_id     = var.image_id[var.region]
   master_shape        = var.master_shape
+  plugins             = var.plugins
   slave_count         = var.slave_count
   slave_ads           = data.template_file.ad_names.*.rendered
   slave_subnet_ids    = split(",", join(",", oci_core_subnet.JenkinsSlaveSubnetAD.*.id))
