@@ -66,6 +66,12 @@ variable "jnlp_port" {
   default = 49187
 }
 
+variable "plugins" {
+  type        = list(string)
+  description = "A list of Jenkins plugins to install, use short names. "
+  default     = ["git", "ssh-slaves", "oracle-cloud-infrastructure-compute"]
+}
+
 variable "jenkins_version" {
   default = "2.138.2"
 }
@@ -82,6 +88,14 @@ variable "bastion_display_name" {
 }
 
 variable "bastion_shape" {
+  default = "VM.Standard1.4"
+}
+
+variable "master_shape" {
+  default = "VM.Standard1.4"
+}
+
+variable "slave_shape" {
   default = "VM.Standard1.4"
 }
 
