@@ -29,7 +29,8 @@ cat <<EOF | java -jar /home/opc/tmp/jenkins-cli.jar -s ${jenkins_master_url} -au
 EOF
 
 
-export TOKEN=$(curl --user "admin:$PASS" -s ${jenkins_master_url}/crumbIssuer/api/json | python -c 'import sys,json;j=json.load(sys.stdin);print j["crumbRequestField"] + "=" + j["crumb"]')
+export _COOKIE_JAR=$(mktemp)
+export TOKEN=$(curl -c "$_COOKIE_JAR" --user "admin:$PASS" -s ${jenkins_master_url}/crumbIssuer/api/json | python -c 'import sys,json;j=json.load(sys.stdin);print j["crumbRequestField"] + "=" + j["crumb"]')
 
 cat > /home/opc/secret.groovy <<EOF
 for (aSlave in hudson.model.Hudson.instance.slaves) {
@@ -39,7 +40,10 @@ for (aSlave in hudson.model.Hudson.instance.slaves) {
 }
 EOF
 
-export SECRET=$(curl --user "admin:$PASS" -d "$TOKEN" --data-urlencode "script=$(</home/opc/secret.groovy)" ${jenkins_master_url}/scriptText | awk -F',' '{print $2}')
+export SECRET=$(curl -b "$_COOKIE_JAR" --user "admin:$PASS" -d "$TOKEN" --data-urlencode "script=$(</home/opc/secret.groovy)" ${jenkins_master_url}/scriptText | awk -F',' '{print $2}')
+
+rm "$_COOKIE_JAR"
+unset _COOKIE_JAR
 
 # Run from service definition
 sudo chown -R jenkins:jenkins /home/jenkins/jenkins-slave
