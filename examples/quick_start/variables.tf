@@ -73,7 +73,8 @@ variable "plugins" {
 }
 
 variable "jenkins_version" {
-  default = "2.138.2"
+#  default = "2.138.2"
+  default = "2.249.1"
 }
 
 variable "jenkins_password" {
