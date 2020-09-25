@@ -46,7 +46,7 @@ sleep 10
 waitForJenkins
 
 # INSTALL CLI
-sudo cp /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar /var/lib/jenkins/jenkins-cli.jar
+sudo wget -P /var/lib/jenkins/ http://localhost:8080/jnlpJars/jenkins-cli.jar
 
 sleep 10
 
@@ -64,7 +64,7 @@ sudo service jenkins restart
 
 waitForJenkins
 
-sleep 10
+sleep 30
 
 # INSTALL PLUGINS
 sudo java -jar /var/lib/jenkins/jenkins-cli.jar -s http://localhost:${http_port} -auth admin:$PASS install-plugin ${plugins}

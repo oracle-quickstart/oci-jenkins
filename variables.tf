@@ -106,7 +106,7 @@ variable "jnlp_port" {
 }
 
 variable "plugins" {
-  type        = "list"
+  type        = list
   description = "A list of Jenkins plugins to install, use short names. "
   default     = ["git", "ssh-slaves", "oracle-cloud-infrastructure-compute"]
 }
