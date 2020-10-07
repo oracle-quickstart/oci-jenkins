@@ -62,9 +62,31 @@ When you no longer need the deployment, you can run this command to destroy it:
 
     terraform destroy
 
+## Deployment in OCI Resource Manager (ORM)
+Create the zip file:
+
+    zip -r oci-jenkins.zip *
+
+Create ORM Stack by uploading the zip file (Create Stack -> My Solutions):
+
+![](./images/orm-01.png)
+
+Configure variables:
+
+![](./images/orm-02.png)
+
+Create the Stack:
+
+![](./images/orm-03.png)
+
+Run Apply Job for the Stack:
+
+![](./images/orm-04.png)
+
+
 ## Jenkins in master agent mode Architecture
 
-![](./images/oci-jenkins.png)
+![](./images/jenkins-oci.png)
 
 ## Reference Archirecture
 
