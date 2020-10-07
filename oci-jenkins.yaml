@@ -1,0 +1,31 @@
+## Copyright (c) 2020, Oracle and/or its affiliates. 
+## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+
+schemaVersion: 1.0.0
+version: "20190612"
+locale: "en"
+groupings:
+  - title: "Deploy Jenkins in master agent mode"
+    variables:
+    - region
+    - compartment_ocid
+    - jenkins_password
+ 
+variables:
+  region:
+    type: oci:identity:region:name
+    title: Region
+    description: The region in which to create all resources
+    required: true
+ 
+  compartment_ocid:
+    type: oci:identity:compartment:id
+    title: Target Compartment
+    description: The target compartment for all of the provisioned resources
+    required: true
+
+  jenkins_password:
+    type: string
+    title: Jenkins Password
+    description: The Password for Jenkins Server
+    required: true

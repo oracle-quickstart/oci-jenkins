@@ -9,6 +9,9 @@ sudo useradd --home-dir /home/jenkins --create-home --shell /bin/bash jenkins
 sudo mkdir /home/jenkins/jenkins-slave
 sudo chown -R jenkins:jenkins /home/jenkins
 
+# Sleep for 60 seconds
+sleep 60
+
 # Get dependencies from master node
 wget -P /home/opc/tmp ${jenkins_master_url}/jnlpJars/jenkins-cli.jar
 wget -P /home/opc/tmp ${jenkins_master_url}/jnlpJars/slave.jar

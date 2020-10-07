@@ -1,47 +1,50 @@
-############################################
-# Jenkins Master Instance
-############################################
-module "jenkins-master" {
-  source                = "./modules/jenkins-master"
-  availability_domain   = "${var.master_ad}"
-  compartment_ocid      = "${var.compartment_ocid}"
-  master_display_name   = "${var.master_display_name}"
-  image_id              = "${var.master_image_id}"
-  shape                 = "${var.master_shape}"
-  label_prefix          = "${var.label_prefix}"
-  subnet_id             = "${var.master_subnet_id}"
-  jenkins_version       = "${var.jenkins_version}"
-  jenkins_password      = "${var.jenkins_password}"
-  http_port             = "${var.http_port}"
-  jnlp_port             = "${var.jnlp_port}"
-  ssh_authorized_keys   = "${var.ssh_authorized_keys}"
-  ssh_private_key       = "${var.ssh_private_key}"
-  user_data             = "${var.master_user_data}"
-  plugins               = "${var.plugins}"
-  bastion_host          = "${var.bastion_host}"
-  bastion_user          = "${var.bastion_user}"
-  bastion_private_key   = "${var.bastion_private_key}"
+# ------------------------------------------------------------------------------
+# Setup Bastion Host
+# ------------------------------------------------------------------------------
+resource "oci_core_instance" "JenkinsBastion" {
+  availability_domain = data.template_file.ad_names[var.bastion_ad_index].rendered
+  compartment_id      = var.compartment_ocid
+  display_name        = var.bastion_display_name
+  shape               = var.bastion_shape
+
+  create_vnic_details {
+    subnet_id        = oci_core_subnet.JenkinsBastion.id
+    assign_public_ip = true
+  }
+
+  metadata = {
+    ssh_authorized_keys = tls_private_key.public_private_key_pair.public_key_openssh
+  }
+
+  source_details {
+    source_id   = var.image_id[var.region]
+    source_type = "image"
+  }
 }
 
-############################################
-# Jenkins Slave Instance(s)
-############################################
-module "jenkins-slave" {
-  source                = "./modules/jenkins-slave"
-  number_of_slaves      = "${var.slave_count}"
-  availability_domains  = "${var.slave_ads}"
-  compartment_ocid      = "${var.compartment_ocid}"
-  slave_display_name    = "${var.slave_display_name}"
-  image_id              = "${var.slave_image_id}"
-  shape                 = "${var.slave_shape}"
-  label_prefix          = "${var.label_prefix}"
-  subnet_ids            = "${var.slave_subnet_ids}"
-  jenkins_master_ip     = "${module.jenkins-master.private_ip}"
-  jenkins_master_port   = "${var.http_port}"
-  jenkins_password      = "${var.jenkins_password}"
-  ssh_authorized_keys   = "${var.ssh_authorized_keys}"
-  ssh_private_key       = "${var.ssh_private_key}"
-  bastion_host          = "${var.bastion_host}"
-  bastion_user          = "${var.bastion_user}"
-  bastion_private_key   = "${var.bastion_private_key}"
+# ------------------------------------------------------------------------------
+# DEPLOY THE JENKINS CLUSTER
+# ------------------------------------------------------------------------------
+module "jenkins" {
+  source              = "./modules/jenkins"
+  compartment_ocid    = var.compartment_ocid
+  jenkins_version     = var.jenkins_version
+  jenkins_password    = var.jenkins_password
+  master_ad           = data.template_file.ad_names[0].rendered
+  master_subnet_id    = oci_core_subnet.JenkinsMasterSubnetAD.id
+  master_image_id     = var.image_id[var.region]
+  master_shape        = var.master_shape
+  plugins             = var.plugins
+  slave_count         = var.slave_count
+  slave_ads           = data.template_file.ad_names.*.rendered
+  slave_subnet_ids    = split(",", join(",", oci_core_subnet.JenkinsSlaveSubnetAD.*.id))
+  slave_image_id      = var.image_id[var.region]
+  slave_shape         = var.slave_shape
+  ssh_authorized_keys = tls_private_key.public_private_key_pair.public_key_openssh
+  ssh_private_key     = tls_private_key.public_private_key_pair.private_key_pem
+  bastion_host        = oci_core_instance.JenkinsBastion.public_ip
+  bastion_user        = var.bastion_user
+  bastion_private_key = tls_private_key.public_private_key_pair.private_key_pem
+  http_port           = var.http_port
 }
+

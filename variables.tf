@@ -1,125 +1,136 @@
-variable "compartment_ocid" {
-  description = "Compartment's OCID where VCN will be created. "
+variable "tenancy_ocid" {
 }
 
-variable "dns_label" {
-  description = "Allows assignment of DNS hostname when launching an Instance. "
-  default     = ""
+#variable "user_ocid" {
+#}
+
+#variable "fingerprint" {
+#}
+
+#variable "private_key_path" {
+#}
+
+variable "region" {
+}
+
+variable "compartment_ocid" {
+}
+
+#variable "ssh_authorized_keys" {
+#}
+
+#variable "ssh_private_key" {
+#}
+
+variable "vcn_cidr" {
+  default = "10.0.0.0/16"
+}
+
+locals {
+  // contains bastion, LB, and anything internet-facing
+  dmz_tier_prefix = cidrsubnet(var.vcn_cidr, 2, 0)
+
+  // contains private subnets with app logic
+  app_tier_prefix = cidrsubnet(var.vcn_cidr, 2, 1)
+
+  lb_subnet_prefix      = cidrsubnet(local.dmz_tier_prefix, 2, 0)
+  bastion_subnet_prefix = cidrsubnet(local.dmz_tier_prefix, 2, 1)
+  master_subnet_prefix  = cidrsubnet(local.app_tier_prefix, 2, 0)
+  slave_subnet_prefix   = cidrsubnet(local.app_tier_prefix, 2, 1)
 }
 
 variable "label_prefix" {
-  description = "To create unique identifier for multiple clusters in a compartment."
-  default     = ""
+  default = ""
 }
 
-variable "ssh_authorized_keys" {
-  description = "Public SSH keys path to be included in the ~/.ssh/authorized_keys file for the default user on the instance. "
-  default     = ""
-}
+variable "image_id" {
+  type = map(string)
 
-variable "ssh_private_key" {
-  description = "The private key path to access instance. "
-  default     = ""
-}
-
-variable "master_ad" {
-  description = "The Availability Domain for Jenkins master. "
-  default     = ""
-}
-
-variable "master_subnet_id" {
-  description = "The OCID of the master subnet to create the VNIC in. "
-  default     = ""
-}
-
-variable "jenkins_password" {
-  description = "Required field for Jenkins initial password. "
-}
-
-variable "jenkins_version" {
-  description = "The verion of Jenkins server. "
-}
-
-variable "master_display_name" {
-  description = "The name of the master instance. "
-  default     = "JenkinsMaster"
-}
-
-variable "master_image_id" {
-  description = "The OCID of an image for a master instance to use. "
-  default     = ""
-}
-
-variable "master_shape" {
-  description = "Instance shape to use for master instance. "
-  default     = "VM.Standard2.1"
-}
-
-variable "master_user_data" {
-  description = "Provide your own base64-encoded data to be used by Cloud-Init to run custom scripts or provide custom Cloud-Init configuration for master instance. "
-  default     = ""
-}
-
-variable "slave_count" {
-  description = "Number of slave instances to launch. "
-  default     = 1
-}
-
-variable "slave_ads" {
-  description = "The Availability Domain(s) for Jenkins slave(s). "
-  default     = []
-}
-
-variable "slave_subnet_ids" {
-  description = "List of Jenkins slave subnets' id. "
-  default     = []
-}
-
-variable "slave_display_name" {
-  description = "The name of the slave instance. "
-  default     = "JenkinsSlave"
-}
-
-variable "slave_image_id" {
-  description = "The OCID of an image for slave instance to use.  "
-  default     = ""
-}
-
-variable "slave_shape" {
-  description = "Instance shape to use for slave instance. "
-  default     = "VM.Standard2.1"
-}
-
-variable "slave_user_data" {
-  description = "Provide your own base64-encoded data to be used by Cloud-Init to run custom scripts or provide custom Cloud-Init configuration for slave instance. "
-  default     = ""
+  # --------------------------------------------------------------------------
+  # Oracle-provided image "Oracle-Linux-7.4-2018.02.21-1"
+  # See https://docs.us-phoenix-1.oraclecloud.com/images/
+  # --------------------------------------------------------------------------
+  default = {
+    us-phoenix-1   = "ocid1.image.oc1.phx.aaaaaaaaupbfz5f5hdvejulmalhyb6goieolullgkpumorbvxlwkaowglslq"
+    us-ashburn-1   = "ocid1.image.oc1.iad.aaaaaaaajlw3xfie2t5t52uegyhiq2npx7bqyu4uvi2zyu3w3mqayc2bxmaa"
+    eu-frankfurt-1 = "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaa7d3fsb6272srnftyi4dphdgfjf6gurxqhmv6ileds7ba3m2gltxq"
+    uk-london-1    = "ocid1.image.oc1.uk-london-1.aaaaaaaaa6h6gj6v4n56mqrbgnosskq63blyv2752g36zerymy63cfkojiiq"
+  }
 }
 
 variable "http_port" {
-  description = "The port to use for HTTP traffic to Jenkins. "
-  default     = 8080
+  default = 8080
+}
+
+variable "lb_http_port" {
+  default = 80
 }
 
 variable "jnlp_port" {
-  description = "The Port to use for Jenkins master to slave communication bewtween instances. "
-  default     = 49187
+  default = 49187
 }
 
 variable "plugins" {
-  type        = list
+  type        = list(string)
   description = "A list of Jenkins plugins to install, use short names. "
   default     = ["git", "ssh-slaves", "oracle-cloud-infrastructure-compute"]
 }
 
+variable "jenkins_version" {
+#  default = "2.138.2"
+  default = "2.249.1"
+}
+
+variable "jenkins_password" {
+}
+
+variable "slave_count" {
+  default = "2"
+}
+
+variable "bastion_display_name" {
+  default = "JenkinsBastion"
+}
+
+variable "bastion_shape" {
+  default = "VM.Standard1.4"
+}
+
+variable "master_shape" {
+  default = "VM.Standard1.4"
+}
+
+variable "slave_shape" {
+  default = "VM.Standard1.4"
+}
+
 variable "bastion_host" {
-  description = "The bastion host IP."
+  default = ""
 }
 
 variable "bastion_user" {
-  description = "The SSH user to connect to the bastion host."
-  default     = "opc"
+  default = "opc"
 }
 
-variable "bastion_private_key" {
-  description = "The private key path to access the bastion host."
+#variable "bastion_authorized_keys" {
+#}
+
+#variable "bastion_private_key" {
+#}
+
+variable "bastion_ad_index" {
+  default = 0
 }
+
+variable "listener_ca_certificate" {
+  default = ""
+}
+
+variable "listener_private_key" {
+  default = ""
+}
+
+variable "listener_public_certificate" {
+  default = ""
+}
+

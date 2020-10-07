@@ -100,13 +100,8 @@ resource "oci_core_security_list" "JenkinsBastion" {
   vcn_id         = oci_core_virtual_network.JenkinsVCN.id
 
   egress_security_rules {
-    tcp_options {
-      max = 22
-      min = 22
-    }
-
     protocol    = "6"
-    destination = var.vcn_cidr
+    destination = "0.0.0.0/0"
   }
 
   ingress_security_rules {
@@ -151,8 +146,8 @@ resource "oci_core_security_list" "JenkinsLB" {
     source   = "0.0.0.0/0"
 
     tcp_options {
-      min = 80
-      max = 80
+      min = var.lb_http_port
+      max = var.lb_http_port
     }
   }
   ingress_security_rules {

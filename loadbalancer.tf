@@ -8,7 +8,6 @@ resource "oci_load_balancer" "JenkinsLB" {
 
   subnet_ids = [
     oci_core_subnet.JenkinsLBSubnet1.id,
-#    oci_core_subnet.JenkinsLBSubnet2.id,
   ]
 
   display_name = "JenkinsLB"
@@ -29,7 +28,7 @@ resource "oci_load_balancer_listener" "JenkinsLBLsnr" {
   load_balancer_id         = oci_load_balancer.JenkinsLB.id
   name                     = "http"
   default_backend_set_name = oci_load_balancer_backend_set.JenkinsLBBes.name
-  port                     = 80
+  port                     = var.lb_http_port
   protocol                 = "HTTP"
 
   connection_configuration {

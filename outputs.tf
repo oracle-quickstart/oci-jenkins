@@ -1,22 +1,23 @@
-output "master_instance_id" {
-  value = "${module.jenkins-master.id}"
-}
-
 output "master_private_ip" {
-  value = "${module.jenkins-master.private_ip}"
-}
-
-output "slave_instance_ids" {
-  value = "${module.jenkins-slave.ids}"
+  value = module.jenkins.master_private_ip
 }
 
 output "slave_private_ips" {
-  value = "${module.jenkins-slave.private_ips}"
+  value = module.jenkins.slave_private_ips
 }
 
-output "master_login_url" {
-  value = "http://${module.jenkins-master.private_ip}:${var.http_port}"
+output "lb_public_ip" {
+  value = [oci_load_balancer.JenkinsLB.ip_addresses]
 }
-output "slave_host_names" {
-  value = "${module.jenkins-slave.slave_host_names}"
+
+output "jenkins_login_url" {
+  value = "http://${oci_load_balancer.JenkinsLB.ip_addresses[0]}"
+}
+
+output "SSH_private_key" {
+  value = tls_private_key.public_private_key_pair.private_key_pem
+}
+
+output "Bastion_Public_IP" {
+  value = data.oci_core_vnic.bastion_VNIC1.public_ip_address
 }
