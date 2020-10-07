@@ -16,7 +16,7 @@ and [setup guide](https://www.terraform.io/docs/providers/oci/guides/version-3-u
 * [Github issues](https://github.com/terraform-providers/terraform-provider-oci/issues)
 * [Troubleshooting](https://www.terraform.io/docs/providers/oci/guides/guides/troubleshooting.html)
 
-## Clone the Module
+## Clone of the repo
 Now, you'll want a local copy of this repo. You can make that with the commands:
 
     git clone https://github.com/oracle-quickstart/oci-jenkins.git
@@ -63,11 +63,11 @@ When you no longer need the deployment, you can run this command to destroy it:
     terraform destroy
 
 ## Deployment in OCI Resource Manager (ORM)
-Create the zip file:
+Just after clone of the repo create the zip file:
 
     zip -r oci-jenkins.zip *
 
-Create ORM Stack by uploading the zip file (Create Stack -> My Solutions):
+Create ORM Stack by uploading the zip file (Create Stack -> My Configuration):
 
 ![](./images/orm-01.png)
 
