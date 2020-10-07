@@ -21,7 +21,7 @@ Now, you'll want a local copy of this repo. You can make that with the commands:
 
     git clone https://github.com/oracle-quickstart/oci-jenkins.git
     cd oci-jenkins
-    git branch checkout orm
+    git checkout orm
     ls
 
 ## Prerequisites
