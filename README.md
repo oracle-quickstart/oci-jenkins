@@ -64,34 +64,36 @@ When you no longer need the deployment, you can run this command to destroy it:
 
 ## Deployment in OCI Resource Manager (ORM)
 
-STEP 1. Just after clone of the repo create the zip file:
+**STEP 1.** Just after clone of the repo create the zip file:
 
+    git clone https://github.com/oracle-quickstart/oci-jenkins.git
+    cd oci-jenkins
+    git checkout orm
     zip -r oci-jenkins.zip *
 
-STEP 2. Create ORM Stack by uploading the zip file (Create Stack -> My Configuration):
+**STEP 2.** Create ORM Stack by uploading the zip file (Create Stack -> My Configuration):
 
 ![](./images/orm-01.png)
 
-STEP 3. Configure variables:
+**STEP 3.** Configure variables:
 
 ![](./images/orm-02.png)
 
-STEP 4. Create the Stack:
+**STEP 4.** Create the Stack:
 
 ![](./images/orm-03.png)
 
-STEP 5. Run Apply Job for the Stack:
+**STEP 5.** Run Terraform Apply for the Job of your Stack:
 
 ![](./images/orm-04.png)
 
-STEP 6. After successful execution download the log of the job:
+**STEP 6.** After successful execution download the log of the job:
 
 ![](./images/orm-05.png)
 
-From the end of the log pickup Jenkins's LoadBalancer public IP/URL:
+**STEP 7.** From the end of the log pickup Jenkins's LoadBalancer public IP/URL:
 
 ![](./images/orm-06.png)
-
 
 
 ## Jenkins in master agent mode Architecture
