@@ -48,7 +48,7 @@ resource "oci_core_instance" "TFJenkinsSlave" {
 
       bastion_host        = var.bastion_host
       bastion_user        = var.bastion_user
-      bastion_private_key = file(var.bastion_private_key)
+      bastion_private_key = var.bastion_private_key
     }
 
     content     = data.template_file.config_slave.rendered
@@ -67,7 +67,7 @@ resource "oci_core_instance" "TFJenkinsSlave" {
 
       bastion_host        = var.bastion_host
       bastion_user        = var.bastion_user
-      bastion_private_key = file(var.bastion_private_key)
+      bastion_private_key = var.bastion_private_key
     }
 
     inline = [
