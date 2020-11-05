@@ -38,6 +38,8 @@ sudo firewall-cmd --reload
 
 waitForJenkins
 
+sleep 10 
+
 # UPDATE PLUGIN LIST
 curl  -L http://updates.jenkins-ci.org/update-center.json | sed '1d;$d' | curl -X POST -H 'Accept: application/json' -d @- http://localhost:${http_port}/updateCenter/byId/default/postBack
 
