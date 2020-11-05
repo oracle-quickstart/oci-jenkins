@@ -30,7 +30,7 @@ resource "oci_core_instance" "TFJenkinsSlave" {
   }
 
   metadata = {
-    ssh_authorized_keys = file(var.ssh_authorized_keys)
+    ssh_authorized_keys = var.ssh_authorized_keys
   }
 
   source_details {
@@ -44,7 +44,7 @@ resource "oci_core_instance" "TFJenkinsSlave" {
       agent       = false
       timeout     = "5m"
       user        = var.vm_user
-      private_key = file(var.ssh_private_key)
+      private_key = var.ssh_private_key
 
       bastion_host        = var.bastion_host
       bastion_user        = var.bastion_user
@@ -63,7 +63,7 @@ resource "oci_core_instance" "TFJenkinsSlave" {
       agent       = false
       timeout     = "10m"
       user        = var.vm_user
-      private_key = file(var.ssh_private_key)
+      private_key = var.ssh_private_key
 
       bastion_host        = var.bastion_host
       bastion_user        = var.bastion_user

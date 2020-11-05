@@ -46,8 +46,8 @@ module "jenkins" {
 Argument | Description
 --- | ---
 compartment_ocid | Compartment's OCID where VCN will be created
-ssh_authorized_keys | Public SSH keys path to be included in the ~/.ssh/authorized_keys file for the default user on the instance
-ssh_private_key | The private key path to access instance
+ssh_authorized_keys | Public SSH key to be included in the ~/.ssh/authorized_keys file for the default user on the instance
+ssh_private_key | The private key to access instance
 label_prefix | To create unique identifier for multiple clusters in a compartment.
 master_ad  | The Availability Domain for Jenkins master.
 master_subnet_id | The OCID of the master subnet to create the VNIC in.

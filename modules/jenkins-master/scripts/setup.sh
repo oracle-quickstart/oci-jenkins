@@ -62,9 +62,11 @@ sudo mv /home/opc/default-user.groovy /var/lib/jenkins/init.groovy.d/default-use
 
 sudo service jenkins restart
 
+sleep 10 
+
 waitForJenkins
 
-sleep 30
+sleep 60
 
 # INSTALL PLUGINS
 sudo java -jar /var/lib/jenkins/jenkins-cli.jar -s http://localhost:${http_port} -auth admin:$PASS install-plugin ${plugins}
