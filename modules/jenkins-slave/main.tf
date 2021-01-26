@@ -71,6 +71,7 @@ resource "oci_core_instance" "TFJenkinsSlave" {
     }
 
     inline = [
+      "sleep 60",
       "sudo chmod +x ~/config_slave.sh",
       "sudo ~/config_slave.sh ${self.display_name}",
     ]

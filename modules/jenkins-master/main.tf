@@ -92,6 +92,7 @@ resource "oci_core_instance" "TFJenkinsMaster" {
     }
 
     inline = [
+      "sleep 60",
       "chmod +x ~/setup.sh",
       "sudo ~/setup.sh",
     ]
