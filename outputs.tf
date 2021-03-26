@@ -6,17 +6,17 @@ output "master_private_ip" {
   value = "${module.jenkins-master.private_ip}"
 }
 
-output "slave_instance_ids" {
-  value = "${module.jenkins-slave.ids}"
+output "agent_instance_ids" {
+  value = "${module.jenkins-agent.ids}"
 }
 
-output "slave_private_ips" {
-  value = "${module.jenkins-slave.private_ips}"
+output "agent_private_ips" {
+  value = "${module.jenkins-agent.private_ips}"
 }
 
 output "master_login_url" {
   value = "http://${module.jenkins-master.private_ip}:${var.http_port}"
 }
-output "slave_host_names" {
-  value = "${module.jenkins-slave.slave_host_names}"
+output "agent_host_names" {
+  value = "${module.jenkins-agent.agent_host_names}"
 }
