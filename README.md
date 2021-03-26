@@ -3,7 +3,7 @@
 These are Terraform modules that deploy [Jenkins](https://jenkins.io/) on [Oracle Cloud Infrastructure (OCI)](https://cloud.oracle.com/en_US/cloud-infrastructure).
 
 ## About
-The Jenkins Oracle Cloud Infrastructure Module provides a Terraform-based Jenkins cluster installation for Oracle Cloud Infrastructure (OCI). Jenkins is a distributed automation server, generally associated with Continuous Integration (CI) and Continuous Delivery (CD). A Jenkins cluster typically involves one or more master instance(s) coupled with one or more slave instance(s).
+The Jenkins Oracle Cloud Infrastructure Module provides a Terraform-based Jenkins cluster installation for Oracle Cloud Infrastructure (OCI). Jenkins is a distributed automation server, generally associated with Continuous Integration (CI) and Continuous Delivery (CD). A Jenkins cluster typically involves one or more master instance(s) coupled with one or more agent instance(s).
 
 ![Jenkins architecture](images/architecture.png)
 
@@ -20,7 +20,7 @@ Instead of figuring out the details of how to run a piece of infrastructure from
 
 ## How to use this Module
 Each Module has the following folder structure:
-* [root](): This folder contains a root module calls jenkins-master and jenkins-slave sub-modules to create a Jenkins cluster in OCI.
+* [root](): This folder contains a root module calls jenkins-master and jenkins-agent sub-modules to create a Jenkins cluster in OCI.
 * [modules](): This folder contains the reusable code for this Module, broken down into one or more modules.
 * [examples](): This folder contains examples of how to use the modules.
   - [example-1](examples/example-1): This is an example of how to use the terraform_oci_jenkins module to deploy a Jenkins cluster in OCI by using an existing VCN, Security list and Subnets.
@@ -34,9 +34,9 @@ module "jenkins" {
   compartment_ocid    = "${var.compartment_ocid}"
   master_ad           = "${var.master_ad}"
   master_subnet_id    = "${var.master_subnet_id}"
-  slave_count         = "${var.slave_count}"
-  slave_ads           = "${var.slave_ads}"
-  slave_subnet_id     = "${var.slave_subnet_id}"
+  agent_count         = "${var.agent_count}"
+  agent_ads           = "${var.agent_ads}"
+  agent_subnet_id     = "${var.agent_subnet_id}"
   ssh_authorized_keys = "${var.ssh_authorized_keys}"
   ssh_private_key     = "${var.ssh_private_key}"
 }
@@ -55,12 +55,12 @@ master_display_name | The name of the master instance.
 master_image_id | The OCID of an image for a master instance to use. You can refer to https://docs.us-phoenix-1.oraclecloud.com/images/ for more details.
 master_shape | The shape to be used on the master instance.
 master_user_data | Provide your own base64-encoded data to be used by Cloud-Init to run custom scripts or provide custom Cloud-Init configuration for master instance.
-slave_count | Number of slave instances to launch.
-slave_ads | The list of Availability Domains for Jenkins slave.
-slave_subnet_ids | The list of Jenkins slave subnets' id.
-slave_display_name | The name of the slave instance.
-slave_image_id | The OCID of an image for slave instance to use. You can refer to https://docs.us-phoenix-1.oraclecloud.com/images/ for more details.
-slave_shape | The shape to be used on the slave instance
+agent_count | Number of agent instances to launch.
+agent_ads | The list of Availability Domains for Jenkins agent.
+agent_subnet_ids | The list of Jenkins agent subnets' id.
+agent_display_name | The name of the agent instance.
+agent_image_id | The OCID of an image for agent instance to use. You can refer to https://docs.us-phoenix-1.oraclecloud.com/images/ for more details.
+agent_shape | The shape to be used on the agent instance
 http_port | The port to use for HTTP traffic to Jenkins.
-jnlp_port | The Port to use for Jenkins master to slave communication between instances.
+jnlp_port | The Port to use for Jenkins master to agent communication between instances.
 plugins | The list of plugins to pre-install on the master instance.
