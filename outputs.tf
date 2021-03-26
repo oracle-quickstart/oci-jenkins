@@ -18,5 +18,5 @@ output "master_login_url" {
   value = "http://${module.jenkins-master.private_ip}:${var.http_port}"
 }
 output "agent_host_names" {
-  value = "${module.jenkins-agent.agent_host_names}"
+  value = module.jenkins-agent.agent_host_names
 }
