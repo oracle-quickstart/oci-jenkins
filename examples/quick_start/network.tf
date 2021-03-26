@@ -183,14 +183,14 @@ resource "oci_core_subnet" "JenkinsMasterSubnetAD" {
 }
 
 ############################################
-# Create Slave Subnet
+# Create agent Subnet
 ############################################
-resource "oci_core_subnet" "JenkinsSlaveSubnetAD" {
+resource "oci_core_subnet" "JenkinsAgentSubnetAD" {
   count               = length(data.template_file.ad_names.*.rendered)
 #  availability_domain = data.template_file.ad_names[count.index].rendered
-  cidr_block          = cidrsubnet(local.slave_subnet_prefix, 4, count.index)
-  display_name        = "${var.label_prefix}JenkinsSlaveSubnet${count.index + 1}"
-  dns_label           = "slavead${count.index + 1}"
+  cidr_block          = cidrsubnet(local.agent_subnet_prefix, 4, count.index)
+  display_name        = "${var.label_prefix}JenkinsAgentSubnet${count.index + 1}"
+  dns_label           = "agentad${count.index + 1}"
   security_list_ids   = [oci_core_security_list.JenkinsPrivate.id]
   compartment_id      = var.compartment_ocid
   vcn_id              = oci_core_virtual_network.JenkinsVCN.id

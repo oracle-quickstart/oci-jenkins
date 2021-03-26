@@ -4,22 +4,22 @@ variable "compartment_ocid" {
 }
 
 variable "availability_domains" {
-  description = "The Availability Domains of the slave instance. "
+  description = "The Availability Domains of the agent instance. "
   default     = ""
 }
 
 variable "subnet_ids" {
-  description = "List of Jenkins slave subnets' id. "
+  description = "List of Jenkins agent subnets' id. "
   default     = []
 }
 
-variable "slave_display_name" {
-  description = "The name of the slave instance. "
+variable "agent_display_name" {
+  description = "The name of the agent instance. "
   default     = ""
 }
 
 variable "shape" {
-  description = "Instance shape to use for slave instance. "
+  description = "Instance shape to use for agent instance. "
   default     = "VM.Standard1.4"
 }
 
@@ -28,8 +28,8 @@ variable "label_prefix" {
   default     = ""
 }
 
-variable "number_of_slaves" {
-  description = "The number of slave instance(s) to create"
+variable "number_of_agents" {
+  description = "The number of agent instance(s) to create"
 }
 
 variable "jenkins_master_ip" {
@@ -78,7 +78,7 @@ variable "bastion_private_key" {
 }
 
 variable "vm_user" {
-  description = "The SSH user to connect to the slave host."
+  description = "The SSH user to connect to the agent host."
   default     = "opc"
 }
 

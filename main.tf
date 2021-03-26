@@ -24,18 +24,18 @@ module "jenkins-master" {
 }
 
 ############################################
-# Jenkins Slave Instance(s)
+# Jenkins agent Instance(s)
 ############################################
-module "jenkins-slave" {
-  source                = "./modules/jenkins-slave"
-  number_of_slaves      = "${var.slave_count}"
-  availability_domains  = "${var.slave_ads}"
+module "jenkins-agent" {
+  source                = "./modules/jenkins-agent"
+  number_of_agents      = "${var.agent_count}"
+  availability_domains  = "${var.agent_ads}"
   compartment_ocid      = "${var.compartment_ocid}"
-  slave_display_name    = "${var.slave_display_name}"
-  image_id              = "${var.slave_image_id}"
-  shape                 = "${var.slave_shape}"
+  agent_display_name    = "${var.agent_display_name}"
+  image_id              = "${var.agent_image_id}"
+  shape                 = "${var.agent_shape}"
   label_prefix          = "${var.label_prefix}"
-  subnet_ids            = "${var.slave_subnet_ids}"
+  subnet_ids            = "${var.agent_subnet_ids}"
   jenkins_master_ip     = "${module.jenkins-master.private_ip}"
   jenkins_master_port   = "${var.http_port}"
   jenkins_password      = "${var.jenkins_password}"

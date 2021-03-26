@@ -60,38 +60,38 @@ variable "master_user_data" {
   default     = ""
 }
 
-variable "slave_count" {
-  description = "Number of slave instances to launch. "
+variable "agent_count" {
+  description = "Number of agent instances to launch. "
   default     = 1
 }
 
-variable "slave_ads" {
-  description = "The Availability Domain(s) for Jenkins slave(s). "
+variable "agent_ads" {
+  description = "The Availability Domain(s) for Jenkins agent(s). "
   default     = []
 }
 
-variable "slave_subnet_ids" {
-  description = "List of Jenkins slave subnets' id. "
+variable "agent_subnet_ids" {
+  description = "List of Jenkins agent subnets' id. "
   default     = []
 }
 
-variable "slave_display_name" {
-  description = "The name of the slave instance. "
-  default     = "JenkinsSlave"
+variable "agent_display_name" {
+  description = "The name of the agent instance. "
+  default     = "Jenkinsagent"
 }
 
-variable "slave_image_id" {
-  description = "The OCID of an image for slave instance to use.  "
+variable "agent_image_id" {
+  description = "The OCID of an image for agent instance to use.  "
   default     = ""
 }
 
-variable "slave_shape" {
-  description = "Instance shape to use for slave instance. "
+variable "agent_shape" {
+  description = "Instance shape to use for agent instance. "
   default     = "VM.Standard2.1"
 }
 
-variable "slave_user_data" {
-  description = "Provide your own base64-encoded data to be used by Cloud-Init to run custom scripts or provide custom Cloud-Init configuration for slave instance. "
+variable "agent_user_data" {
+  description = "Provide your own base64-encoded data to be used by Cloud-Init to run custom scripts or provide custom Cloud-Init configuration for agent instance. "
   default     = ""
 }
 
@@ -101,14 +101,14 @@ variable "http_port" {
 }
 
 variable "jnlp_port" {
-  description = "The Port to use for Jenkins master to slave communication bewtween instances. "
+  description = "The Port to use for Jenkins master to agent communication bewtween instances. "
   default     = 49187
 }
 
 variable "plugins" {
   type        = list
   description = "A list of Jenkins plugins to install, use short names. "
-  default     = ["git", "ssh-slaves", "oracle-cloud-infrastructure-compute"]
+  default     = ["git", "ssh-agents", "oracle-cloud-infrastructure-compute"]
 }
 
 variable "bastion_host" {

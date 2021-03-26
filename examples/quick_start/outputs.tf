@@ -3,7 +3,7 @@ output "master_private_ip" {
 }
 
 output "slave_private_ips" {
-  value = module.jenkins.slave_private_ips
+  value = module.jenkins.agent_private_ips
 }
 
 output "lb_public_ip" {
