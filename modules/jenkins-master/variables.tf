@@ -1,6 +1,6 @@
 variable "compartment_ocid" {
   description = "Compartment's OCID where VCN will be created. "
-  default = "ocid1.compartment.oc1..aaaaaaaada2gaukcqoagqoshxq2pyt6cdsj2mhnrz3p5nke33ljx2bp476wq"
+  default     = ""
 }
 
 variable "availability_domain" {
@@ -10,12 +10,12 @@ variable "availability_domain" {
 
 variable "jenkins_version" {
   description = "The version of the Jenkins Server."
-  default     = "2.138.2"
+  default = "2.277.4"
 }
 
 variable "jenkins_password" {
   description = "Required field for Jenkins initial password. "
-  default = "Oracle1234!!!!"
+  default     = "Oracle1234!!!!"
 }
 
 variable "master_display_name" {
@@ -25,13 +25,24 @@ variable "master_display_name" {
 
 variable "subnet_id" {
   description = "The OCID of the master subnet to create the VNIC in. "
-  default     = "ocid1.subnet.oc1.iad.aaaaaaaa5hkgodv25wtxwptoklrwvmzji2urka6yqwac2sizxfw45atcf4qa"
+  default     = ""
 }
 
 variable "shape" {
   description = "Instance shape to use for master instance. "
-  default     = "VM.Standard1.4"
+  default     = "VM.Standard2.4"
 }
+
+variable "flex_shape_ocpus" {
+  description = "Number of Flex shape OCPUs"
+  default     = ""
+}
+
+variable "flex_shape_memory" {
+  description = "Amount of Flex shape Memory in GB"
+  default     = ""
+}
+
 
 variable "label_prefix" {
   description = "To create unique identifier for multiple clusters in a compartment."
@@ -64,7 +75,7 @@ variable "user_data" {
 
 variable "http_port" {
   description = "The port to use for HTTP traffic to Jenkins"
-  default = "8080"
+  default     = "8080"
 }
 
 variable "jnlp_port" {

@@ -23,6 +23,16 @@ variable "shape" {
   default     = "VM.Standard1.4"
 }
 
+variable "flex_shape_ocpus" {
+  description = "Number of Flex shape OCPUs"
+  default     = ""
+}
+
+variable "flex_shape_memory" {
+  description = "Amount of Flex shape Memory in GB"
+  default     = ""
+}
+
 variable "label_prefix" {
   description = "To create unique identifier for multiple clusters in a compartment."
   default     = ""
