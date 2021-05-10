@@ -11,21 +11,24 @@ function waitForJenkins() {
     echo "Jenkins launched"
 }
 
+#Enable Developer repo (EPEL)
+sudo yum-config-manager --enable ol7_developer*
+
 # Install Java for Jenkins
 sudo yum install -y java-1.8.0-openjdk
-
-# Install xmlstarlet used for XML config manipulation
-sudo yum install -y xmlstarlet
 
 # Install Jenkins
 sudo echo "[jenkins-ci-org-${jenkins_version}]"
 sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
 sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+
 sudo yum install -y jenkins-${jenkins_version}
 
-# Config Jenkins Http Port
+# Config Jenkins Http Port and Agent Port using System/Java properties - https://www.jenkins.io/doc/book/managing/system-properties/
 sudo sed -i '/JENKINS_PORT/c\ \JENKINS_PORT=\"${http_port}\"' /etc/sysconfig/jenkins
-sudo sed -i '/JENKINS_JAVA_OPTIONS/c\ \JENKINS_JAVA_OPTIONS=\"-Djenkins.install.runSetupWizard=false -Djava.awt.headless=true\"' /etc/sysconfig/jenkins
+sudo sed -i '/JENKINS_JAVA_OPTIONS/c\ \JENKINS_JAVA_OPTIONS=\"-Djenkins.install.runSetupWizard=false -Djava.awt.headless=true -Djenkins.model.Jenkins.slaveAgentPort=${jnlp_port}\"' /etc/sysconfig/jenkins
+
+
 # Start Jenkins
 sudo service jenkins restart
 sudo chkconfig --add jenkins
@@ -34,6 +37,7 @@ sudo chkconfig --add jenkins
 sudo firewall-cmd --zone=public --permanent --add-port=${http_port}/tcp
 sudo firewall-cmd --zone=public --permanent --add-port=${jnlp_port}/tcp
 sudo firewall-cmd --zone=public --permanent --add-port=443/tcp
+sudo firewall-cmd --zone=public --permanent --add-port=8080/tcp
 sudo firewall-cmd --reload
 
 waitForJenkins
@@ -51,10 +55,6 @@ waitForJenkins
 sudo wget -P /var/lib/jenkins/ http://localhost:8080/jnlpJars/jenkins-cli.jar
 
 sleep 10
-
-# Set Agent Port
-xmlstarlet ed -u "//slaveAgentPort" -v "${jnlp_port}" /var/lib/jenkins/config.xml > /home/opc/jenkins_config.xml
-sudo mv /home/opc/jenkins_config.xml /var/lib/jenkins/config.xml
 
 # Initialize Jenkins User Password Groovy Script
 export PASS=${jenkins_password}
