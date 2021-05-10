@@ -3,9 +3,21 @@ set -e -x
 
 function waitForJenkins() {
     echo "Waiting for Jenkins to launch on ${http_port}..."
-
+    i=0
     while ! timeout 1 bash -c "echo > /dev/tcp/localhost/${http_port}"; do
       sleep 1
+      ((i=$i+1))
+      ### every 30s, restart jenkins service
+      if [ $(( $i % 30 )) -eq 0 ]; then
+        echo "Connection refused, restarting jenkins"
+        sudo service jenkins restart
+      fi
+
+      ### after 5m, fail
+      if [ $(( $i % 300 )) -eq 0 ]; then
+        echo "Failed to connect to jenkins during installation process, exiting"
+        exit -1
+      fi
     done
 
     echo "Jenkins launched"
@@ -28,17 +40,15 @@ sudo yum install -y jenkins-${jenkins_version}
 sudo sed -i '/JENKINS_PORT/c\ \JENKINS_PORT=\"${http_port}\"' /etc/sysconfig/jenkins
 sudo sed -i '/JENKINS_JAVA_OPTIONS/c\ \JENKINS_JAVA_OPTIONS=\"-Djenkins.install.runSetupWizard=false -Djava.awt.headless=true -Djenkins.model.Jenkins.slaveAgentPort=${jnlp_port}\"' /etc/sysconfig/jenkins
 
-
-# Start Jenkins
-sudo service jenkins restart
-sudo chkconfig --add jenkins
-
 # Set httpport on firewall
 sudo firewall-cmd --zone=public --permanent --add-port=${http_port}/tcp
 sudo firewall-cmd --zone=public --permanent --add-port=${jnlp_port}/tcp
 sudo firewall-cmd --zone=public --permanent --add-port=443/tcp
-sudo firewall-cmd --zone=public --permanent --add-port=8080/tcp
 sudo firewall-cmd --reload
+
+# Start Jenkins
+sudo service jenkins restart
+sudo chkconfig --add jenkins
 
 waitForJenkins
 
