@@ -24,9 +24,17 @@ data "template_file" "init_jenkins" {
 resource "oci_core_instance" "TFJenkinsMaster" {
   availability_domain = var.availability_domain
   compartment_id      = var.compartment_ocid
-#   shape               = "VM.Standard1.8"
-  shape               = var.shape
   display_name        = "${var.label_prefix}${var.master_display_name}"
+  shape               = local.shape
+
+  dynamic "shape_config" {
+    for_each = local.is_flex_shape
+    content {
+      ocpus         = local.flex_shape_ocpus
+      memory_in_gbs = local.flex_shape_memory
+    }
+  }
+
 
   create_vnic_details {
     subnet_id        = var.subnet_id

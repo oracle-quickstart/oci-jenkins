@@ -14,14 +14,20 @@ locals {
 
 # Jenkins agents
 resource "oci_core_instance" "TFJenkinsAgent" {
-  count               = var.number_of_agents
-#  availability_domain = var.availability_domains
-#  availability_domain = ""
- availability_domain = var.availability_domains[count.index % length(var.availability_domains)]
+  count = var.number_of_agents
+  availability_domain = var.availability_domains[count.index % length(var.availability_domains)]
   compartment_id      = var.compartment_ocid
   display_name        = "${var.label_prefix}${var.agent_display_name}-${count.index + 1}"
-  shape               = var.shape
-#   shape               = "VM.Standard1.4"
+  shape               = local.shape
+
+  dynamic "shape_config" {
+    for_each = local.is_flex_shape
+    content {
+      ocpus         = local.flex_shape_ocpus
+      memory_in_gbs = local.flex_shape_memory
+    }
+  }
+
   create_vnic_details {
     subnet_id        = var.subnet_ids[count.index % length(var.subnet_ids)]
     display_name     = "${var.label_prefix}${var.agent_display_name}-${count.index + 1}"
@@ -55,7 +61,6 @@ resource "oci_core_instance" "TFJenkinsAgent" {
     destination = "~/config_agent.sh"
   }
 
-  # Register & Launch agent
   # Register & Launch agent
   provisioner "remote-exec" {
     connection {

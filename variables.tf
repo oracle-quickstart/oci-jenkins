@@ -55,6 +55,17 @@ variable "master_shape" {
   default     = "VM.Standard2.1"
 }
 
+variable "master_flex_shape_ocpus" {
+  description = "Number of Flex shape OCPUs"
+  default     = ""
+}
+
+variable "master_flex_shape_memory" {
+  description = "Amount of Flex shape Memory in GB"
+  default     = ""
+}
+
+
 variable "master_user_data" {
   description = "Provide your own base64-encoded data to be used by Cloud-Init to run custom scripts or provide custom Cloud-Init configuration for master instance. "
   default     = ""
@@ -90,6 +101,17 @@ variable "agent_shape" {
   default     = "VM.Standard2.1"
 }
 
+variable "agent_flex_shape_ocpus" {
+  description = "Number of Flex shape OCPUs"
+  default     = ""
+}
+
+variable "agent_flex_shape_memory" {
+  description = "Amount of Flex shape Memory in GB"
+  default     = ""
+}
+
+
 variable "agent_user_data" {
   description = "Provide your own base64-encoded data to be used by Cloud-Init to run custom scripts or provide custom Cloud-Init configuration for agent instance. "
   default     = ""
@@ -106,7 +128,7 @@ variable "jnlp_port" {
 }
 
 variable "plugins" {
-  type        = list
+  type        = list(any)
   description = "A list of Jenkins plugins to install, use short names. "
   default     = ["git", "ssh-agents", "oracle-cloud-infrastructure-compute"]
 }

@@ -54,6 +54,8 @@ master_subnet_id | The OCID of the master subnet to create the VNIC in.
 master_display_name | The name of the master instance.
 master_image_id | The OCID of an image for a master instance to use. You can refer to https://docs.us-phoenix-1.oraclecloud.com/images/ for more details.
 master_shape | The shape to be used on the master instance.
+master_flex_shape_ocpus | The number of OCPUs to be used on the master instance with Flexible shapes.
+master_flex_shape_memory | The amount of Memory in GB to be used on the master instance with Flexible shapes.
 master_user_data | Provide your own base64-encoded data to be used by Cloud-Init to run custom scripts or provide custom Cloud-Init configuration for master instance.
 agent_count | Number of agent instances to launch.
 agent_ads | The list of Availability Domains for Jenkins agent.
@@ -61,6 +63,8 @@ agent_subnet_ids | The list of Jenkins agent subnets' id.
 agent_display_name | The name of the agent instance.
 agent_image_id | The OCID of an image for agent instance to use. You can refer to https://docs.us-phoenix-1.oraclecloud.com/images/ for more details.
 agent_shape | The shape to be used on the agent instance
+agent_flex_shape_ocpus | The number of OCPUs to be used on the agent instance with Flexible shapes.
+agent_flex_shape_memory | The amount of Memory in GB to be used on the agent instance with Flexible shapes.
 http_port | The port to use for HTTP traffic to Jenkins.
 jnlp_port | The Port to use for Jenkins master to agent communication between instances.
 plugins | The list of plugins to pre-install on the master instance.
