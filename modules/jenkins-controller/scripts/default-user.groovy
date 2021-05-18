@@ -15,4 +15,4 @@ def strategy = new FullControlOnceLoggedInAuthorizationStrategy()
 instance.setAuthorizationStrategy(strategy)
 instance.save()
 
-Jenkins.instance.getInjector().getInstance(AdminWhitelistRule.class).setMasterKillSwitch(false)
+Jenkins.instance.getInjector().getInstance(AdminWhitelistRule.class).setControllerKillSwitch(false)

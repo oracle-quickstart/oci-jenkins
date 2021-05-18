@@ -3,13 +3,13 @@ data "template_file" "config_agent" {
   template = file("${path.module}/scripts/config.sh")
 
   vars = {
-    jenkins_master_url = local.jenkins_master_url
+    jenkins_controller_url = local.jenkins_controller_url
     jenkins_password   = var.jenkins_password
   }
 }
 
 locals {
-  jenkins_master_url = "http://${var.jenkins_master_ip}:${var.jenkins_master_port}"
+  jenkins_controller_url = "http://${var.jenkins_controller_ip}:${var.jenkins_controller_port}"
 }
 
 # Jenkins agents

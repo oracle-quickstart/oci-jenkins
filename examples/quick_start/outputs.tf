@@ -1,8 +1,8 @@
-output "master_private_ip" {
-  value = module.jenkins.master_private_ip
+output "controller_private_ip" {
+  value = module.jenkins.controller_private_ip
 }
 
-output "slave_private_ips" {
+output "agent_private_ips" {
   value = module.jenkins.agent_private_ips
 }
 

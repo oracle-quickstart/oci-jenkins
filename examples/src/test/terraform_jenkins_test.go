@@ -66,15 +66,15 @@ func validateSolution(t *testing.T, terraform_options *terraform.Options) {
 	}
 func testJenkins(t *testing.T, terraform_options *terraform.Options, key_pair *ssh.KeyPair){
 	commandGetKey := "cat" + " /tmp/secret"
-	slave_private_name0 := terraform.Output(t, terraform_options, "slave_private_name0")
-	slave_private_name1 := terraform.Output(t, terraform_options, "slave_private_name1")
- 	master_public_ip    := terraform.Output(t, terraform_options, "master_public_ip")
-	key := test_helper.SSHToHost(t, master_public_ip, "opc", key_pair, commandGetKey)
+	agent_private_name0 := terraform.Output(t, terraform_options, "agent_private_name0")
+	agent_private_name1 := terraform.Output(t, terraform_options, "agent_private_name1")
+ 	controller_public_ip    := terraform.Output(t, terraform_options, "controller_public_ip")
+	key := test_helper.SSHToHost(t, controller_public_ip, "opc", key_pair, commandGetKey)
 	key = strings.Replace(key, "\n", "", -1)
-	master_login_url_tf := terraform.Output(t, terraform_options, "master_login_url")
-	master_login_url := master_login_url_tf + "/"
-	fmt.Println(master_login_url)
-	jenkins := gojenkins.CreateJenkins(nil, master_login_url, "admin", key)
+	controller_login_url_tf := terraform.Output(t, terraform_options, "controller_login_url")
+	controller_login_url := controller_login_url_tf + "/"
+	fmt.Println(controller_login_url)
+	jenkins := gojenkins.CreateJenkins(nil, controller_login_url, "admin", key)
 	fmt.Println(jenkins)
 	fmt.Println(key)
 	fmt.Println("key")
@@ -102,14 +102,14 @@ func testJenkins(t *testing.T, terraform_options *terraform.Options, key_pair *s
   <publishers/>
   <buildWrappers/>
 </project>`
-	_,err = j.GetNode(slave_private_name0)
+	_,err = j.GetNode(agent_private_name0)
 	if err != nil {
-                panic("Could not get jenkins slave node1")
+                panic("Could not get jenkins agent node1")
                 fmt.Println(err)
         }
- 	_,err = j.GetNode(slave_private_name1)
+ 	_,err = j.GetNode(agent_private_name1)
         if err != nil {
-                panic("Could not get jenkins slave node2")
+                panic("Could not get jenkins agent node2")
                 fmt.Println(err)
         }
 	_,err = j.CreateJob(configString, "NewJob")

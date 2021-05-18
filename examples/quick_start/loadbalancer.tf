@@ -40,7 +40,7 @@ resource "oci_load_balancer_listener" "JenkinsLBLsnr" {
 resource "oci_load_balancer_backend" "JenkinsLBBe" {
   load_balancer_id = oci_load_balancer.JenkinsLB.id
   backendset_name  = oci_load_balancer_backend_set.JenkinsLBBes.name
-  ip_address       = module.jenkins.master_private_ip
+  ip_address       = module.jenkins.controller_private_ip
   port             = var.http_port
   backup           = false
   drain            = false

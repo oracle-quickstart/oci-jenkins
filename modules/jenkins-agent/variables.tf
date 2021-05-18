@@ -42,12 +42,12 @@ variable "number_of_agents" {
   description = "The number of agent instance(s) to create"
 }
 
-variable "jenkins_master_ip" {
-  description = "The IP of the master Jenkins instance"
+variable "jenkins_controller_ip" {
+  description = "The IP of the Controller Jenkins instance"
 }
 
-variable "jenkins_master_port" {
-  description = "The Port of the master Jenkins instance. "
+variable "jenkins_controller_port" {
+  description = "The Port of the Controller Jenkins instance. "
 }
 
 variable "jenkins_password" {

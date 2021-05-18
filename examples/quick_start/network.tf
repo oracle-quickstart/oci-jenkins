@@ -167,14 +167,14 @@ resource "oci_core_security_list" "JenkinsLB" {
 }
 
 ############################################
-# Create Master Subnet
+# Create controller Subnet
 ############################################
-resource "oci_core_subnet" "JenkinsMasterSubnetAD" {
+resource "oci_core_subnet" "JenkinscontrollerSubnetAD" {
 #  availability_domain = data.template_file.ad_names[0].rendered
-  cidr_block          = cidrsubnet(local.master_subnet_prefix, 4, 0)
-#  display_name        = "${var.label_prefix}JenkinsMasterSubnetAD"
-   display_name        = "JenkinsMasterSubnet"
-  dns_label           = "masterad"
+  cidr_block          = cidrsubnet(local.controller_subnet_prefix, 4, 0)
+#  display_name        = "${var.label_prefix}JenkinscontrollerSubnetAD"
+   display_name        = "JenkinscontrollerSubnet"
+  dns_label           = "controllerad"
   security_list_ids   = [oci_core_security_list.JenkinsPrivate.id]
   compartment_id      = var.compartment_ocid
   vcn_id              = oci_core_virtual_network.JenkinsVCN.id

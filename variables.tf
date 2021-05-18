@@ -22,13 +22,13 @@ variable "ssh_private_key" {
   default     = ""
 }
 
-variable "master_ad" {
-  description = "The Availability Domain for Jenkins master. "
+variable "controller_ad" {
+  description = "The Availability Domain for Jenkins Controller. "
   default     = ""
 }
 
-variable "master_subnet_id" {
-  description = "The OCID of the master subnet to create the VNIC in. "
+variable "controller_subnet_id" {
+  description = "The OCID of the Controller subnet to create the VNIC in. "
   default     = ""
 }
 
@@ -40,34 +40,34 @@ variable "jenkins_version" {
   description = "The verion of Jenkins server. "
 }
 
-variable "master_display_name" {
-  description = "The name of the master instance. "
-  default     = "JenkinsMaster"
+variable "controller_display_name" {
+  description = "The name of the Controller instance. "
+  default     = "JenkinsController"
 }
 
-variable "master_image_id" {
-  description = "The OCID of an image for a master instance to use. "
+variable "controller_image_id" {
+  description = "The OCID of an image for a Controller instance to use. "
   default     = ""
 }
 
-variable "master_shape" {
-  description = "Instance shape to use for master instance. "
+variable "controller_shape" {
+  description = "Instance shape to use for Controller instance. "
   default     = "VM.Standard2.1"
 }
 
-variable "master_flex_shape_ocpus" {
+variable "controller_flex_shape_ocpus" {
   description = "Number of Flex shape OCPUs"
   default     = ""
 }
 
-variable "master_flex_shape_memory" {
+variable "controller_flex_shape_memory" {
   description = "Amount of Flex shape Memory in GB"
   default     = ""
 }
 
 
-variable "master_user_data" {
-  description = "Provide your own base64-encoded data to be used by Cloud-Init to run custom scripts or provide custom Cloud-Init configuration for master instance. "
+variable "controller_user_data" {
+  description = "Provide your own base64-encoded data to be used by Cloud-Init to run custom scripts or provide custom Cloud-Init configuration for Controller instance. "
   default     = ""
 }
 
@@ -88,7 +88,7 @@ variable "agent_subnet_ids" {
 
 variable "agent_display_name" {
   description = "The name of the agent instance. "
-  default     = "Jenkinsagent"
+  default     = "JenkinsAgent"
 }
 
 variable "agent_image_id" {
@@ -123,7 +123,7 @@ variable "http_port" {
 }
 
 variable "jnlp_port" {
-  description = "The Port to use for Jenkins master to agent communication bewtween instances. "
+  description = "The Port to use for Jenkins Controller to agent communication bewtween instances. "
   default     = 49187
 }
 

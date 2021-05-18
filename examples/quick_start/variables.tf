@@ -35,8 +35,8 @@ locals {
 
   lb_subnet_prefix      = cidrsubnet(local.dmz_tier_prefix, 2, 0)
   bastion_subnet_prefix = cidrsubnet(local.dmz_tier_prefix, 2, 1)
-  master_subnet_prefix  = cidrsubnet(local.app_tier_prefix, 2, 0)
-  slave_subnet_prefix   = cidrsubnet(local.app_tier_prefix, 2, 1)
+  controller_subnet_prefix  = cidrsubnet(local.app_tier_prefix, 2, 0)
+  agent_subnet_prefix   = cidrsubnet(local.app_tier_prefix, 2, 1)
 }
 
 variable "label_prefix" {
@@ -80,7 +80,7 @@ variable "jenkins_version" {
 variable "jenkins_password" {
 }
 
-variable "slave_count" {
+variable "agent_count" {
   default = "2"
 }
 
@@ -92,11 +92,11 @@ variable "bastion_shape" {
   default = "VM.Standard1.4"
 }
 
-variable "master_shape" {
+variable "controller_shape" {
   default = "VM.Standard1.4"
 }
 
-variable "slave_shape" {
+variable "agent_shape" {
   default = "VM.Standard1.4"
 }
 

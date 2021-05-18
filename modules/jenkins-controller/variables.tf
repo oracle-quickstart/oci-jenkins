@@ -18,18 +18,18 @@ variable "jenkins_password" {
   default     = "Oracle1234!!!!"
 }
 
-variable "master_display_name" {
-  description = "The name of the master instance. "
-  default     = "Jenkins_Master"
+variable "controller_display_name" {
+  description = "The name of the Controller instance. "
+  default     = "Jenkins_Controller"
 }
 
 variable "subnet_id" {
-  description = "The OCID of the master subnet to create the VNIC in. "
+  description = "The OCID of the Controller subnet to create the VNIC in. "
   default     = ""
 }
 
 variable "shape" {
-  description = "Instance shape to use for master instance. "
+  description = "Instance shape to use for Controller instance. "
   default     = "VM.Standard2.4"
 }
 
@@ -101,7 +101,7 @@ variable "bastion_private_key" {
 }
 
 variable "vm_user" {
-  description = "The SSH user to connect to the master host."
+  description = "The SSH user to connect to the Controller host."
   default     = "opc"
 }
 
