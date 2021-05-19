@@ -2,7 +2,8 @@
 set -e -x
 
 # Install Java for Jenkins
-sudo yum install -y java-1.8.0-openjdk
+#sudo yum install -y java-1.8.0-openjdk
+sudo yum install -y java-11-openjdk
 
 # Config jenkins user on agent node
 sudo useradd --home-dir /home/jenkins --create-home --shell /bin/bash jenkins

@@ -34,7 +34,8 @@ function restartAndWaitForJenkins() {
 sudo yum-config-manager --enable ol7_developer*
 
 # Install Java for Jenkins
-sudo yum install -y java-1.8.0-openjdk
+#sudo yum install -y java-1.8.0-openjdk
+sudo yum install -y java-11-openjdk
 
 # Install Jenkins
 sudo echo "[jenkins-ci-org-${jenkins_version}]"
