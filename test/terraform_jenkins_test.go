@@ -68,11 +68,11 @@ func validateSolution(t *testing.T, terraform_options *terraform.Options) {
 	testJenkins(t, terraform_options, key_pair, key)
 }
 func testJenkins(t *testing.T, terraform_options *terraform.Options, key_pair *ssh.KeyPair, key string) {
-	slave_private_name0 := "JenkinsSlave-1"
-	slave_private_name1 := "JenkinsSlave-2"
-	master_login_url_tf := terraform.Output(t, terraform_options, "jenkins_login_url")
-	master_login_url := master_login_url_tf + "/"
-	jenkins := gojenkins.CreateJenkins(nil, master_login_url, "admin", key)
+	agent_private_name0 := "JenkinsAgent-1"
+	agent_private_name1 := "JenkinsAgent-2"
+	controller_login_url_tf := terraform.Output(t, terraform_options, "jenkins_login_url")
+	controller_login_url := controller_login_url_tf + "/"
+	jenkins := gojenkins.CreateJenkins(nil, controller_login_url, "admin", key)
 	j, err := jenkins.Init()
 	if err != nil {
 		panic("Something Went Wrong")
@@ -96,14 +96,14 @@ func testJenkins(t *testing.T, terraform_options *terraform.Options, key_pair *s
   <publishers/>
   <buildWrappers/>
 </project>`
-	_, err = j.GetNode(slave_private_name0)
+	_, err = j.GetNode(agent_private_name0)
 	if err != nil {
-		panic("Could not get jenkins slave node1")
+		panic("Could not get jenkins agent node1")
 		fmt.Println(err)
 	}
-	_, err = j.GetNode(slave_private_name1)
+	_, err = j.GetNode(agent_private_name1)
 	if err != nil {
-		panic("Could not get jenkins slave node2")
+		panic("Could not get jenkins agent node2")
 		fmt.Println(err)
 	}
 	_, err = j.CreateJob(configString, "NewJob")

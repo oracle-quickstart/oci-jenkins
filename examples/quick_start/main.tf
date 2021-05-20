@@ -30,10 +30,10 @@ module "jenkins" {
   compartment_ocid    = var.compartment_ocid
   jenkins_version     = var.jenkins_version
   jenkins_password    = var.jenkins_password
-  master_ad           = data.template_file.ad_names[0].rendered
-  master_subnet_id    = oci_core_subnet.JenkinsMasterSubnetAD.id
-  master_image_id     = var.image_id[var.region]
-  master_shape        = var.master_shape
+  controller_ad           = data.template_file.ad_names[0].rendered
+  controller_subnet_id    = oci_core_subnet.JenkinsControllerSubnetAD.id
+  controller_image_id     = var.image_id[var.region]
+  controller_shape        = var.controller_shape
   plugins             = var.plugins
   agent_count         = var.agent_count
   agent_ads           = data.template_file.ad_names.*.rendered

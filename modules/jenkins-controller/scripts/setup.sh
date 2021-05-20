@@ -1,16 +1,23 @@
 #!/bin/bash
 set -e -x
 
-function waitForJenkins() {
+function restartAndWaitForJenkins() {
+    echo "Restarting jenkins service"    
+    sudo service jenkins restart
+    echo "Waiting 30s..."
+    sleep 30
+
     echo "Waiting for Jenkins to launch on ${http_port}..."
     i=0
     while ! timeout 1 bash -c "echo > /dev/tcp/localhost/${http_port}"; do
       sleep 1
       ((i=$i+1))
-      ### every 30s, restart jenkins service
-      if [ $(( $i % 30 )) -eq 0 ]; then
-        echo "Connection refused, restarting jenkins"
+      ### every 60s, if fails to connect, restart jenkins service
+      if [ $(( $i % 60 )) -eq 0 ]; then
+        echo "Failed to connect after $i, restarting jenkins"
         sudo service jenkins restart
+        echo "Waiting 30s for jenkins"
+        sleep 30
       fi
 
       ### after 5m, fail
@@ -27,7 +34,7 @@ function waitForJenkins() {
 sudo yum-config-manager --enable ol7_developer*
 
 # Install Java for Jenkins
-sudo yum install -y java-1.8.0-openjdk
+sudo yum install -y java-11-openjdk
 
 # Install Jenkins
 sudo echo "[jenkins-ci-org-${jenkins_version}]"
@@ -47,24 +54,14 @@ sudo firewall-cmd --zone=public --permanent --add-port=443/tcp
 sudo firewall-cmd --reload
 
 # Start Jenkins
-sudo service jenkins restart
 sudo chkconfig --add jenkins
-
-waitForJenkins
-
-sleep 10 
+restartAndWaitForJenkins
 
 # UPDATE PLUGIN LIST
-curl  -L http://updates.jenkins-ci.org/update-center.json | sed '1d;$d' | curl -X POST -H 'Accept: application/json' -d @- http://localhost:${http_port}/updateCenter/byId/default/postBack
-
-sleep 10
-
-waitForJenkins
+curl -L http://updates.jenkins-ci.org/update-center.json | sed '1d;$d' | curl -X POST -H 'Accept: application/json' -d @- http://localhost:${http_port}/updateCenter/byId/default/postBack
 
 # INSTALL CLI
 sudo wget -P /var/lib/jenkins/ http://localhost:8080/jnlpJars/jenkins-cli.jar
-
-sleep 10
 
 # Initialize Jenkins User Password Groovy Script
 export PASS=${jenkins_password}
@@ -72,13 +69,7 @@ export PASS=${jenkins_password}
 sudo -u jenkins mkdir -p /var/lib/jenkins/init.groovy.d
 sudo mv /home/opc/default-user.groovy /var/lib/jenkins/init.groovy.d/default-user.groovy
 
-sudo service jenkins restart
-
-sleep 10 
-
-waitForJenkins
-
-sleep 60
+restartAndWaitForJenkins
 
 # INSTALL PLUGINS
 sudo java -jar /var/lib/jenkins/jenkins-cli.jar -s http://localhost:${http_port} -auth admin:$PASS install-plugin ${plugins}

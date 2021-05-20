@@ -20,11 +20,11 @@ data "template_file" "init_jenkins" {
   }
 }
 
-## JENKINS MASTER INSTANCE
-resource "oci_core_instance" "TFJenkinsMaster" {
+## JENKINS Controller INSTANCE
+resource "oci_core_instance" "TFJenkinsController" {
   availability_domain = var.availability_domain
   compartment_id      = var.compartment_ocid
-  display_name        = "${var.label_prefix}${var.master_display_name}"
+  display_name        = "${var.label_prefix}${var.controller_display_name}"
   shape               = local.shape
 
   dynamic "shape_config" {
@@ -38,9 +38,9 @@ resource "oci_core_instance" "TFJenkinsMaster" {
 
   create_vnic_details {
     subnet_id        = var.subnet_id
-    display_name     = "${var.label_prefix}${var.master_display_name}"
+    display_name     = "${var.label_prefix}${var.controller_display_name}"
     assign_public_ip = var.assign_public_ip
-    hostname_label   = var.master_display_name
+    hostname_label   = var.controller_display_name
   }
 
   metadata = {
