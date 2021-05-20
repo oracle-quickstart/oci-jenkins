@@ -169,10 +169,10 @@ resource "oci_core_security_list" "JenkinsLB" {
 ############################################
 # Create controller Subnet
 ############################################
-resource "oci_core_subnet" "JenkinscontrollerSubnetAD" {
+resource "oci_core_subnet" "JenkinsControllerSubnetAD" {
 #  availability_domain = data.template_file.ad_names[0].rendered
   cidr_block          = cidrsubnet(local.controller_subnet_prefix, 4, 0)
-#  display_name        = "${var.label_prefix}JenkinscontrollerSubnetAD"
+#  display_name        = "${var.label_prefix}JenkinsControllerSubnetAD"
    display_name        = "JenkinscontrollerSubnet"
   dns_label           = "controllerad"
   security_list_ids   = [oci_core_security_list.JenkinsPrivate.id]

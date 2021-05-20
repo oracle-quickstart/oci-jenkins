@@ -31,7 +31,7 @@ module "jenkins" {
   jenkins_version     = var.jenkins_version
   jenkins_password    = var.jenkins_password
   controller_ad           = data.template_file.ad_names[0].rendered
-  controller_subnet_id    = oci_core_subnet.JenkinscontrollerSubnetAD.id
+  controller_subnet_id    = oci_core_subnet.JenkinsControllerSubnetAD.id
   controller_image_id     = var.image_id[var.region]
   controller_shape        = var.controller_shape
   plugins             = var.plugins

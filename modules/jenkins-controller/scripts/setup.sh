@@ -34,7 +34,6 @@ function restartAndWaitForJenkins() {
 sudo yum-config-manager --enable ol7_developer*
 
 # Install Java for Jenkins
-#sudo yum install -y java-1.8.0-openjdk
 sudo yum install -y java-11-openjdk
 
 # Install Jenkins
@@ -61,8 +60,6 @@ restartAndWaitForJenkins
 # UPDATE PLUGIN LIST
 curl -L http://updates.jenkins-ci.org/update-center.json | sed '1d;$d' | curl -X POST -H 'Accept: application/json' -d @- http://localhost:${http_port}/updateCenter/byId/default/postBack
 
-#waitForJenkins
-
 # INSTALL CLI
 sudo wget -P /var/lib/jenkins/ http://localhost:8080/jnlpJars/jenkins-cli.jar
 
@@ -73,11 +70,6 @@ sudo -u jenkins mkdir -p /var/lib/jenkins/init.groovy.d
 sudo mv /home/opc/default-user.groovy /var/lib/jenkins/init.groovy.d/default-user.groovy
 
 restartAndWaitForJenkins
-# sudo service jenkins restart
-
-# waitForJenkins
-
-# sleep 60
 
 # INSTALL PLUGINS
 sudo java -jar /var/lib/jenkins/jenkins-cli.jar -s http://localhost:${http_port} -auth admin:$PASS install-plugin ${plugins}
