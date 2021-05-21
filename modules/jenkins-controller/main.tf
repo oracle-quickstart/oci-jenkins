@@ -20,6 +20,10 @@ data "template_file" "init_jenkins" {
   }
 }
 
+data "template_file" "disable_controller_executor" {
+  template = file("${path.module}/scripts/disable-controller-executor.groovy")
+}
+
 ## JENKINS Controller INSTANCE
 resource "oci_core_instance" "TFJenkinsController" {
   availability_domain = var.availability_domain
@@ -85,6 +89,23 @@ resource "oci_core_instance" "TFJenkinsController" {
     content     = data.template_file.init_jenkins.rendered
     destination = "~/default-user.groovy"
   }
+
+  provisioner "file" {
+    connection {
+      host        = self.private_ip
+      agent       = false
+      timeout     = "5m"
+      user        = var.vm_user
+      private_key = var.ssh_private_key
+
+      bastion_host        = var.bastion_host
+      bastion_user        = var.bastion_user
+      bastion_private_key = var.bastion_private_key
+    }
+
+    content     = data.template_file.disable_controller_executor.rendered
+    destination = "~/disable-controller-executor.groovy"
+  }  
 
   provisioner "remote-exec" {
     connection {

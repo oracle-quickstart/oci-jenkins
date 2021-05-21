@@ -68,6 +68,7 @@ export PASS=${jenkins_password}
 
 sudo -u jenkins mkdir -p /var/lib/jenkins/init.groovy.d
 sudo mv /home/opc/default-user.groovy /var/lib/jenkins/init.groovy.d/default-user.groovy
+sudo mv /home/opc/disable-controller-executor.groovy /var/lib/jenkins/init.groovy.d/disable-controller-executor.groovy
 
 restartAndWaitForJenkins
 
