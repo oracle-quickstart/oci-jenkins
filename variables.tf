@@ -138,6 +138,14 @@ variable "use_bastion_service" {
   default     = false
 }
 
+variable "bastion_service_id" {
+  description = "Bastion Service OCID"
+}
+
+variable "bastion_service_region" {
+  description = "Bastion Service Region"
+}
+
 variable "bastion_host" {
   description = "The bastion host IP."
 }

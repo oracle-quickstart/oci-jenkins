@@ -88,7 +88,13 @@ variable "bastion_user" {
   default     = "opc"
 }
 
+variable "bastion_service_id" {
+  description = "Bastion Service OCID"
+}
 
+variable "bastion_service_region" {
+  description = "Bastion Service Region"
+}
 
 variable "bastion_private_key" {
   description = "The private key path to access the bastion host."

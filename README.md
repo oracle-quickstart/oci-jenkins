@@ -68,3 +68,10 @@ agent_flex_shape_memory | The amount of Memory in GB to be used on the agent ins
 http_port | The port to use for HTTP traffic to Jenkins.
 jnlp_port | The Port to use for Jenkins Controller to agent communication between instances.
 plugins | The list of plugins to pre-install on the Controller instance.
+use_bastion_service | Bastion Service usage instead of Bastion Host
+bastion_service_id | Bastion Service OCID (only when use_bastion_service=True)
+bastion_service_region | Bastion Service Region (only when use_bastion_service=True)
+bastion_host | Bastion Host Public IP (in case of the Bastion Service pass "host.bastion.${var.region}.oci.oraclecloud.com")
+bastion_user | Bastion User (in most of the cases "opc")
+bastion_private_key | The private key path to access the bastion host.
+
