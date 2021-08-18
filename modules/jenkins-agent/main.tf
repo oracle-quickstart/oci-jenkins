@@ -4,7 +4,7 @@ data "template_file" "config_agent" {
 
   vars = {
     jenkins_controller_url = local.jenkins_controller_url
-    jenkins_password   = var.jenkins_password
+    jenkins_password       = var.jenkins_password
   }
 }
 
@@ -14,7 +14,7 @@ locals {
 
 # Jenkins agents
 resource "oci_core_instance" "TFJenkinsAgent" {
-  count = var.number_of_agents
+  count               = var.number_of_agents
   availability_domain = var.availability_domains[count.index % length(var.availability_domains)]
   compartment_id      = var.compartment_ocid
   display_name        = "${var.label_prefix}${var.agent_display_name}-${count.index + 1}"
@@ -25,6 +25,19 @@ resource "oci_core_instance" "TFJenkinsAgent" {
     content {
       ocpus         = local.flex_shape_ocpus
       memory_in_gbs = local.flex_shape_memory
+    }
+  }
+
+  dynamic "agent_config" {
+    for_each = var.use_bastion_service ? [1] : []
+    content {
+      are_all_plugins_disabled = false
+      is_management_disabled   = false
+      is_monitoring_disabled   = false
+      plugins_config {
+        desired_state = "ENABLED"
+        name          = "Bastion"
+      }
     }
   }
 

@@ -20,6 +20,7 @@ module "jenkins-controller" {
   ssh_private_key         = var.ssh_private_key
   user_data               = var.controller_user_data
   plugins                 = var.plugins
+  use_bastion_service     = var.use_bastion_service
   bastion_host            = var.bastion_host
   bastion_user            = var.bastion_user
   bastion_private_key     = var.bastion_private_key
@@ -45,6 +46,7 @@ module "jenkins-agent" {
   jenkins_password        = var.jenkins_password
   ssh_authorized_keys     = var.ssh_authorized_keys
   ssh_private_key         = var.ssh_private_key
+  use_bastion_service     = var.use_bastion_service
   bastion_host            = var.bastion_host
   bastion_user            = var.bastion_user
   bastion_private_key     = var.bastion_private_key

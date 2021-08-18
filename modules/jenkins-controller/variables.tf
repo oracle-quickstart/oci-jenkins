@@ -10,7 +10,7 @@ variable "availability_domain" {
 
 variable "jenkins_version" {
   description = "The version of the Jenkins Server."
-  default = "2.277.4"
+  default     = "2.277.4"
 }
 
 variable "jenkins_password" {
@@ -85,6 +85,11 @@ variable "jnlp_port" {
 variable "plugins" {
   type        = list(string)
   description = "A list of Jenkins plugins to install, use short names. "
+}
+
+variable "use_bastion_service" {
+  description = "Use bastion service instead of bastion host"
+  default     = false
 }
 
 variable "bastion_host" {

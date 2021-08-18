@@ -133,6 +133,11 @@ variable "plugins" {
   default     = ["git", "ssh-agents", "oracle-cloud-infrastructure-compute"]
 }
 
+variable "use_bastion_service" {
+  description = "Use bastion service instead of bastion host"
+  default     = false
+}
+
 variable "bastion_host" {
   description = "The bastion host IP."
 }

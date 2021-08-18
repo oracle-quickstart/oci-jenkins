@@ -39,6 +39,18 @@ resource "oci_core_instance" "TFJenkinsController" {
     }
   }
 
+  dynamic "agent_config" {
+    for_each = var.use_bastion_service ? [1] : []
+    content {
+      are_all_plugins_disabled = false
+      is_management_disabled   = false
+      is_monitoring_disabled   = false
+      plugins_config {
+        desired_state = "ENABLED"
+        name          = "Bastion"
+      }
+    }
+  }
 
   create_vnic_details {
     subnet_id        = var.subnet_id
@@ -105,7 +117,7 @@ resource "oci_core_instance" "TFJenkinsController" {
 
     content     = data.template_file.disable_controller_executor.rendered
     destination = "~/disable-controller-executor.groovy"
-  }  
+  }
 
   provisioner "remote-exec" {
     connection {
