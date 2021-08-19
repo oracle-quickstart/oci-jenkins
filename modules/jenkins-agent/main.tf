@@ -57,16 +57,47 @@ resource "oci_core_instance" "TFJenkinsAgent" {
     source_type = "image"
   }
 
+  provisioner "local-exec" {
+    command = "sleep 240"
+  }
+}
+
+resource "oci_bastion_session" "ssh_via_bastion_service" {
+  count      = var.use_bastion_service ? var.number_of_agents : 0
+  bastion_id = var.bastion_service_id
+
+  key_details {
+    public_key_content = var.bastion_authorized_keys
+  }
+
+  target_resource_details {
+    session_type                               = "MANAGED_SSH"
+    target_resource_id                         = oci_core_instance.TFJenkinsAgent[count.index].id
+    target_resource_operating_system_user_name = "opc"
+    target_resource_port                       = 22
+    target_resource_private_ip_address         = oci_core_instance.TFJenkinsAgent[count.index].private_ip
+  }
+
+  display_name           = "ssh_via_bastion_service"
+  key_type               = "PUB"
+  session_ttl_in_seconds = 1800
+}
+
+
+resource "null_resource" "TFJenkinsAgentConfig" {
+  depends_on = [oci_core_instance.TFJenkinsAgent]
+  count      = var.number_of_agents
+
   provisioner "file" {
     connection {
-      host        = self.private_ip
+      host        = oci_core_instance.TFJenkinsAgent[count.index].private_ip
       agent       = false
       timeout     = "5m"
       user        = var.vm_user
       private_key = var.ssh_private_key
 
-      bastion_host        = var.bastion_host
-      bastion_user        = var.bastion_user
+      bastion_host        = var.use_bastion_service ? "host.bastion.${var.bastion_service_region}.oci.oraclecloud.com" : var.bastion_host
+      bastion_user        = var.use_bastion_service ? oci_bastion_session.ssh_via_bastion_service[count.index].id : var.bastion_user
       bastion_private_key = var.bastion_private_key
     }
 
@@ -77,21 +108,21 @@ resource "oci_core_instance" "TFJenkinsAgent" {
   # Register & Launch agent
   provisioner "remote-exec" {
     connection {
-      host        = self.private_ip
+      host        = oci_core_instance.TFJenkinsAgent[count.index].private_ip
       agent       = false
       timeout     = "10m"
       user        = var.vm_user
       private_key = var.ssh_private_key
 
-      bastion_host        = var.bastion_host
-      bastion_user        = var.bastion_user
+      bastion_host        = var.use_bastion_service ? "host.bastion.${var.bastion_service_region}.oci.oraclecloud.com" : var.bastion_host
+      bastion_user        = var.use_bastion_service ? oci_bastion_session.ssh_via_bastion_service[count.index].id : var.bastion_user
       bastion_private_key = var.bastion_private_key
     }
 
     inline = [
       "sleep 60",
       "sudo chmod +x ~/config_agent.sh",
-      "sudo ~/config_agent.sh ${self.display_name}",
+      "sudo ~/config_agent.sh ${oci_core_instance.TFJenkinsAgent[count.index].display_name}",
     ]
   }
 }

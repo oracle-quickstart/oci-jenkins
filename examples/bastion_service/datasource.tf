@@ -38,16 +38,3 @@ data "oci_core_images" "agent_image" {
     regex  = true
   }
 }
-
-data "oci_core_images" "bastion_image" {
-  compartment_id           = var.compartment_ocid
-  operating_system         = var.instance_os
-  operating_system_version = var.linux_os_version
-  shape                    = var.bastion_shape
-
-  filter {
-    name   = "display_name"
-    values = ["^.*Oracle[^G]*$"]
-    regex  = true
-  }
-}

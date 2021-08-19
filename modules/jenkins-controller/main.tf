@@ -68,16 +68,46 @@ resource "oci_core_instance" "TFJenkinsController" {
     source_type = "image"
   }
 
+  provisioner "local-exec" {
+    command = "sleep 240"
+  }
+}
+
+resource "oci_bastion_session" "ssh_via_bastion_service" {
+  count      = var.use_bastion_service ? 1 : 0
+  bastion_id = var.bastion_service_id
+
+  key_details {
+    public_key_content = var.bastion_authorized_keys
+  }
+
+  target_resource_details {
+    session_type                               = "MANAGED_SSH"
+    target_resource_id                         = oci_core_instance.TFJenkinsController.id
+    target_resource_operating_system_user_name = "opc"
+    target_resource_port                       = 22
+    target_resource_private_ip_address         = oci_core_instance.TFJenkinsController.private_ip
+  }
+
+  display_name           = "ssh_via_bastion_service"
+  key_type               = "PUB"
+  session_ttl_in_seconds = 1800
+}
+
+
+resource "null_resource" "TFJenkinsControllerConfig" {
+  depends_on = [oci_core_instance.TFJenkinsController]
+
   provisioner "file" {
     connection {
-      host        = self.private_ip
+      host        = oci_core_instance.TFJenkinsController.private_ip
       agent       = false
       timeout     = "5m"
       user        = var.vm_user
       private_key = var.ssh_private_key
 
-      bastion_host        = var.bastion_host
-      bastion_user        = var.bastion_user
+      bastion_host        = var.use_bastion_service ? "host.bastion.${var.bastion_service_region}.oci.oraclecloud.com" : var.bastion_host
+      bastion_user        = var.use_bastion_service ? oci_bastion_session.ssh_via_bastion_service[0].id : var.bastion_user
       bastion_private_key = var.bastion_private_key
     }
 
@@ -87,14 +117,14 @@ resource "oci_core_instance" "TFJenkinsController" {
 
   provisioner "file" {
     connection {
-      host        = self.private_ip
+      host        = oci_core_instance.TFJenkinsController.private_ip
       agent       = false
       timeout     = "5m"
       user        = var.vm_user
       private_key = var.ssh_private_key
 
-      bastion_host        = var.bastion_host
-      bastion_user        = var.bastion_user
+      bastion_host        = var.use_bastion_service ? "host.bastion.${var.bastion_service_region}.oci.oraclecloud.com" : var.bastion_host
+      bastion_user        = var.use_bastion_service ? oci_bastion_session.ssh_via_bastion_service[0].id : var.bastion_user
       bastion_private_key = var.bastion_private_key
     }
 
@@ -104,14 +134,14 @@ resource "oci_core_instance" "TFJenkinsController" {
 
   provisioner "file" {
     connection {
-      host        = self.private_ip
+      host        = oci_core_instance.TFJenkinsController.private_ip
       agent       = false
       timeout     = "5m"
       user        = var.vm_user
       private_key = var.ssh_private_key
 
-      bastion_host        = var.bastion_host
-      bastion_user        = var.bastion_user
+      bastion_host        = var.use_bastion_service ? "host.bastion.${var.bastion_service_region}.oci.oraclecloud.com" : var.bastion_host
+      bastion_user        = var.use_bastion_service ? oci_bastion_session.ssh_via_bastion_service[0].id : var.bastion_user
       bastion_private_key = var.bastion_private_key
     }
 
@@ -121,14 +151,14 @@ resource "oci_core_instance" "TFJenkinsController" {
 
   provisioner "remote-exec" {
     connection {
-      host        = self.private_ip
+      host        = oci_core_instance.TFJenkinsController.private_ip
       agent       = false
       timeout     = "5m"
       user        = var.vm_user
       private_key = var.ssh_private_key
 
-      bastion_host        = var.bastion_host
-      bastion_user        = var.bastion_user
+      bastion_host        = var.use_bastion_service ? "host.bastion.${var.bastion_service_region}.oci.oraclecloud.com" : var.bastion_host
+      bastion_user        = var.use_bastion_service ? oci_bastion_session.ssh_via_bastion_service[0].id : var.bastion_user
       bastion_private_key = var.bastion_private_key
     }
 
@@ -137,10 +167,6 @@ resource "oci_core_instance" "TFJenkinsController" {
       "chmod +x ~/setup.sh",
       "sudo ~/setup.sh",
     ]
-  }
-
-  timeouts {
-    create = "10m"
   }
 }
 

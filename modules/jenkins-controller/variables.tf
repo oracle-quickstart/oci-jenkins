@@ -113,6 +113,10 @@ variable "bastion_private_key" {
   description = "The private key path to access the bastion host."
 }
 
+variable "bastion_authorized_keys" {
+  description = "The public key path to access the bastion host."
+}
+
 variable "vm_user" {
   description = "The SSH user to connect to the Controller host."
   default     = "opc"

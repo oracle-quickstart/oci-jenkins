@@ -23,22 +23,22 @@ Each Module has the following folder structure:
 * [root](): This folder contains a root module calls jenkins-controller and jenkins-agent sub-modules to create a Jenkins cluster in OCI.
 * [modules](): This folder contains the reusable code for this Module, broken down into one or more modules.
 * [examples](): This folder contains examples of how to use the modules.
-  - [example-1](examples/example-1): This is an example of how to use the terraform_oci_jenkins module to deploy a Jenkins cluster in OCI by using an existing VCN, Security list and Subnets.
-  - [example-2](examples/example-2): This example creates a VCN in Oracle Cloud Infrastructure including default route table, DHCP options, security list and subnets from scratch, then use terraform_oci_jenkins module to deploy a Jenkins cluster.
+  - [quick_start](examples/quick_start): This is an example of how to use the terraform_oci_jenkins module to deploy a Jenkins cluster in OCI by using an existing VCN, Security list and Subnets + Bastion Host.
+  - [bastion_service](examples/bastion_service): This is an example of how to use the terraform_oci_jenkins module to deploy a Jenkins cluster in OCI by using an existing VCN, Security list and Subnets + OCI Bastion Service.
 
 To deploy Jenkins Cluster servers using this Module:
 
 ```hcl
 module "jenkins" {
-  source              = "github.com/oci-quickstart/oci-quickstart-jenkins"
-  compartment_ocid    = "${var.compartment_ocid}"
+  source                  = "github.com/oci-quickstart/oci-quickstart-jenkins"
+  compartment_ocid        = "${var.compartment_ocid}"
   controller_ad           = "${var.controller_ad}"
   controller_subnet_id    = "${var.controller_subnet_id}"
-  agent_count         = "${var.agent_count}"
-  agent_ads           = "${var.agent_ads}"
-  agent_subnet_id     = "${var.agent_subnet_id}"
-  ssh_authorized_keys = "${var.ssh_authorized_keys}"
-  ssh_private_key     = "${var.ssh_private_key}"
+  agent_count             = "${var.agent_count}"
+  agent_ads               = "${var.agent_ads}"
+  agent_subnet_id         = "${var.agent_subnet_id}"
+  ssh_authorized_keys     = "${var.ssh_authorized_keys}"
+  ssh_private_key         = "${var.ssh_private_key}"
 }
 
 ```
@@ -71,7 +71,8 @@ plugins | The list of plugins to pre-install on the Controller instance.
 use_bastion_service | Bastion Service usage instead of Bastion Host
 bastion_service_id | Bastion Service OCID (only when use_bastion_service=True)
 bastion_service_region | Bastion Service Region (only when use_bastion_service=True)
-bastion_host | Bastion Host Public IP (in case of the Bastion Service pass "host.bastion.${var.region}.oci.oraclecloud.com")
-bastion_user | Bastion User (in most of the cases "opc")
+bastion_host | Bastion Host Public IP (only when use_bastion_service=False)
+bastion_user | Bastion User (only when use_bastion_service=False)
 bastion_private_key | The private key path to access the bastion host.
+bastion_authorized_keys | The public key path to access the bastion host.
 

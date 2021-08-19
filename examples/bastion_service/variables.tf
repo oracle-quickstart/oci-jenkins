@@ -43,7 +43,6 @@ variable "label_prefix" {
   default = ""
 }
 
-
 variable "http_port" {
   default = 8080
 }
@@ -81,24 +80,6 @@ variable "agent_count" {
   default = "2"
 }
 
-variable "bastion_display_name" {
-  default = "JenkinsBastion"
-}
-
-variable "bastion_shape" {
-  default = "VM.Standard.E3.Flex"
-}
-
-variable "bastion_flex_shape_ocpus" {
-  description = "Number of Flex shape OCPUs"
-  default     = 1
-}
-
-variable "bastion_flex_shape_memory" {
-  description = "Amount of Flex shape Memory in GB"
-  default     = 1
-}
-
 variable "controller_shape" {
   default = "VM.Standard.E3.Flex"
 }
@@ -127,22 +108,10 @@ variable "agent_flex_shape_memory" {
   default     = 10
 }
 
-variable "bastion_host" {
-  default = ""
-}
-
-variable "bastion_user" {
-  default = "opc"
-}
-
-variable "bastion_authorized_keys" {
-}
-
 variable "bastion_private_key" {
 }
 
-variable "bastion_ad_index" {
-  default = 0
+variable "bastion_authorized_keys" {
 }
 
 variable "listener_ca_certificate" {
@@ -166,4 +135,3 @@ variable "linux_os_version" {
   description = "Operating system version for all Linux instances"
   default     = "7.9"
 }
-

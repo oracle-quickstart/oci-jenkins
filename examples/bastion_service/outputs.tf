@@ -14,6 +14,3 @@ output "jenkins_login_url" {
   value = "http://${oci_load_balancer.JenkinsLB.ip_addresses[0]}"
 }
 
-output "bastion_public_ip" {
-  value = oci_core_instance.JenkinsBastion.public_ip
-}
