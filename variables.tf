@@ -133,6 +133,21 @@ variable "plugins" {
   default     = ["git", "ssh-agents", "oracle-cloud-infrastructure-compute"]
 }
 
+variable "use_bastion_service" {
+  description = "Use bastion service instead of bastion host"
+  default     = false
+}
+
+variable "bastion_service_id" {
+  description = "Bastion Service OCID"
+  default     = ""
+}
+
+variable "bastion_service_region" {
+  description = "Bastion Service Region"
+  default     = ""
+}
+
 variable "bastion_host" {
   description = "The bastion host IP."
 }
@@ -144,4 +159,8 @@ variable "bastion_user" {
 
 variable "bastion_private_key" {
   description = "The private key path to access the bastion host."
+}
+
+variable "bastion_authorized_keys" {
+  description = "The public key path to access the bastion host."
 }

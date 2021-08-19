@@ -20,15 +20,20 @@ module "jenkins-controller" {
   ssh_private_key         = var.ssh_private_key
   user_data               = var.controller_user_data
   plugins                 = var.plugins
+  use_bastion_service     = var.use_bastion_service
+  bastion_service_id      = var.bastion_service_id
+  bastion_service_region  = var.bastion_service_region
   bastion_host            = var.bastion_host
   bastion_user            = var.bastion_user
   bastion_private_key     = var.bastion_private_key
+  bastion_authorized_keys = var.bastion_authorized_keys
 }
 
 ############################################
 # Jenkins agent Instance(s)
 ############################################
 module "jenkins-agent" {
+  depends_on              = [module.jenkins-controller]
   source                  = "./modules/jenkins-agent"
   number_of_agents        = var.agent_count
   availability_domains    = var.agent_ads
@@ -45,7 +50,11 @@ module "jenkins-agent" {
   jenkins_password        = var.jenkins_password
   ssh_authorized_keys     = var.ssh_authorized_keys
   ssh_private_key         = var.ssh_private_key
+  use_bastion_service     = var.use_bastion_service
+  bastion_service_id      = var.bastion_service_id
+  bastion_service_region  = var.bastion_service_region
   bastion_host            = var.bastion_host
   bastion_user            = var.bastion_user
   bastion_private_key     = var.bastion_private_key
+  bastion_authorized_keys = var.bastion_authorized_keys
 }

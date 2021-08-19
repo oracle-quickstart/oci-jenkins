@@ -1,41 +1,13 @@
 # ------------------------------------------------------------------------------
-# Setup Bastion Host
+# Setup Bastion Service
 # ------------------------------------------------------------------------------
-
-locals {
-  bastion_shape             = var.bastion_shape
-  bastion_flex_shape_ocpus  = var.bastion_flex_shape_ocpus
-  bastion_flex_shape_memory = var.bastion_flex_shape_memory
-  bastion_is_flex_shape     = length(regexall("Flex", local.bastion_shape)) > 0 ? [1] : []
-}
-
-resource "oci_core_instance" "JenkinsBastion" {
-  availability_domain = data.template_file.ad_names[var.bastion_ad_index].rendered
-  compartment_id      = var.compartment_ocid
-  display_name        = var.bastion_display_name
-  shape               = var.bastion_shape
-
-  create_vnic_details {
-    subnet_id        = oci_core_subnet.JenkinsBastion.id
-    assign_public_ip = true
-  }
-
-  dynamic "shape_config" {
-    for_each = local.bastion_is_flex_shape
-    content {
-      ocpus         = local.bastion_flex_shape_ocpus
-      memory_in_gbs = local.bastion_flex_shape_memory
-    }
-  }
-
-  metadata = {
-    ssh_authorized_keys = file(var.bastion_authorized_keys)
-  }
-
-  source_details {
-    source_id   = lookup(data.oci_core_images.bastion_image.images[0], "id")
-    source_type = "image"
-  }
+resource "oci_bastion_bastion" "bastion-service" {
+  bastion_type                 = "STANDARD"
+  compartment_id               = var.compartment_ocid
+  target_subnet_id             = oci_core_subnet.JenkinsBastion.id
+  client_cidr_block_allow_list = ["0.0.0.0/0"]
+  name                         = "BastionService"
+  max_session_ttl_in_seconds   = 1800
 }
 
 # ------------------------------------------------------------------------------
@@ -62,8 +34,10 @@ module "jenkins" {
   agent_flex_shape_memory      = var.agent_flex_shape_memory
   ssh_authorized_keys          = file(var.ssh_authorized_keys)
   ssh_private_key              = file(var.ssh_private_key)
-  bastion_host                 = oci_core_instance.JenkinsBastion.public_ip
-  bastion_user                 = var.bastion_user
+  use_bastion_service          = true
+  bastion_service_id           = oci_bastion_bastion.bastion-service.id
+  bastion_service_region       = var.region
+  bastion_host                 = ""
   bastion_private_key          = file(var.bastion_private_key)
   bastion_authorized_keys      = file(var.bastion_authorized_keys)
 }
