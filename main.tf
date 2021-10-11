@@ -1,3 +1,6 @@
+## Copyright © 2021, Oracle and/or its affiliates. 
+## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+
 ############################################
 # Jenkins Controller Instance
 ############################################
@@ -12,6 +15,7 @@ module "jenkins-controller" {
   flex_shape_memory       = var.controller_flex_shape_memory
   label_prefix            = var.label_prefix
   subnet_id               = var.controller_subnet_id
+  assign_public_ip        = var.controller_assign_public_ip
   jenkins_version         = var.jenkins_version
   jenkins_password        = var.jenkins_password
   http_port               = var.http_port

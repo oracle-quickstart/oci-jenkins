@@ -1,26 +1,14 @@
-variable "tenancy_ocid" {
-}
+## Copyright © 2021, Oracle and/or its affiliates. 
+## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
 
-variable "user_ocid" {
-}
-
-variable "fingerprint" {
-}
-
-variable "private_key_path" {
-}
-
-variable "region" {
-}
-
-variable "compartment_ocid" {
-}
-
-variable "ssh_authorized_keys" {
-}
-
-variable "ssh_private_key" {
-}
+variable "tenancy_ocid" {}
+variable "user_ocid" {}
+variable "fingerprint" {}
+variable "private_key_path" {}
+variable "region" {}
+variable "compartment_ocid" {}
+variable "ssh_authorized_keys" {}
+variable "ssh_private_key" {}
 
 variable "vcn_cidr" {
   default = "10.0.0.0/16"

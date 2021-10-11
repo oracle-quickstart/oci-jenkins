@@ -1,3 +1,6 @@
+## Copyright © 2021, Oracle and/or its affiliates. 
+## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+
 ############################################
 # Create VCN
 ############################################
@@ -170,61 +173,61 @@ resource "oci_core_security_list" "JenkinsLB" {
 # Create controller Subnet
 ############################################
 resource "oci_core_subnet" "JenkinsControllerSubnetAD" {
-#  availability_domain = data.template_file.ad_names[0].rendered
-  cidr_block          = cidrsubnet(local.controller_subnet_prefix, 4, 0)
-#  display_name        = "${var.label_prefix}JenkinsControllerSubnetAD"
-   display_name        = "JenkinscontrollerSubnet"
-  dns_label           = "controllerad"
-  security_list_ids   = [oci_core_security_list.JenkinsPrivate.id]
-  compartment_id      = var.compartment_ocid
-  vcn_id              = oci_core_virtual_network.JenkinsVCN.id
-  route_table_id      = oci_core_route_table.private.id
-  dhcp_options_id     = oci_core_virtual_network.JenkinsVCN.default_dhcp_options_id
+  #  availability_domain = data.template_file.ad_names[0].rendered
+  cidr_block = cidrsubnet(local.controller_subnet_prefix, 4, 0)
+  #  display_name        = "${var.label_prefix}JenkinsControllerSubnetAD"
+  display_name      = "JenkinscontrollerSubnet"
+  dns_label         = "controllerad"
+  security_list_ids = [oci_core_security_list.JenkinsPrivate.id]
+  compartment_id    = var.compartment_ocid
+  vcn_id            = oci_core_virtual_network.JenkinsVCN.id
+  route_table_id    = oci_core_route_table.private.id
+  dhcp_options_id   = oci_core_virtual_network.JenkinsVCN.default_dhcp_options_id
 }
 
 ############################################
 # Create agent Subnet
 ############################################
 resource "oci_core_subnet" "JenkinsAgentSubnetAD" {
-  count               = length(data.template_file.ad_names.*.rendered)
-#  availability_domain = data.template_file.ad_names[count.index].rendered
-  cidr_block          = cidrsubnet(local.agent_subnet_prefix, 4, count.index)
-  display_name        = "${var.label_prefix}JenkinsAgentSubnet${count.index + 1}"
-  dns_label           = "agentad${count.index + 1}"
-  security_list_ids   = [oci_core_security_list.JenkinsPrivate.id]
-  compartment_id      = var.compartment_ocid
-  vcn_id              = oci_core_virtual_network.JenkinsVCN.id
-  route_table_id      = oci_core_route_table.private.id
-  dhcp_options_id     = oci_core_virtual_network.JenkinsVCN.default_dhcp_options_id
+  count = length(data.template_file.ad_names.*.rendered)
+  #  availability_domain = data.template_file.ad_names[count.index].rendered
+  cidr_block        = cidrsubnet(local.agent_subnet_prefix, 4, count.index)
+  display_name      = "${var.label_prefix}JenkinsAgentSubnet${count.index + 1}"
+  dns_label         = "agentad${count.index + 1}"
+  security_list_ids = [oci_core_security_list.JenkinsPrivate.id]
+  compartment_id    = var.compartment_ocid
+  vcn_id            = oci_core_virtual_network.JenkinsVCN.id
+  route_table_id    = oci_core_route_table.private.id
+  dhcp_options_id   = oci_core_virtual_network.JenkinsVCN.default_dhcp_options_id
 }
 
 ############################################
 # Create Bastion Subnet
 ############################################
 resource "oci_core_subnet" "JenkinsBastion" {
-#  availability_domain = data.template_file.ad_names[var.bastion_ad_index].rendered
-  compartment_id      = var.compartment_ocid
-  display_name        = "JenkinsBastion${var.bastion_ad_index + 1}"
-  cidr_block          = cidrsubnet(local.bastion_subnet_prefix, 4, 0)
-  security_list_ids   = [oci_core_security_list.JenkinsBastion.id]
-  vcn_id              = oci_core_virtual_network.JenkinsVCN.id
-  route_table_id      = oci_core_route_table.public.id
-  dhcp_options_id     = oci_core_virtual_network.JenkinsVCN.default_dhcp_options_id
+  #  availability_domain = data.template_file.ad_names[var.bastion_ad_index].rendered
+  compartment_id    = var.compartment_ocid
+  display_name      = "JenkinsBastion${var.bastion_ad_index + 1}"
+  cidr_block        = cidrsubnet(local.bastion_subnet_prefix, 4, 0)
+  security_list_ids = [oci_core_security_list.JenkinsBastion.id]
+  vcn_id            = oci_core_virtual_network.JenkinsVCN.id
+  route_table_id    = oci_core_route_table.public.id
+  dhcp_options_id   = oci_core_virtual_network.JenkinsVCN.default_dhcp_options_id
 }
 
 ############################################
 # Create LoadBalancer Subnet
 ############################################
 resource "oci_core_subnet" "JenkinsLBSubnet1" {
-#  availability_domain = data.template_file.ad_names[0].rendered
-  cidr_block          = cidrsubnet(local.lb_subnet_prefix, 4, 0)
-  display_name        = "JenkinsLBSubnet1"
-  dns_label           = "subnet1"
-  security_list_ids   = [oci_core_security_list.JenkinsLB.id]
-  compartment_id      = var.compartment_ocid
-  vcn_id              = oci_core_virtual_network.JenkinsVCN.id
-  route_table_id      = oci_core_route_table.public.id
-  dhcp_options_id     = oci_core_virtual_network.JenkinsVCN.default_dhcp_options_id
+  #  availability_domain = data.template_file.ad_names[0].rendered
+  cidr_block        = cidrsubnet(local.lb_subnet_prefix, 4, 0)
+  display_name      = "JenkinsLBSubnet1"
+  dns_label         = "subnet1"
+  security_list_ids = [oci_core_security_list.JenkinsLB.id]
+  compartment_id    = var.compartment_ocid
+  vcn_id            = oci_core_virtual_network.JenkinsVCN.id
+  route_table_id    = oci_core_route_table.public.id
+  dhcp_options_id   = oci_core_virtual_network.JenkinsVCN.default_dhcp_options_id
 }
 
 #resource "oci_core_subnet" "JenkinsLBSubnet2" {

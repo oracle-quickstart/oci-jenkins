@@ -7,30 +7,25 @@ variable "fingerprint" {}
 variable "private_key_path" {}
 variable "region" {}
 variable "compartment_ocid" {}
-variable "ssh_authorized_keys" {}
-variable "ssh_private_key" {}
+
+variable "ssh_authorized_keys" {
+  default = ""
+}
+variable "ssh_private_key" {
+  default = ""
+}
 
 variable "vcn_cidr" {
   default = "10.0.0.0/16"
 }
 
-locals {
-  // contains bastion, LB, and anything internet-facing
-  dmz_tier_prefix = cidrsubnet(var.vcn_cidr, 2, 0)
-
-  // contains private subnets with app logic
-  app_tier_prefix = cidrsubnet(var.vcn_cidr, 2, 1)
-
-  lb_subnet_prefix         = cidrsubnet(local.dmz_tier_prefix, 2, 0)
-  bastion_subnet_prefix    = cidrsubnet(local.dmz_tier_prefix, 2, 1)
-  controller_subnet_prefix = cidrsubnet(local.app_tier_prefix, 2, 0)
-  agent_subnet_prefix      = cidrsubnet(local.app_tier_prefix, 2, 1)
+variable "subnet_cidr" {
+  default = "10.0.1.0/24"
 }
 
 variable "label_prefix" {
   default = ""
 }
-
 
 variable "http_port" {
   default = 8080
@@ -65,28 +60,6 @@ variable "jenkins_version" {
 variable "jenkins_password" {
 }
 
-variable "agent_count" {
-  default = "2"
-}
-
-variable "bastion_display_name" {
-  default = "JenkinsBastion"
-}
-
-variable "bastion_shape" {
-  default = "VM.Standard.E3.Flex"
-}
-
-variable "bastion_flex_shape_ocpus" {
-  description = "Number of Flex shape OCPUs"
-  default     = 1
-}
-
-variable "bastion_flex_shape_memory" {
-  description = "Amount of Flex shape Memory in GB"
-  default     = 1
-}
-
 variable "controller_shape" {
   default = "VM.Standard.E3.Flex"
 }
@@ -99,42 +72,6 @@ variable "controller_flex_shape_ocpus" {
 variable "controller_flex_shape_memory" {
   description = "Amount of Flex shape Memory in GB"
   default     = 10
-}
-
-variable "agent_shape" {
-  default = "VM.Standard.E3.Flex"
-}
-
-variable "agent_flex_shape_ocpus" {
-  description = "Number of Flex shape OCPUs"
-  default     = 1
-}
-
-variable "agent_flex_shape_memory" {
-  description = "Amount of Flex shape Memory in GB"
-  default     = 10
-}
-
-variable "bastion_host" {
-  default = ""
-}
-
-variable "bastion_user" {
-  default = "opc"
-}
-
-variable "bastion_authorized_keys" {
-}
-
-variable "bastion_private_key" {
-}
-
-variable "bastion_ad_index" {
-  default = 0
-}
-
-variable "listener_ca_certificate" {
-  default = ""
 }
 
 variable "listener_private_key" {

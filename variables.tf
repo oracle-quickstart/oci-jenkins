@@ -1,3 +1,6 @@
+## Copyright © 2021, Oracle and/or its affiliates. 
+## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+
 variable "compartment_ocid" {
   description = "Compartment's OCID where VCN will be created. "
 }
@@ -38,6 +41,11 @@ variable "jenkins_password" {
 
 variable "jenkins_version" {
   description = "The verion of Jenkins server. "
+}
+
+variable "controller_assign_public_ip" {
+  description = "Assign public IP to Controller instance. "
+  default     = false
 }
 
 variable "controller_display_name" {
@@ -150,6 +158,7 @@ variable "bastion_service_region" {
 
 variable "bastion_host" {
   description = "The bastion host IP."
+  default     = ""
 }
 
 variable "bastion_user" {
@@ -159,8 +168,10 @@ variable "bastion_user" {
 
 variable "bastion_private_key" {
   description = "The private key path to access the bastion host."
+  default     = ""
 }
 
 variable "bastion_authorized_keys" {
   description = "The public key path to access the bastion host."
+  default     = ""
 }
