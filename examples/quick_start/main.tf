@@ -1,3 +1,6 @@
+## Copyright © 2021, Oracle and/or its affiliates. 
+## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+
 # ------------------------------------------------------------------------------
 # Setup Bastion Host
 # ------------------------------------------------------------------------------
@@ -42,7 +45,7 @@ resource "oci_core_instance" "JenkinsBastion" {
 # DEPLOY THE JENKINS CLUSTER
 # ------------------------------------------------------------------------------
 module "jenkins" {
-  source                       = "../../"
+  source                       = "github.com/oracle-quickstart/oci-jenkins"
   compartment_ocid             = var.compartment_ocid
   jenkins_version              = var.jenkins_version
   jenkins_password             = var.jenkins_password

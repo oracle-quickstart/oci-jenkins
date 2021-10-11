@@ -1,3 +1,6 @@
+## Copyright © 2021, Oracle and/or its affiliates. 
+## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+
 ## DATASOURCE
 # Init Script Files
 data "template_file" "setup_jenkins" {
@@ -95,8 +98,69 @@ resource "oci_bastion_session" "ssh_via_bastion_service" {
 }
 
 
-resource "null_resource" "TFJenkinsControllerConfig" {
+resource "null_resource" "TFJenkinsControllerConfig_via_public_ip" {
   depends_on = [oci_core_instance.TFJenkinsController]
+  count      = var.assign_public_ip ? 1 : 0
+
+  provisioner "file" {
+    connection {
+      host        = oci_core_instance.TFJenkinsController.public_ip
+      agent       = false
+      timeout     = "5m"
+      user        = var.vm_user
+      private_key = var.ssh_private_key
+    }
+
+    content     = data.template_file.setup_jenkins.rendered
+    destination = "~/setup.sh"
+  }
+
+  provisioner "file" {
+    connection {
+      host        = oci_core_instance.TFJenkinsController.public_ip
+      agent       = false
+      timeout     = "5m"
+      user        = var.vm_user
+      private_key = var.ssh_private_key
+    }
+
+    content     = data.template_file.init_jenkins.rendered
+    destination = "~/default-user.groovy"
+  }
+
+  provisioner "file" {
+    connection {
+      host        = oci_core_instance.TFJenkinsController.public_ip
+      agent       = false
+      timeout     = "5m"
+      user        = var.vm_user
+      private_key = var.ssh_private_key
+    }
+
+    content     = data.template_file.disable_controller_executor.rendered
+    destination = "~/disable-controller-executor.groovy"
+  }
+
+  provisioner "remote-exec" {
+    connection {
+      host        = oci_core_instance.TFJenkinsController.public_ip
+      agent       = false
+      timeout     = "5m"
+      user        = var.vm_user
+      private_key = var.ssh_private_key
+    }
+
+    inline = [
+      "sleep 60",
+      "chmod +x ~/setup.sh",
+      "sudo ~/setup.sh",
+    ]
+  }
+}
+
+resource "null_resource" "TFJenkinsControllerConfig_via_bastion" {
+  depends_on = [oci_core_instance.TFJenkinsController]
+  count      = var.assign_public_ip ? 0 : 1
 
   provisioner "file" {
     connection {
@@ -169,4 +233,5 @@ resource "null_resource" "TFJenkinsControllerConfig" {
     ]
   }
 }
+
 
